@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:24:29 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/08 16:07:27 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/08 16:33:12 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,6 +24,16 @@
 #include <netdb.h>
 #include "../include/Server.hpp"
 
+bool _port_is_digit(char *port)
+{
+	for (size_t i = 0; port[i]; i++)
+	{
+		if (!isdigit(port[i]))
+			return false;
+	}
+	return true;
+}
+
 int main(int argc, char **argv)
 {
 	//argv[0]: port
@@ -32,12 +42,19 @@ int main(int argc, char **argv)
 	//Will be used in the Server constructor
 	if (argc != 3)
 	{
-		std::cerr << "Error: Not enough arguments. Usage: ./ircsserv <port> <password>" << std::endl;
-		return (-1);
+		std::cerr << "Error: Wrong number of arguments. Usage: ./ircsserv <port> <password>" << std::endl;
+		return (1);
+	}
+
+	if (!argv[2][0])
+	{
+		std::cerr << "Error: Password cannot be empty." << std::endl;
+		return (1);
 	}
 
 	int port;
-	//Need check of argv[1] > isdigit
+	if (!_port_is_digit(argv[1]))
+		std::cerr << "Error: port should be a numeric value" << std::endl;
 	std::istringstream(argv[1]) >> port;
 	/* Server ircserv(port, argv[2]); */
 	int sockfd;
