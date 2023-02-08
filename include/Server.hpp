@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:33:17 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/02 22:15:30 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/08 13:12:51 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,11 +20,13 @@
 class Server
 {
 private:
+
+	Server();
+
 	int			_port;
 	std::string	_password;
 
 public:
-	Server();
 
 	Server(int port, std::string password);
 
