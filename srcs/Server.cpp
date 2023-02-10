@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/10 17:57:45 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/10 18:31:48 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 Server::Server(char * port, char * password): _port(std::string(port)), _password(std::string(password)), _listen_fd(0)
 {}
 
-struct addrinfo *Server::_getaddrinfo_attempt()
+struct addrinfo *Server::_getaddrinfo_attempt() const
 {
 	struct addrinfo hints;
 	struct addrinfo *servinfo;
@@ -105,4 +105,12 @@ Server::~Server()
 {
 	if (_listen_fd)
 		close(_listen_fd);
+}
+
+void	Server::pollfd_push_back(int fd)
+{
+	struct pollfd new_user_fd;
+	new_user_fd.fd = fd;
+	new_user_fd.events = POLLIN;
+	_user_fds.push_back(new_user_fd);
 }

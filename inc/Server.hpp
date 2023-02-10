@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:33:17 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/10 17:57:37 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/10 18:34:38 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,12 +23,17 @@ private:
 
 	Server();
 
+	/* Port used for connecting to the server */
+	std::string		_port;
+	/* Password requested for connecting to the server */
+	std::string		_password;
+
 	/* Vector containing the pollfd structs that are passed as arguments to poll() */
 	std::vector<struct pollfd>	_user_fds;
 
 	/* Returns a linked list of addrinfo structs that can be used to attempt to open a socket.
 	Returns NULL if getaddrinfo() fails. (this should change) */
-	struct addrinfo *_getaddrinfo_attempt();
+	struct addrinfo *_getaddrinfo_attempt() const;
 	
 	/* On every addrinfo in the given list, attempts to : open a socket, setsockopt (?), bind it to the address.
 	Sets _listen_fd to the first possible fd on which it succeeded.
@@ -37,21 +42,18 @@ private:
 
 public:
 
-	/* Port used for connecting to the server */
-	std::string		_port;
-	/* Password requested for connecting to the server */
-	std::string		_password;
-
 	/* Socket on which the server listens for new incoming connection requests */
 	int				_listen_fd;
 
+	/* Initializes and opens _listen_fd for connection requests. */
 	int begin_listening();
+
+	/* Adds a pollfd to the vector _user_fds with the given fd and event mask POLLIN. */
+	void	pollfd_push_back(int fd);
 
 	Server(char * port, char * password);
 
 	~Server();
 };
-
-std::ostream & operator<<(std::ostream& out, const Server & dt);
 
 #endif
