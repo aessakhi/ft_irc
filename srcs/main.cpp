@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:24:29 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/10 14:27:35 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/10 15:38:41 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -53,18 +53,13 @@ int main(int argc, char **argv)
 {
 	program_arguments_check(argc, argv);
 	
-	int port;
-	std::istringstream(argv[1]) >> port;
 	/* Server ircserv(port, argv[2]); */
+	
 	int sockfd;
-	struct addrinfo hints, *servinfo, *p;
-	int rv;
+	struct addrinfo hints, *servinfo;
 	/* int	numbytes; */
-	struct sockaddr_storage their_addr;
-	socklen_t sin_size;
 	/* char buf[MAXBUFLEN]; */
 	/* socklen_t addr_len; */
-	int new_fd;
 	int yes=1;
 	char s[INET_ADDRSTRLEN];
 
@@ -72,13 +67,13 @@ int main(int argc, char **argv)
 	hints.ai_family = AF_INET;
 	hints.ai_socktype = SOCK_STREAM;
 	
-	if ((rv = getaddrinfo(NULL, argv[1], &hints, &servinfo)) != 0)
+	if (getaddrinfo(NULL, argv[1], &hints, &servinfo) != 0)
 	{
 		std::cerr << "getaddrinfo error" << std::endl;
 		return (-1);
 	}
 	
-
+	struct addrinfo *p;
 	for (p = servinfo; p != NULL; p = p->ai_next)
 	{
 		if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1)
@@ -120,6 +115,11 @@ int main(int argc, char **argv)
 		exit(-1);
 	}
 
+	/*----------------------LOOP----------------------*/
+
+	struct sockaddr_storage their_addr;
+	socklen_t sin_size;
+	int new_fd;
 
 	while(1)
 	{
