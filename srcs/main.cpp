@@ -6,10 +6,11 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:24:29 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/08 17:12:04 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/10 12:40:30 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
+/*
 #include <iostream>
 #include <sstream>
 #include <cstring>
@@ -23,6 +24,9 @@
 #include <arpa/inet.h>
 #include <netdb.h>
 #include "../include/Server.hpp"
+*/
+
+#include "main.hpp"
 
 bool _port_is_digit(char *port)
 {
@@ -126,19 +130,18 @@ int main(int argc, char **argv)
 		if (new_fd != -1)
 		{
 			std::cout << "Accepted connection" << std::endl;
-
 			// Basic str receiver and sender
-			char buf[512];
+			char buf[1024];
 			int nread;
 			while (1)
 			{
-				nread = recv(new_fd, buf, 512, 0);
+				nread = recv(new_fd, buf, 1024, 0);
 				buf[nread] = 0;
 				if (nread)
-					std::cout << buf;
+					std::cout << "--[" << buf << "]--" << std::endl;
 				if (buf[0] == 'e' && buf[1] == 'x' && buf[2] == 'i' && buf[3] == 't')
 					break;
-				send(new_fd, buf, nread, 0);
+				// send(new_fd, buf, nread, 0);
 			}
 			
 			close(new_fd);
