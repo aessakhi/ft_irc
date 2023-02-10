@@ -6,13 +6,13 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:24:29 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/10 13:16:38 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/10 14:27:35 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.hpp"
 
-/* Returns true only if the given string could be a port */
+/* Returns true only if the given string could be a port. */
 bool _port_is_digit(char *port)
 {
 	for (size_t i = 0; port[i]; i++)
@@ -23,7 +23,7 @@ bool _port_is_digit(char *port)
 	return (port[0] != 0);
 }
 
-/* Basic check for input arguments */
+/* Basic check for input arguments. */
 void program_arguments_check(int argc, char **argv)
 {
 	if (argc != 3)
@@ -45,13 +45,12 @@ void program_arguments_check(int argc, char **argv)
 	}
 }
 
+/*
+argv[0] should be the requested port,
+argv[1] should be the server password.
+*/
 int main(int argc, char **argv)
 {
-	//argv[0]: port
-	//Need to get the port as int
-	//argv[1]: password
-	//Will be used in the Server constructor
-	
 	program_arguments_check(argc, argv);
 	
 	int port;
@@ -107,22 +106,26 @@ int main(int argc, char **argv)
 		break;
 	}
 
+	fcntl(sockfd, F_SETFD, O_NONBLOCK);
+
 	if (p == NULL)
 	{
 		std::cerr << "Failed to bind" << std::endl;
 		exit(-1);
 	}
 
-	if (listen(sockfd, 10) == -1)
+	if (listen(sockfd, 2) == -1)
 	{
 		std::cerr << "listen: error" << std::endl;
 		exit(-1);
 	}
 
+
 	while(1)
 	{
 		sin_size = sizeof their_addr;
 		new_fd = accept(sockfd, (struct sockaddr *)&their_addr, &sin_size);
+		fcntl(new_fd, F_SETFD, O_NONBLOCK);
 		if (new_fd != -1)
 		{
 			std::cout << "Accepted connection" << std::endl;
@@ -137,9 +140,10 @@ int main(int argc, char **argv)
 					std::cout << "--[" << buf << "]--" << std::endl;
 				if (buf[0] == 'e' && buf[1] == 'x' && buf[2] == 'i' && buf[3] == 't')
 					break;
-				// send(new_fd, buf, nread, 0);
+				send(new_fd, buf, nread, 0);
 			}
 			
+			std::cout << "closing fd" << std::endl;
 			close(new_fd);
 		}
 		else
