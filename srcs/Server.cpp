@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/10 18:31:48 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/10 18:43:41 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,8 @@ int Server::begin_listening()
 		return -1;
 	}
 
+	pollfd_push_back(_listen_fd);
+
 	return 0;
 }
 
@@ -113,4 +115,9 @@ void	Server::pollfd_push_back(int fd)
 	new_user_fd.fd = fd;
 	new_user_fd.events = POLLIN;
 	_user_fds.push_back(new_user_fd);
+}
+
+int Server::get_listening_fd() const
+{
+	return _listen_fd;
 }
