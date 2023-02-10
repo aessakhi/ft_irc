@@ -6,7 +6,7 @@
 #    By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/02 21:22:12 by aessakhi          #+#    #+#              #
-#    Updated: 2023/02/10 12:49:24 by ldesnoye         ###   ########.fr        #
+#    Updated: 2023/02/10 13:03:10 by ldesnoye         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,29 +21,35 @@ SRC_NAMES =	main.cpp \
 
 SRCS =	$(addprefix $(SRC_DIR)/, $(SRC_NAMES))
 
-OBJS = $(SRCS:.cpp=.o)
+OBJ_DIR =	objs
+OBJ_NAMES	= $(SRC_NAMES:.cpp=.o)
+OBJS		= $(addprefix $(OBJ_DIR)/, $(OBJ_NAMES))
 
-INC_DIR =	include
+INC_DIR =	inc
 INC_NAMES =	main.hpp \
 			Server.hpp \
 
-INCS = $(addprefix $(INC_DIR)/, $(INC_NAMES))
+INC = $(addprefix $(INC_DIR)/, $(INC_NAMES))
 
 RM =	rm -rf
 
 $(NAME):	$(OBJS)
 			$(CXX) -o $(NAME) $(OBJS) $(CXXFLAGS)
 
-%.o :	%.cpp $(INCS)
-		$(CXX) $(CXXFLAGS) -c $< -o $@ -I./include/
+$(OBJ_DIR)/%.o :	$(SRC_DIR)/%.cpp $(INC) | $(OBJ_DIR)
+					$(CXX) $(CXXFLAGS) -c $< -o $@ -I./$(INC_DIR)/
+
+$(OBJ_DIR) :
+				mkdir -p $(OBJ_DIR)
 
 all: $(NAME)
 
 clean:
 	$(RM) $(OBJS)
+	$(RM) $(OBJ_DIR)
 
 fclean:	clean
-		$(RM) $(NAME)
+	$(RM) $(NAME)
 
 re: clean all
 
