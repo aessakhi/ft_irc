@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 12:39:34 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/10 14:51:13 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/10 15:03:29 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,7 @@
 #include <netdb.h>
 #include <fcntl.h>
 #include <vector>
+#include <poll.h>
 
 #include "Server.hpp"
 
