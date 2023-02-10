@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:33:17 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/10 18:34:38 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/10 18:43:09 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,12 +24,13 @@ private:
 	Server();
 
 	/* Port used for connecting to the server */
-	std::string		_port;
+	std::string	_port;
 	/* Password requested for connecting to the server */
-	std::string		_password;
+	std::string	_password;
 
-	/* Vector containing the pollfd structs that are passed as arguments to poll() */
-	std::vector<struct pollfd>	_user_fds;
+	/* Vector containing the pollfd structs that are passed as arguments to poll().
+	The first element is the fd on which clients request access, the others are fds for communication with users.*/
+	std::vector<struct pollfd> _user_fds;
 
 	/* Returns a linked list of addrinfo structs that can be used to attempt to open a socket.
 	Returns NULL if getaddrinfo() fails. (this should change) */
@@ -40,10 +41,13 @@ private:
 	Returns 0 on success, or -1 if an error occured. */
 	int _bind_attempt(struct addrinfo * servinfo);
 
+	/* Socket on which the server listens for new incoming connection requests */
+	int	_listen_fd;
+
 public:
 
-	/* Socket on which the server listens for new incoming connection requests */
-	int				_listen_fd;
+	/* Returns the fd capable of accepting new connections. */
+	int get_listening_fd() const;
 
 	/* Initializes and opens _listen_fd for connection requests. */
 	int begin_listening();

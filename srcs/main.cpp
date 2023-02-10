@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:24:29 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/10 18:32:29 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/10 18:43:22 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ int main(int argc, char **argv)
 	{
 		// sin_size = sizeof their_addr;
 		// new_fd = accept(ircserv._listen_fd, (struct sockaddr *)&their_addr, &sin_size);
-		new_fd = accept(ircserv._listen_fd, NULL, 0);
+		new_fd = accept(ircserv.get_listening_fd(), NULL, 0);
 
 		fcntl(new_fd, F_SETFD, O_NONBLOCK);
 		
