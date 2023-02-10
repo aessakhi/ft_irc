@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 12:39:34 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/10 17:54:43 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/10 18:37:18 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,6 +34,7 @@
 
 #define SHOW(s) std::cout << #s << " : [" << s << "]" << std::endl;
 
+// main_arg_check.cpp
 int program_arguments_check(int argc, char **argv);
 
 #endif
