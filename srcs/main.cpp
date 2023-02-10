@@ -6,44 +6,11 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:24:29 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/10 15:38:41 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/10 17:57:54 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.hpp"
-
-/* Returns true only if the given string could be a port. */
-bool _port_is_digit(char *port)
-{
-	for (size_t i = 0; port[i]; i++)
-	{
-		if (!isdigit(port[i]))
-			return false;
-	}
-	return (port[0] != 0);
-}
-
-/* Basic check for input arguments. */
-void program_arguments_check(int argc, char **argv)
-{
-	if (argc != 3)
-	{
-		std::cerr << "Error: Wrong number of arguments. Usage: ./ircsserv <port> <password>" << std::endl;
-		exit(1);
-	}
-
-	if (!_port_is_digit(argv[1]))
-	{
-		std::cerr << "Error: Port should be a numeric value" << std::endl;
-		exit(1);
-	}
-
-	if (!argv[2][0])
-	{
-		std::cerr << "Error: Password cannot be empty." << std::endl;
-		exit(1);
-	}
-}
 
 /*
 argv[0] should be the requested port,
@@ -51,68 +18,16 @@ argv[1] should be the server password.
 */
 int main(int argc, char **argv)
 {
-	program_arguments_check(argc, argv);
-	
-	/* Server ircserv(port, argv[2]); */
-	
-	int sockfd;
-	struct addrinfo hints, *servinfo;
-	/* int	numbytes; */
-	/* char buf[MAXBUFLEN]; */
-	/* socklen_t addr_len; */
-	int yes=1;
-	char s[INET_ADDRSTRLEN];
-
-	memset(&hints, 0, sizeof hints);
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = SOCK_STREAM;
-	
-	if (getaddrinfo(NULL, argv[1], &hints, &servinfo) != 0)
+	if (program_arguments_check(argc, argv))
 	{
-		std::cerr << "getaddrinfo error" << std::endl;
-		return (-1);
-	}
-	
-	struct addrinfo *p;
-	for (p = servinfo; p != NULL; p = p->ai_next)
-	{
-		if ((sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol)) == -1)
-		{
-			std::cerr << "socket error" << std::endl;
-			continue;
-		}
-		if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1)
-		{
-			std::cerr << "setsockopt error" << std::endl;
-			exit(-1);
-		}
-		if (bind(sockfd, p->ai_addr, p->ai_addrlen) == -1)
-		{
-			close(sockfd);
-			std::cerr << "Bind error" << std::endl;
-			continue;
-		}
-
-		struct sockaddr_in *ipv4 = (struct sockaddr_in *)p->ai_addr;
-		void *addr = &(ipv4->sin_addr);
-
-		std::cout << inet_ntop(p->ai_family, addr, s, sizeof s) << std::endl;
-		freeaddrinfo(servinfo);
-		break;
+		return -1;
 	}
 
-	fcntl(sockfd, F_SETFD, O_NONBLOCK);
+	Server ircserv(argv[1], argv[2]);
 
-	if (p == NULL)
+	if (ircserv.begin_listening())
 	{
-		std::cerr << "Failed to bind" << std::endl;
-		exit(-1);
-	}
-
-	if (listen(sockfd, 2) == -1)
-	{
-		std::cerr << "listen: error" << std::endl;
-		exit(-1);
+		return -1;
 	}
 
 	/*----------------------LOOP----------------------*/
@@ -121,10 +36,10 @@ int main(int argc, char **argv)
 	socklen_t sin_size;
 	int new_fd;
 
-	while(1)
+	while (1)
 	{
 		sin_size = sizeof their_addr;
-		new_fd = accept(sockfd, (struct sockaddr *)&their_addr, &sin_size);
+		new_fd = accept(ircserv._listen_fd, (struct sockaddr *)&their_addr, &sin_size);
 		fcntl(new_fd, F_SETFD, O_NONBLOCK);
 		if (new_fd != -1)
 		{

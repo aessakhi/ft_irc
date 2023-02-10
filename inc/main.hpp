@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 12:39:34 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/10 15:03:29 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/10 17:54:43 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,9 +28,12 @@
 #include <fcntl.h>
 #include <vector>
 #include <poll.h>
+#include <signal.h>
 
 #include "Server.hpp"
 
 #define SHOW(s) std::cout << #s << " : [" << s << "]" << std::endl;
+
+int program_arguments_check(int argc, char **argv);
 
 #endif

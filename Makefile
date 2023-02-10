@@ -6,7 +6,7 @@
 #    By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/02 21:22:12 by aessakhi          #+#    #+#              #
-#    Updated: 2023/02/10 13:03:10 by ldesnoye         ###   ########.fr        #
+#    Updated: 2023/02/10 17:55:20 by ldesnoye         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,6 +17,7 @@ CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
 SRC_DIR =	srcs
 SRC_NAMES =	main.cpp \
+			main_arg_check.cpp \
 			Server.cpp \
 
 SRCS =	$(addprefix $(SRC_DIR)/, $(SRC_NAMES))
