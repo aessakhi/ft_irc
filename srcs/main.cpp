@@ -6,28 +6,13 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:24:29 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/10 12:40:30 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/10 13:16:38 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-/*
-#include <iostream>
-#include <sstream>
-#include <cstring>
-#include <stdio.h>
-#include <unistd.h>
-#include <stdlib.h>
-#include <errno.h>
-#include <sys/types.h>
-#include <sys/socket.h>
-#include <netinet/in.h>
-#include <arpa/inet.h>
-#include <netdb.h>
-#include "../include/Server.hpp"
-*/
-
 #include "main.hpp"
 
+/* Returns true only if the given string could be a port */
 bool _port_is_digit(char *port)
 {
 	for (size_t i = 0; port[i]; i++)
@@ -35,7 +20,29 @@ bool _port_is_digit(char *port)
 		if (!isdigit(port[i]))
 			return false;
 	}
-	return true;
+	return (port[0] != 0);
+}
+
+/* Basic check for input arguments */
+void program_arguments_check(int argc, char **argv)
+{
+	if (argc != 3)
+	{
+		std::cerr << "Error: Wrong number of arguments. Usage: ./ircsserv <port> <password>" << std::endl;
+		exit(1);
+	}
+
+	if (!_port_is_digit(argv[1]))
+	{
+		std::cerr << "Error: Port should be a numeric value" << std::endl;
+		exit(1);
+	}
+
+	if (!argv[2][0])
+	{
+		std::cerr << "Error: Password cannot be empty." << std::endl;
+		exit(1);
+	}
 }
 
 int main(int argc, char **argv)
@@ -44,21 +51,10 @@ int main(int argc, char **argv)
 	//Need to get the port as int
 	//argv[1]: password
 	//Will be used in the Server constructor
-	if (argc != 3)
-	{
-		std::cerr << "Error: Wrong number of arguments. Usage: ./ircsserv <port> <password>" << std::endl;
-		return (1);
-	}
-
-	if (!argv[2][0])
-	{
-		std::cerr << "Error: Password cannot be empty." << std::endl;
-		return (1);
-	}
-
+	
+	program_arguments_check(argc, argv);
+	
 	int port;
-	if (!_port_is_digit(argv[1]))
-		std::cerr << "Error: port should be a numeric value" << std::endl;
 	std::istringstream(argv[1]) >> port;
 	/* Server ircserv(port, argv[2]); */
 	int sockfd;
