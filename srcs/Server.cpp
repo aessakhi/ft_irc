@@ -3,121 +3,64 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/10 18:43:41 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/11 16:21:27 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-Server::Server(char * port, char * password): _port(std::string(port)), _password(std::string(password)), _listen_fd(0)
+Server::Server(char *port, char *password): _port(std::string(port)), _password(std::string(password)), _sockfd(0)
 {}
 
-struct addrinfo *Server::_getaddrinfo_attempt() const
+Server::~Server(){}
+
+void	Server::_createsocket()
 {
-	struct addrinfo hints;
-	struct addrinfo *servinfo;
+	struct sockaddr_in	srv_address;
+	int		sockfd;
 
-	memset(&hints, 0, sizeof hints);
-	hints.ai_family = AF_INET;
-	hints.ai_socktype = SOCK_STREAM;
-	
-	if (getaddrinfo(NULL, _port.c_str(), &hints, &servinfo))
-		return NULL;
+	sockfd = socket(PF_INET, SOCK_STREAM, 0);
 
-	return servinfo;
-}
-
-int Server::_bind_attempt(struct addrinfo * servinfo)
-{
-	int sockfd;
-	int yes = 1;
-	struct addrinfo *p;
-	
-	for (p = servinfo; p != NULL; p = p->ai_next)
+	if (sockfd < 0)
 	{
-		sockfd = socket(p->ai_family, p->ai_socktype, p->ai_protocol);
-		
-		if (sockfd == -1)
-		{
-			continue;
-		}
-		
-		if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR, &yes, sizeof(int)) == -1)
-		{
-			std::cerr << "setsockopt error" << std::endl;
-			close(sockfd);
-			return -1;
-		}
-		
-		if (bind(sockfd, p->ai_addr, p->ai_addrlen) == -1)
-		{
-			std::cerr << "Bind error" << std::endl;
-			close(sockfd);
-			continue;
-		}
-		
-		break;
-	}
-	
-	if (p == NULL)
-	{
-		std::cerr << "Failed to bind" << std::endl;
-		return -1;
-	}
-	
-	_listen_fd = sockfd;
-	
-	return 0;
-}
-
-int Server::begin_listening()
-{
-	struct addrinfo *servinfo = _getaddrinfo_attempt();
-	if (!servinfo)
-	{
-		return -1;
+		std::cerr << "Socket error" << std::endl;
+		close(sockfd);
+		exit(-1);
 	}
 
-	if (_bind_attempt(servinfo))
+	if (fcntl(sockfd, F_SETFL, O_NONBLOCK) < 0)
 	{
-		freeaddrinfo(servinfo);
-		return -1;
+		std::cerr << "Socket error" << std::endl;
+		close(sockfd);
+		exit(-1);
 	}
 
-	freeaddrinfo(servinfo);
+	this->_sockfd = sockfd;
 
-	// Maybe useless ?
-	fcntl(_listen_fd, F_SETFD, O_NONBLOCK);
-	
-	if (listen(_listen_fd, 10) == -1)
+	srv_address.sin_family = AF_INET;
+	srv_address.sin_port = htons(atoi(this->_port.c_str()));
+	srv_address.sin_addr.s_addr = INADDR_ANY;
+	memset(srv_address.sin_zero, 0, sizeof srv_address.sin_zero);
+
+	if ((bind(sockfd, (struct sockaddr *)&srv_address, sizeof srv_address)) < 0)
 	{
-		std::cerr << "listen: error" << std::endl;
-		return -1;
+		std::cerr << "Bind error" << std::endl;
+		close(sockfd);
+		exit(-1);
 	}
 
-	pollfd_push_back(_listen_fd);
-
-	return 0;
+	if ((listen(sockfd, 10)) < 0)
+	{
+		std::cerr << "Listen error" << std::endl;
+		close(sockfd);
+		exit(-1);
+	}
 }
 
-Server::~Server()
+void	Server::init()
 {
-	if (_listen_fd)
-		close(_listen_fd);
-}
-
-void	Server::pollfd_push_back(int fd)
-{
-	struct pollfd new_user_fd;
-	new_user_fd.fd = fd;
-	new_user_fd.events = POLLIN;
-	_user_fds.push_back(new_user_fd);
-}
-
-int Server::get_listening_fd() const
-{
-	return _listen_fd;
+	_createsocket();
 }
