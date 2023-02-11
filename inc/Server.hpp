@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:33:17 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/11 16:21:01 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/11 20:00:55 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,15 +28,13 @@ private:
 	/* Password requested for connecting to the server */
 	std::string	_password;
 
-	/* Vector containing the pollfd structs that are passed as arguments to poll().
-	The first element is the fd on which clients request access, the others are fds for communication with users.*/
-	std::vector<struct pollfd> _user_fds;
+	/* Socket on which the server listens for new incoming connection requests */
+	int	_listenfd;
+
+	int	_epollfd;
 
 	/* _createsocket will be called by init to create and bind the socket */
-	void	_createsocket();
-
-	/* Socket on which the server listens for new incoming connection requests */
-	int	_sockfd;
+	void	_createsocket(int sockfd);
 
 public:
 
@@ -44,7 +42,13 @@ public:
 
 	~Server();
 
+	/* Functions */
 	void	init();
+
+	/* Member accessors */
+	std::string	getpwd() const;
+	std::string	getport() const;
+
 };
 
 #endif
