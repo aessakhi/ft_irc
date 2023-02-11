@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:33:17 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/11 20:00:55 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/12 00:09:55 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -34,7 +34,7 @@ private:
 	int	_epollfd;
 
 	/* _createsocket will be called by init to create and bind the socket */
-	void	_createsocket(int sockfd);
+	void	_createsocket();
 
 public:
 

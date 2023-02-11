@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/11 21:04:50 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/12 00:14:50 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,9 +17,11 @@ Server::Server(char *port, char *password): _port(std::string(port)), _password(
 
 Server::~Server(){}
 
-void	Server::_createsocket(int sockfd)
+void	Server::_createsocket()
 {
-	struct sockaddr_in	srv_address;
+	struct	sockaddr_in	srv_address;
+	int		sockfd;
+	int		yes = 1;
 
 	sockfd = socket(PF_INET, SOCK_STREAM, 0);
 
@@ -27,6 +29,12 @@ void	Server::_createsocket(int sockfd)
 	{
 		std::cerr << "Socket error" << std::endl;
 		close(sockfd);
+		exit(-1);
+	}
+
+	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &yes, sizeof yes) == -1)
+	{
+		std::cerr << "setsockopt" << std::endl;
 		exit(-1);
 	}
 
@@ -55,6 +63,7 @@ void	Server::_createsocket(int sockfd)
 		close(sockfd);
 		exit(-1);
 	}
+	this->_listenfd = sockfd;
 }
 
 void	Server::init()
@@ -66,7 +75,8 @@ void	Server::init()
 	socklen_t			addr_length;
 	struct sockaddr_in	client_addr;
 
-	this->_createsocket(this->_listenfd);
+	this->_listenfd = 0;
+	this->_createsocket();
 
 	if ((this->_epollfd = epoll_create1(0)) == -1)
 	{
@@ -110,7 +120,19 @@ void	Server::init()
 			}
 			else
 			{
-				
+				char	buf[4096];
+				ssize_t	ret;
+				std::string	msg;
+
+				memset(buf, 0, 4096);
+				ret = recv(ep_event[i].data.fd, buf, 4096, 0);
+				if (ret == -1)
+				{
+					std::cerr << "recv error" << std::endl;
+					exit(-1);
+				}
+				buf[ret] = 0;
+				std::cout << buf << std::endl;
 			}
 		}
 	}
