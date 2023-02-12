@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:33:17 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/12 18:47:53 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/12 18:58:07 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,7 +15,7 @@
 
 #include "main.hpp"
 
-//Need to stock the user list -> ? , channel list -> Map easier? pair<std::string, Channel*> ?
+//Need to stock the user list -> pair<int, User*> , channel list -> Map easier? pair<std::string, Channel*> ?
 
 class Server
 {

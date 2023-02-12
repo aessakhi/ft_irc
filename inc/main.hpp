@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 12:39:34 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/11 19:30:06 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/12 19:26:03 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 #include <signal.h>
 
 #include "Server.hpp"
+#include "User.hpp"
 
 #define SHOW(s) std::cout << #s << " : [" << s << "]" << std::endl;
 
