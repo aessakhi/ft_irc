@@ -6,13 +6,13 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/12 16:58:06 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/12 18:47:56 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-Server::Server(char *port, char *password): _port(std::string(port)), _password(std::string(password)), _listenfd(0)
+Server::Server(char *port, char *password): _port(std::string(port)), _password(std::string(password)), _listenfd(0), _epollfd(0)
 {}
 
 Server::~Server(){}
@@ -66,23 +66,16 @@ void	Server::_createsocket()
 	this->_listenfd = sockfd;
 }
 
-void	Server::init()
+void	Server::_create_epoll()
 {
-	struct	epoll_event ev;
-	struct	epoll_event ep_event[50];
-	int		nfds;
-
-	socklen_t			addr_length;
-	struct sockaddr_in	client_addr;
-
-	this->_listenfd = 0;
-	this->_createsocket();
+	struct epoll_event	ev;
 
 	if ((this->_epollfd = epoll_create1(0)) == -1)
 	{
 		std::cerr << "epoll error" << std::endl;
 		exit(-1);
 	}
+	memset(&ev, 0, sizeof(struct epoll_event));
 	ev.events = EPOLLIN;
 	ev.data.fd = this->_listenfd;
 	if (epoll_ctl(this->_epollfd, EPOLL_CTL_ADD, this->_listenfd, &ev) == -1)
@@ -90,6 +83,67 @@ void	Server::init()
 		std::cerr << "epoll error" << std::endl;
 		exit(-1);
 	}
+}
+
+void	Server::_acceptnewUser()
+{
+	int					new_fd;
+	socklen_t			addr_length;
+	struct sockaddr_in	client_addr;
+	struct	epoll_event	ev;
+
+	addr_length = sizeof(struct sockaddr_in);
+	if ((new_fd = accept(this->_listenfd, (struct sockaddr *)&client_addr, &addr_length)) == -1)
+	{
+		std::cerr << "accept error" << std::endl;
+		exit(-1);
+	}
+	memset(&ev, 0, sizeof(struct epoll_event));
+	ev.events = EPOLLIN;
+	ev.data.fd = new_fd;
+	if (epoll_ctl(this->_epollfd, EPOLL_CTL_ADD, new_fd, &ev) == -1)
+	{
+		std::cerr << "epoll error";
+		exit(-1);
+	}
+}
+
+void	Server::_receivemessage(struct epoll_event event)
+{
+	// Just for a shitty test to check how the commands will be sent/received
+	int first = 0;
+
+	//Buffer size to change maybe?
+	char buf[4096];
+	ssize_t ret;
+	std::string msg;
+
+	memset(buf, 0, 4096);
+	ret = recv(event.data.fd, buf, 4096, 0);
+	if (ret == -1)
+	{
+		std::cerr << "recv error" << std::endl;
+		exit(-1);
+	}
+	buf[ret] = 0;
+	std::cout << buf;
+	if (first == 0)
+	{
+		//irssi needs to receive these numerical replies to confirm the connection. Need to add the expected details of the reply messages.
+		send(event.data.fd, "001\r\n002\r\n003\r\n", sizeof("001\r\n002\r\n003\r\n"), MSG_NOSIGNAL);
+		first++;
+	}
+}
+
+void	Server::init()
+{
+	struct	epoll_event ep_event[50];
+	int		nfds;
+
+	this->_createsocket();
+
+	this->_create_epoll();
+
 	while (1)
 	{
 		nfds = epoll_wait(this->_epollfd, ep_event, 50, 3000);
@@ -101,46 +155,9 @@ void	Server::init()
 		for (int i = 0; i < nfds; i++)
 		{
 			if (ep_event[i].data.fd == this->_listenfd)
-			{
-				addr_length = sizeof(struct sockaddr_in);
-				int new_fd;
-				if ((new_fd = accept(this->_listenfd, (struct sockaddr*)&client_addr, &addr_length)) == -1)
-				{
-					std::cerr << "accept error" << std::endl;
-					exit(-1);
-				}
-				ev.events = EPOLLIN;
-				ev.data.fd = new_fd;
-				if (epoll_ctl(this->_epollfd, EPOLL_CTL_ADD, new_fd, &ev) == -1)
-				{
-					std::cerr << "epoll error";
-					exit(-1);
-				}
-			}
+				this->_acceptnewUser();
 			else
-			{
-				//Just for a shitty test to check how the commands will be sent/received
-				int	first = 0;
-
-				char	buf[4096];
-				ssize_t	ret;
-				std::string	msg;
-
-				memset(buf, 0, 4096);
-				ret = recv(ep_event[i].data.fd, buf, 4096, 0);
-				if (ret == -1)
-				{
-					std::cerr << "recv error" << std::endl;
-					exit(-1);
-				}
-				buf[ret] = 0;
-				std::cout << buf;
-				if (first == 0)
-				{
-					send(ep_event[i].data.fd, "001\r\n002\r\n003\r\n" , sizeof("001\r\n002\r\n003\r\n"), MSG_NOSIGNAL);
-					first++;
-				}
-			}
+				this->_receivemessage(ep_event[i]);
 		}
 	}
 }
