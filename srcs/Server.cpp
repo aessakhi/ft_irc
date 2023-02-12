@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/12 00:14:50 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/12 16:58:06 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -102,7 +102,6 @@ void	Server::init()
 		{
 			if (ep_event[i].data.fd == this->_listenfd)
 			{
-				std::cout << "Here" << std::endl;
 				addr_length = sizeof(struct sockaddr_in);
 				int new_fd;
 				if ((new_fd = accept(this->_listenfd, (struct sockaddr*)&client_addr, &addr_length)) == -1)
@@ -114,12 +113,15 @@ void	Server::init()
 				ev.data.fd = new_fd;
 				if (epoll_ctl(this->_epollfd, EPOLL_CTL_ADD, new_fd, &ev) == -1)
 				{
-					std::cerr << "epoll error" << std::endl;
+					std::cerr << "epoll error";
 					exit(-1);
 				}
 			}
 			else
 			{
+				//Just for a shitty test to check how the commands will be sent/received
+				int	first = 0;
+
 				char	buf[4096];
 				ssize_t	ret;
 				std::string	msg;
@@ -132,7 +134,12 @@ void	Server::init()
 					exit(-1);
 				}
 				buf[ret] = 0;
-				std::cout << buf << std::endl;
+				std::cout << buf;
+				if (first == 0)
+				{
+					send(ep_event[i].data.fd, "001\r\n002\r\n003\r\n" , sizeof("001\r\n002\r\n003\r\n"), MSG_NOSIGNAL);
+					first++;
+				}
 			}
 		}
 	}
