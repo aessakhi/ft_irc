@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 12:39:34 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/12 19:26:03 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/12 19:57:24 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,9 +29,7 @@
 #include <vector>
 #include <sys/epoll.h>
 #include <signal.h>
-
-#include "Server.hpp"
-#include "User.hpp"
+#include <map>
 
 #define SHOW(s) std::cout << #s << " : [" << s << "]" << std::endl;
 

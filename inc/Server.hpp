@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:33:17 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/12 18:58:07 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/12 19:57:31 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 # define SERVER_HPP
 
 #include "main.hpp"
-
+#include "User.hpp"
 //Need to stock the user list -> pair<int, User*> , channel list -> Map easier? pair<std::string, Channel*> ?
 
 class Server
@@ -32,6 +32,8 @@ private:
 	int	_listenfd;
 
 	int	_epollfd;
+
+	std::map<int, User *>	_UserList;
 
 	/* epoll is way easier to use and navigate than poll, no need to add a vector with the different pollfd */
 	void	_create_epoll();

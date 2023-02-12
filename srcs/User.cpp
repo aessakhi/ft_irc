@@ -1,33 +1,19 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   User.hpp                                           :+:      :+:    :+:   */
+/*   User.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/12 19:26:20 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/12 19:44:57 by aessakhi         ###   ########.fr       */
+/*   Created: 2023/02/12 19:42:29 by aessakhi          #+#    #+#             */
+/*   Updated: 2023/02/12 19:45:00 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef USER_HPP
-# define USER_HPP
+#include "User.hpp"
 
-#include "main.hpp"
+User::User(int fd): _fd(fd)
+{}
 
-class User
-{
-private:
-	User();
-
-	int			_fd;
-	std::string	_nickname;
-	std::string	_username;
-	std::string	_hostname;
-public:
-	User(int fd);
-
-	~User();
-};
-
-#endif
+User::~User()
+{}

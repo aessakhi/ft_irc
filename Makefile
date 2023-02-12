@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+         #
+#    By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/02 21:22:12 by aessakhi          #+#    #+#              #
-#    Updated: 2023/02/10 17:55:20 by ldesnoye         ###   ########.fr        #
+#    Updated: 2023/02/12 19:53:16 by aessakhi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -18,6 +18,7 @@ CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 SRC_DIR =	srcs
 SRC_NAMES =	main.cpp \
 			main_arg_check.cpp \
+			User.cpp \
 			Server.cpp \
 
 SRCS =	$(addprefix $(SRC_DIR)/, $(SRC_NAMES))
@@ -28,6 +29,7 @@ OBJS		= $(addprefix $(OBJ_DIR)/, $(OBJ_NAMES))
 
 INC_DIR =	inc
 INC_NAMES =	main.hpp \
+			User.hpp \
 			Server.hpp \
 
 INC = $(addprefix $(INC_DIR)/, $(INC_NAMES))

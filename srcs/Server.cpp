@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/12 18:47:56 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/12 19:54:38 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -98,6 +98,7 @@ void	Server::_acceptnewUser()
 		std::cerr << "accept error" << std::endl;
 		exit(-1);
 	}
+	this->_UserList[new_fd] = new User(new_fd);
 	memset(&ev, 0, sizeof(struct epoll_event));
 	ev.events = EPOLLIN;
 	ev.data.fd = new_fd;
