@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/13 15:03:54 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/13 15:32:04 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,9 +112,6 @@ void	Server::_acceptnewUser()
 
 void	Server::_receivemessage(struct epoll_event event)
 {
-	// Just for a shitty test to check how the commands will be sent/received
-	int first = 0;
-
 	//Buffer size to change maybe?
 	char buf[4096];
 	ssize_t ret;
@@ -128,13 +125,15 @@ void	Server::_receivemessage(struct epoll_event event)
 		exit(-1);
 	}
 	buf[ret] = 0;
-	std::cout << buf;
+
+	std::vector<std::string>	cmds;
 	/* Need to split the msg using \r\n placing the cmds in a vector. The first command vector will be used for authentication. If it doesn't respect the pre-requisites (PASS, NICK, USER), remove the user from epollfd and the User map */
-	if (first == 0)
+	cmds = ft_split(buf, "\r\n");
+	if (this->_UserList[event.data.fd]->getAuth() == false)
 	{
 		//irssi needs to receive these numerical replies to confirm the connection. Need to add the expected details of the reply messages.
 		send(event.data.fd, "001\r\n002\r\n003\r\n", sizeof("001\r\n002\r\n003\r\n"), MSG_NOSIGNAL);
-		first++;
+		this->_UserList[event.data.fd]->setAuth(true);
 	}
 }
 

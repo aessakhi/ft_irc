@@ -1,12 +1,12 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   main_arg_check.cpp                                 :+:      :+:    :+:   */
+/*   utils.cpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 17:53:06 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/10 17:55:39 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/13 15:28:43 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,4 +46,20 @@ int program_arguments_check(int argc, char **argv)
 	}
 	
 	return 0;
+}
+
+/* Might need to be tweaked a bit, might be an issue when a string has no trailing \r\n */
+std::vector<std::string> ft_split(std::string str, std::string delimiter)
+{
+	std::vector<std::string> result;
+
+	size_t	start;
+	size_t	end = 0;
+
+	while ((start = str.find_first_not_of(delimiter, end)) != std::string::npos)
+	{
+		end = str.find(delimiter, start);
+		result.push_back(str.substr(start, end - start));
+	}
+	return (result);
 }

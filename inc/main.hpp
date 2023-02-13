@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 12:39:34 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/12 19:57:24 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/13 15:25:40 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,13 +27,14 @@
 #include <netdb.h>
 #include <fcntl.h>
 #include <vector>
+#include <map>
 #include <sys/epoll.h>
 #include <signal.h>
-#include <map>
 
 #define SHOW(s) std::cout << #s << " : [" << s << "]" << std::endl;
 
 // main_arg_check.cpp
 int program_arguments_check(int argc, char **argv);
+std::vector<std::string> ft_split(std::string str, std::string delimiter);
 
 #endif
