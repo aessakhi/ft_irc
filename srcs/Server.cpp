@@ -6,13 +6,13 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/12 20:04:23 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/13 15:03:54 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-Server::Server(char *port, char *password): _port(std::string(port)), _password(std::string(password)), _listenfd(0), _epollfd(0)
+Server::Server(char *port, char *password): _port(std::string(port)), _pwd(std::string(password)), _listenfd(0), _epollfd(0)
 {}
 
 Server::~Server(){}
@@ -129,6 +129,7 @@ void	Server::_receivemessage(struct epoll_event event)
 	}
 	buf[ret] = 0;
 	std::cout << buf;
+	/* Need to split the msg using \r\n placing the cmds in a vector. The first command vector will be used for authentication. If it doesn't respect the pre-requisites (PASS, NICK, USER), remove the user from epollfd and the User map */
 	if (first == 0)
 	{
 		//irssi needs to receive these numerical replies to confirm the connection. Need to add the expected details of the reply messages.
@@ -162,4 +163,15 @@ void	Server::init()
 				this->_receivemessage(ep_event[i]);
 		}
 	}
+}
+
+
+std::string	Server::getpwd() const
+{
+	return (this->_pwd);
+}
+
+std::string	Server::getport() const
+{
+	return (this->_port);
 }

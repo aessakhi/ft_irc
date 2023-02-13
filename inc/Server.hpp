@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:33:17 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/12 19:57:31 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/13 14:47:58 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,7 +26,7 @@ private:
 	/* Port used for connecting to the server */
 	std::string	_port;
 	/* Password requested for connecting to the server */
-	std::string	_password;
+	std::string	_pwd;
 
 	/* Socket on which the server listens for new incoming connection requests */
 	int	_listenfd;
