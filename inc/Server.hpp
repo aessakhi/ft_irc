@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:33:17 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/14 11:58:51 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/14 12:05:20 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,6 +44,8 @@ private:
 	void	_acceptnewUser();
 
 	void	_receivemessage(struct epoll_event event);
+
+	void	_removeUserfromServer(int fd);
 
 public:
 

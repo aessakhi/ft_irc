@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/14 11:59:43 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/14 12:10:33 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,7 +122,7 @@ void	Server::_receivemessage(struct epoll_event event)
 	if (ret == -1)
 	{
 		std::cerr << "recv error" << std::endl;
-		exit(-1);
+		return ;
 	}
 	buf[ret] = 0;
 
@@ -134,6 +134,26 @@ void	Server::_receivemessage(struct epoll_event event)
 		//irssi needs to receive these numerical replies to confirm the connection. Need to add the expected details of the reply messages.
 		send(event.data.fd, "001\r\n002\r\n003\r\n", sizeof("001\r\n002\r\n003\r\n"), MSG_NOSIGNAL);
 		this->_UserList[event.data.fd]->setAuth(true);
+	}
+}
+
+void	Server::_removeUserfromServer(int userfd)
+{
+	if (this->getUser(userfd) == 0)
+	{
+		std::cerr << "Invalid user" << std::endl;
+		return ;
+	}
+	this->_UserList.erase(userfd);
+	if (epoll_ctl(this->_epollfd, EPOLL_CTL_DEL, userfd, NULL) == -1)
+	{
+		std::cerr << "epoll_ctl error" << std::endl;
+		return ;
+	}
+	if (close(userfd) == -1)
+	{
+		std::cerr << "close error" << std::endl;
+		return ;
 	}
 }
 
