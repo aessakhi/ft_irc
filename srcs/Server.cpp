@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/12 20:04:23 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/14 11:57:28 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -162,4 +162,11 @@ void	Server::init()
 				this->_receivemessage(ep_event[i]);
 		}
 	}
+}
+
+User	*Server::getUser(int fd) const
+{
+	if (this->_UserList.find(fd) != this->_UserList.end())
+		return (this->_UserList.find(fd)->second);
+	return (NULL);
 }

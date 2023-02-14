@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:33:17 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/12 19:57:31 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/14 11:53:47 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -57,6 +57,7 @@ public:
 	/* Member accessors */
 	std::string	getpwd() const;
 	std::string	getport() const;
+	User	*getUser(int fd) const;
 
 };
 
