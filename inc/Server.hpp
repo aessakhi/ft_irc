@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:33:17 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/14 12:05:20 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/14 16:37:49 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@ private:
 
 	std::map<int, User *>	_UserList;
 
+	std::map<int, std::string>	_buffers;
 	/* epoll is way easier to use and navigate than poll, no need to add a vector with the different pollfd */
 	void	_create_epoll();
 

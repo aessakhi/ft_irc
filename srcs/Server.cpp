@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/14 12:10:33 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/14 16:47:43 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -129,12 +129,15 @@ void	Server::_receivemessage(struct epoll_event event)
 	std::vector<std::string>	cmds;
 	/* Need to split the msg using \r\n placing the cmds in a vector. The first command vector will be used for authentication. If it doesn't respect the pre-requisites (PASS, NICK, USER), remove the user from epollfd and the User map */
 	cmds = ft_split(buf, "\r\n");
+	for (std::vector<std::string>::const_iterator it = cmds.begin(); it != cmds.end(); it++)
+		std::cout << *it << std::endl;
 	if (this->_UserList[event.data.fd]->getAuth() == false)
 	{
 		//irssi needs to receive these numerical replies to confirm the connection. Need to add the expected details of the reply messages.
 		send(event.data.fd, "001\r\n002\r\n003\r\n", sizeof("001\r\n002\r\n003\r\n"), MSG_NOSIGNAL);
 		this->_UserList[event.data.fd]->setAuth(true);
 	}
+	/* _removeUserfromServer(event.data.fd); */
 }
 
 void	Server::_removeUserfromServer(int userfd)

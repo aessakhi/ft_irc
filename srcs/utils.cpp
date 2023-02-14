@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 17:53:06 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/14 12:27:51 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/14 16:42:52 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,9 +56,6 @@ std::vector<std::string> ft_split(std::string str, std::string delimiter)
 	size_t	start;
 	size_t	end = 0;
 
-	/* If there is no delimiter return an empty vector */
-	if (str.find(delimiter) == std::string::npos)
-		return (std::vector<std::string>());
 	while ((start = str.find_first_not_of(delimiter, end)) != std::string::npos)
 	{
 		end = str.find(delimiter, start);
