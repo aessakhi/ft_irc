@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 17:53:06 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/14 16:42:52 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/14 19:33:49 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -63,3 +63,4 @@ std::vector<std::string> ft_split(std::string str, std::string delimiter)
 	}
 	return (result);
 }
+

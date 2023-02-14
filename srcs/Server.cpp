@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/14 16:47:43 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/14 19:32:54 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,6 +110,12 @@ void	Server::_acceptnewUser()
 	}
 }
 
+void	Server::_execCmds(std::vector<std::string> cmds, int userfd)
+{
+	(void)cmds;
+	(void)userfd;
+}
+
 void	Server::_receivemessage(struct epoll_event event)
 {
 	//Buffer size to change maybe?
@@ -125,12 +131,13 @@ void	Server::_receivemessage(struct epoll_event event)
 		return ;
 	}
 	buf[ret] = 0;
-
+	/* Need to change the way the packets are received (In order the process a command, you have to first aggregate de received packets in order to rebuild it)*/
 	std::vector<std::string>	cmds;
 	/* Need to split the msg using \r\n placing the cmds in a vector. The first command vector will be used for authentication. If it doesn't respect the pre-requisites (PASS, NICK, USER), remove the user from epollfd and the User map */
 	cmds = ft_split(buf, "\r\n");
 	for (std::vector<std::string>::const_iterator it = cmds.begin(); it != cmds.end(); it++)
 		std::cout << *it << std::endl;
+
 	if (this->_UserList[event.data.fd]->getAuth() == false)
 	{
 		//irssi needs to receive these numerical replies to confirm the connection. Need to add the expected details of the reply messages.
