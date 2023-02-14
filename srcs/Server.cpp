@@ -6,13 +6,13 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/14 11:57:28 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/14 11:59:43 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 
-Server::Server(char *port, char *password): _port(std::string(port)), _password(std::string(password)), _listenfd(0), _epollfd(0)
+Server::Server(char *port, char *password): _port(std::string(port)), _pwd(std::string(password)), _listenfd(0), _epollfd(0)
 {}
 
 Server::~Server(){}
@@ -112,9 +112,6 @@ void	Server::_acceptnewUser()
 
 void	Server::_receivemessage(struct epoll_event event)
 {
-	// Just for a shitty test to check how the commands will be sent/received
-	int first = 0;
-
 	//Buffer size to change maybe?
 	char buf[4096];
 	ssize_t ret;
@@ -128,12 +125,15 @@ void	Server::_receivemessage(struct epoll_event event)
 		exit(-1);
 	}
 	buf[ret] = 0;
-	std::cout << buf;
-	if (first == 0)
+
+	std::vector<std::string>	cmds;
+	/* Need to split the msg using \r\n placing the cmds in a vector. The first command vector will be used for authentication. If it doesn't respect the pre-requisites (PASS, NICK, USER), remove the user from epollfd and the User map */
+	cmds = ft_split(buf, "\r\n");
+	if (this->_UserList[event.data.fd]->getAuth() == false)
 	{
 		//irssi needs to receive these numerical replies to confirm the connection. Need to add the expected details of the reply messages.
 		send(event.data.fd, "001\r\n002\r\n003\r\n", sizeof("001\r\n002\r\n003\r\n"), MSG_NOSIGNAL);
-		first++;
+		this->_UserList[event.data.fd]->setAuth(true);
 	}
 }
 
@@ -162,6 +162,16 @@ void	Server::init()
 				this->_receivemessage(ep_event[i]);
 		}
 	}
+}
+
+std::string	Server::getpwd() const
+{
+	return (this->_pwd);
+}
+
+std::string	Server::getport() const
+{
+	return (this->_port);
 }
 
 User	*Server::getUser(int fd) const

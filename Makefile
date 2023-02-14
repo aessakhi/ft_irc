@@ -6,7 +6,7 @@
 #    By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/02 21:22:12 by aessakhi          #+#    #+#              #
-#    Updated: 2023/02/12 19:53:16 by aessakhi         ###   ########.fr        #
+#    Updated: 2023/02/13 15:18:43 by aessakhi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -17,7 +17,7 @@ CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
 SRC_DIR =	srcs
 SRC_NAMES =	main.cpp \
-			main_arg_check.cpp \
+			utils.cpp \
 			User.cpp \
 			Server.cpp \
 
