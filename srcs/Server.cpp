@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/15 16:22:38 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/15 16:32:26 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -139,16 +139,20 @@ void	Server::_receivemessage(struct epoll_event event)
 		return ;
 	}
 	buf[ret] = 0;
+	this->_buffers[event.data.fd].append(buf);
 	/* Need to change the way the packets are received (In order the process a command, you have to first aggregate de received packets in order to rebuild it)*/
 	std::vector<std::string>	cmds;
 	/* Need to split the msg using \r\n placing the cmds in a vector. The first command vector will be used for authentication. If it doesn't respect the pre-requisites (PASS, NICK, USER), remove the user from epollfd and the User map */
-	cmds = ft_split(buf, "\r\n");
-	std::cout << "<< ";
+	cmds = ft_split(&this->_buffers[event.data.fd], "\r\n");
+	buf[0] = 0;
 	for (std::vector<std::string>::const_iterator it = cmds.begin(); it != cmds.end(); it++)
 		std::cout << *it << std::endl;
 	std::cout << "-------------------------------" << std::endl;
-	std::string s("test");
-	std::string t("time");
+	std::vector<Command>	cmd_vector;
+	for (std::vector<std::string>::const_iterator it = cmds.begin(); it != cmds.end(); it++)
+	{
+		splitCmds(&cmd_vector, *it);
+	}
 	if (this->_UserList[event.data.fd]->getAuth() == false)
 	{
 		//irssi needs to receive these numerical replies to confirm the connection. Need to add the expected details of the reply messages.
