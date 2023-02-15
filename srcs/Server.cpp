@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/15 16:32:26 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/15 18:07:30 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -155,6 +155,7 @@ void	Server::_receivemessage(struct epoll_event event)
 	}
 	if (this->_UserList[event.data.fd]->getAuth() == false)
 	{
+		std::string s("test");
 		//irssi needs to receive these numerical replies to confirm the connection. Need to add the expected details of the reply messages.
 		_reply(event.data.fd, RPL_WELCOME(s));
 		// _reply(event.data.fd, RPL_YOURHOST(s));
