@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 12:39:34 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/15 12:31:27 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/15 15:35:02 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,6 +37,6 @@
 
 // main_arg_check.cpp
 int program_arguments_check(int argc, char **argv);
-std::vector<std::string> ft_split(std::string str, std::string delimiter);
+std::vector<std::string> ft_split(std::string *str, std::string delimiter);
 
 #endif

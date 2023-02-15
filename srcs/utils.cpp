@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 17:53:06 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/14 19:33:49 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/15 15:34:53 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,17 +49,22 @@ int program_arguments_check(int argc, char **argv)
 }
 
 /* Might need to be tweaked a bit, might be an issue when a string has no trailing \r\n */
-std::vector<std::string> ft_split(std::string str, std::string delimiter)
+std::vector<std::string> ft_split(std::string *str, std::string delimiter)
 {
 	std::vector<std::string> result;
 
-	size_t	start;
 	size_t	end = 0;
 
-	while ((start = str.find_first_not_of(delimiter, end)) != std::string::npos)
+	if (str->find(delimiter) == std::string::npos)
 	{
-		end = str.find(delimiter, start);
-		result.push_back(str.substr(start, end - start));
+		str->erase(std::string::npos);
+		return (std::vector<std::string>());
+	}
+	while (str->find(delimiter, 0) != std::string::npos)
+	{
+		end = str->find(delimiter, 0);
+		result.push_back(str->substr(0, end + delimiter.length()));
+		str->erase(0, end + delimiter.length());
 	}
 	return (result);
 }
