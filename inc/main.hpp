@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 12:39:34 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/13 15:25:40 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/15 12:31:27 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,6 +30,8 @@
 #include <map>
 #include <sys/epoll.h>
 #include <signal.h>
+
+#define RECV_BUFFER_SIZE 512
 
 #define SHOW(s) std::cout << #s << " : [" << s << "]" << std::endl;
 

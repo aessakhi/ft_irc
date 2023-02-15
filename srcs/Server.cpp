@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/14 19:32:54 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/15 12:33:11 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -116,15 +116,20 @@ void	Server::_execCmds(std::vector<std::string> cmds, int userfd)
 	(void)userfd;
 }
 
+void	Server::_reply(int fd, const char * s)
+{
+	send(fd, s, sizeof(s), MSG_NOSIGNAL);
+}
+
 void	Server::_receivemessage(struct epoll_event event)
 {
 	//Buffer size to change maybe?
-	char buf[4096];
+	char buf[RECV_BUFFER_SIZE];
 	ssize_t ret;
 	std::string msg;
 
-	memset(buf, 0, 4096);
-	ret = recv(event.data.fd, buf, 4096, 0);
+	memset(buf, 0, RECV_BUFFER_SIZE);
+	ret = recv(event.data.fd, buf, RECV_BUFFER_SIZE, 0);
 	if (ret == -1)
 	{
 		std::cerr << "recv error" << std::endl;
@@ -135,13 +140,16 @@ void	Server::_receivemessage(struct epoll_event event)
 	std::vector<std::string>	cmds;
 	/* Need to split the msg using \r\n placing the cmds in a vector. The first command vector will be used for authentication. If it doesn't respect the pre-requisites (PASS, NICK, USER), remove the user from epollfd and the User map */
 	cmds = ft_split(buf, "\r\n");
+	std::cout << "<< ";
 	for (std::vector<std::string>::const_iterator it = cmds.begin(); it != cmds.end(); it++)
 		std::cout << *it << std::endl;
-
+	std::cout << "-------------------------------" << std::endl;
 	if (this->_UserList[event.data.fd]->getAuth() == false)
 	{
 		//irssi needs to receive these numerical replies to confirm the connection. Need to add the expected details of the reply messages.
-		send(event.data.fd, "001\r\n002\r\n003\r\n", sizeof("001\r\n002\r\n003\r\n"), MSG_NOSIGNAL);
+		_reply(event.data.fd, "001\r\n");
+		_reply(event.data.fd, "002\r\n");
+		_reply(event.data.fd, "003\r\n");
 		this->_UserList[event.data.fd]->setAuth(true);
 	}
 	/* _removeUserfromServer(event.data.fd); */

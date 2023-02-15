@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.hpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:33:17 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/14 19:26:07 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/15 12:28:07 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,6 +49,9 @@ private:
 	void	_execCmds(std::vector<std::string> cmds, int userfd);
 
 	void	_removeUserfromServer(int fd);
+
+	/* Easier send() */
+	void	_reply(int fd, const char *s);
 
 public:
 
