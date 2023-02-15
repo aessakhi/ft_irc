@@ -11,6 +11,7 @@
 /* ************************************************************************** */
 
 #include "Server.hpp"
+#include "codes.hpp"
 
 Server::Server(char *port, char *password): _port(std::string(port)), _pwd(std::string(password)), _listenfd(0), _epollfd(0)
 {}
@@ -116,9 +117,12 @@ void	Server::_execCmds(std::vector<std::string> cmds, int userfd)
 	(void)userfd;
 }
 
-void	Server::_reply(int fd, const char * s)
+void	Server::_reply(int fd, std::string s)
 {
-	send(fd, s, sizeof(s), MSG_NOSIGNAL);
+	s += "\r\n";
+	send(fd, s.data(), s.size(), MSG_NOSIGNAL);
+	std::cout << "Sending " << s.size() << "bytes" << std::endl;
+	std::cout << ">> " << s;
 }
 
 void	Server::_receivemessage(struct epoll_event event)
@@ -152,9 +156,10 @@ void	Server::_receivemessage(struct epoll_event event)
 	if (this->_UserList[event.data.fd]->getAuth() == false)
 	{
 		//irssi needs to receive these numerical replies to confirm the connection. Need to add the expected details of the reply messages.
-		_reply(event.data.fd, "001\r\n");
-		_reply(event.data.fd, "002\r\n");
-		_reply(event.data.fd, "003\r\n");
+		_reply(event.data.fd, RPL_WELCOME(s));
+		// _reply(event.data.fd, RPL_YOURHOST(s));
+		// _reply(event.data.fd, RPL_CREATED(s, t));
+		// _reply(event.data.fd, RPL_MYINFO(s, ".", "."));
 		this->_UserList[event.data.fd]->setAuth(true);
 	}
 	/* _removeUserfromServer(event.data.fd); */

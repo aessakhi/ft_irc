@@ -57,7 +57,7 @@ private:
 	void	_removeUserfromServer(int fd);
 
 	/* Easier send() */
-	void	_reply(int fd, const char *s);
+	void	_reply(int fd, std::string s);
 
 public:
 
