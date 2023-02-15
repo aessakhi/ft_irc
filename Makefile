@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+         #
+#    By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/02 21:22:12 by aessakhi          #+#    #+#              #
-#    Updated: 2023/02/13 15:18:43 by aessakhi         ###   ########.fr        #
+#    Updated: 2023/02/15 14:22:33 by ldesnoye         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -31,6 +31,7 @@ INC_DIR =	inc
 INC_NAMES =	main.hpp \
 			User.hpp \
 			Server.hpp \
+			codes.hpp
 
 INC = $(addprefix $(INC_DIR)/, $(INC_NAMES))
 

@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:33:17 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/15 13:24:02 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/15 15:02:32 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -56,7 +56,7 @@ private:
 	void	_removeUserfromServer(int fd);
 
 	/* Easier send() */
-	void	_reply(int fd, const char *s);
+	void	_reply(int fd, std::string s);
 
 public:
 
