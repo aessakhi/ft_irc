@@ -6,7 +6,7 @@
 #    By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/02 21:22:12 by aessakhi          #+#    #+#              #
-#    Updated: 2023/02/13 15:18:43 by aessakhi         ###   ########.fr        #
+#    Updated: 2023/02/15 16:14:54 by aessakhi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -20,6 +20,7 @@ SRC_NAMES =	main.cpp \
 			utils.cpp \
 			User.cpp \
 			Server.cpp \
+			Command.cpp \
 
 SRCS =	$(addprefix $(SRC_DIR)/, $(SRC_NAMES))
 
@@ -31,6 +32,7 @@ INC_DIR =	inc
 INC_NAMES =	main.hpp \
 			User.hpp \
 			Server.hpp \
+			Command.hpp \
 
 INC = $(addprefix $(INC_DIR)/, $(INC_NAMES))
 

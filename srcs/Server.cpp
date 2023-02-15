@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/15 15:35:46 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/15 16:32:26 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -144,6 +144,11 @@ void	Server::_receivemessage(struct epoll_event event)
 	for (std::vector<std::string>::const_iterator it = cmds.begin(); it != cmds.end(); it++)
 		std::cout << *it << std::endl;
 	std::cout << "-------------------------------" << std::endl;
+	std::vector<Command>	cmd_vector;
+	for (std::vector<std::string>::const_iterator it = cmds.begin(); it != cmds.end(); it++)
+	{
+		splitCmds(&cmd_vector, *it);
+	}
 	if (this->_UserList[event.data.fd]->getAuth() == false)
 	{
 		//irssi needs to receive these numerical replies to confirm the connection. Need to add the expected details of the reply messages.

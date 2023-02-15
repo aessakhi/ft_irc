@@ -6,11 +6,12 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 17:53:06 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/15 15:34:53 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/15 16:42:59 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "main.hpp"
+#include "Command.hpp"
 
 /* Returns true only if the given string could be a port. */
 static bool _port_is_digit(char *port)
@@ -69,3 +70,35 @@ std::vector<std::string> ft_split(std::string *str, std::string delimiter)
 	return (result);
 }
 
+void	splitCmds(std::vector<Command> *cmd_vector, std::string cmd)
+{
+	size_t						end	= 0;
+	std::string					name;
+	std::string					prefix;
+	std::vector<std::string>	param_list;
+
+	if ((end = cmd.find(" ")) != std::string::npos)
+	{
+		name = cmd.substr(0, end);
+		cmd.erase(0, end + 1);
+		std::cout << "Name = " << name << std::endl;
+	}
+	if ((end = cmd.find(":")) != std::string::npos)
+	{
+		prefix = cmd.substr(0, end);
+		cmd.erase(0, end + 1);
+		std::cout << "Prefix = " << prefix << std::endl;
+	}
+	while ((end = cmd.find(" ")) != std::string::npos)
+	{
+		param_list.push_back(cmd.substr(0, end + 1));
+		cmd.erase(0, end + 1);
+	}
+	if (!cmd.empty())
+		param_list.push_back(cmd);
+	for (std::vector<std::string>::const_iterator it = param_list.begin(); it != param_list.end(); it++)
+	{
+		std::cout << *it << std::endl;
+	}
+	cmd_vector->push_back(Command(name, prefix, param_list));
+}

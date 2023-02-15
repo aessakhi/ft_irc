@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 12:39:34 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/15 15:35:02 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/15 16:29:58 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,8 @@
 #include <sys/epoll.h>
 #include <signal.h>
 
+#include "Command.hpp"
+
 #define RECV_BUFFER_SIZE 512
 
 #define SHOW(s) std::cout << #s << " : [" << s << "]" << std::endl;
@@ -38,5 +40,6 @@
 // main_arg_check.cpp
 int program_arguments_check(int argc, char **argv);
 std::vector<std::string> ft_split(std::string *str, std::string delimiter);
+void	splitCmds(std::vector<Command> *cmd_vector, std::string cmd);
 
 #endif
