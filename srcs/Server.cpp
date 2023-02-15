@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/15 12:33:11 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/15 13:07:24 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -123,7 +123,6 @@ void	Server::_reply(int fd, const char * s)
 
 void	Server::_receivemessage(struct epoll_event event)
 {
-	//Buffer size to change maybe?
 	char buf[RECV_BUFFER_SIZE];
 	ssize_t ret;
 	std::string msg;
