@@ -6,7 +6,7 @@
 #    By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/02 21:22:12 by aessakhi          #+#    #+#              #
-#    Updated: 2023/02/16 17:39:06 by ldesnoye         ###   ########.fr        #
+#    Updated: 2023/02/16 18:27:51 by ldesnoye         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -40,6 +40,7 @@ INC_NAMES =	main.hpp \
 			Command.hpp \
 			CommandList.hpp \
 			Channel.hpp \
+			exceptions.hpp
 
 INC = $(addprefix $(INC_DIR)/, $(INC_NAMES))
 

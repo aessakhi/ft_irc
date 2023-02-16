@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/16 16:56:27 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/16 18:38:18 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,22 +29,19 @@ void	Server::_createsocket()
 
 	if (sockfd < 0)
 	{
-		std::cerr << "Socket error" << std::endl;
 		close(sockfd);
-		exit(-1);
+		throw SocketCreationException();
 	}
 
 	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &yes, sizeof yes) == -1)
 	{
-		std::cerr << "setsockopt" << std::endl;
-		exit(-1);
+		throw SocketCreationException();
 	}
 
 	if (fcntl(sockfd, F_SETFL, O_NONBLOCK) < 0)
 	{
-		std::cerr << "Socket error" << std::endl;
 		close(sockfd);
-		exit(-1);
+		throw SocketCreationException();
 	}
 
 	srv_address.sin_family = AF_INET;
@@ -54,16 +51,14 @@ void	Server::_createsocket()
 
 	if ((bind(sockfd, (struct sockaddr *)&srv_address, sizeof srv_address)) < 0)
 	{
-		std::cerr << "Bind error" << std::endl;
 		close(sockfd);
-		exit(-1);
+		throw SocketCreationException();
 	}
 
 	if ((listen(sockfd, 10)) < 0)
 	{
-		std::cerr << "Listen error" << std::endl;
 		close(sockfd);
-		exit(-1);
+		throw SocketCreationException();
 	}
 	this->_listenfd = sockfd;
 }
@@ -74,16 +69,16 @@ void	Server::_create_epoll()
 
 	if ((this->_epollfd = epoll_create1(0)) == -1)
 	{
-		std::cerr << "epoll error" << std::endl;
-		exit(-1);
+		throw EpollCreationException();
 	}
+	
 	memset(&ev, 0, sizeof(struct epoll_event));
 	ev.events = EPOLLIN;
 	ev.data.fd = this->_listenfd;
+	
 	if (epoll_ctl(this->_epollfd, EPOLL_CTL_ADD, this->_listenfd, &ev) == -1)
 	{
-		std::cerr << "epoll error" << std::endl;
-		exit(-1);
+		throw EpollCtlException();
 	}
 }
 
@@ -97,9 +92,9 @@ void	Server::_acceptnewUser()
 	addr_length = sizeof(struct sockaddr_in);
 	if ((new_fd = accept(this->_listenfd, (struct sockaddr *)&client_addr, &addr_length)) == -1)
 	{
-		std::cerr << "accept error" << std::endl;
-		exit(-1);
+		throw NewUserAcceptException();
 	}
+	
 	/* User will need to be destroyed if authenticate fails or when the connection is closed */
 	this->_UserList[new_fd] = new User(new_fd);
 	memset(&ev, 0, sizeof(struct epoll_event));
@@ -107,8 +102,7 @@ void	Server::_acceptnewUser()
 	ev.data.fd = new_fd;
 	if (epoll_ctl(this->_epollfd, EPOLL_CTL_ADD, new_fd, &ev) == -1)
 	{
-		std::cerr << "epoll error";
-		exit(-1);
+		throw EpollCtlException();
 	}
 }
 
@@ -184,13 +178,11 @@ void	Server::_removeUserfromServer(int userfd)
 	this->_UserList.erase(userfd);
 	if (epoll_ctl(this->_epollfd, EPOLL_CTL_DEL, userfd, NULL) == -1)
 	{
-		std::cerr << "epoll_ctl error" << std::endl;
-		return ;
+		throw EpollCtlException();
 	}
 	if (close(userfd) == -1)
 	{
-		std::cerr << "close error" << std::endl;
-		return ;
+		throw FdCloseException();
 	}
 }
 
@@ -217,8 +209,7 @@ void	Server::init()
 		nfds = epoll_wait(this->_epollfd, ep_event, 50, 3000);
 		if (nfds == -1)
 		{
-			std::cerr << "epoll error" << std::endl;
-			exit(-1);
+			throw EpollWaitException();
 		}
 		for (int i = 0; i < nfds; i++)
 		{

@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   main.hpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 12:39:34 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/15 16:29:58 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/16 18:26:51 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,9 @@
 #include <map>
 #include <sys/epoll.h>
 #include <signal.h>
+#include <stdexcept>
 
+#include "exceptions.hpp"
 #include "Command.hpp"
 
 #define RECV_BUFFER_SIZE 512
