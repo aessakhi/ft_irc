@@ -1,26 +1,25 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   CommandList.hpp                                    :+:      :+:    :+:   */
+/*   nick.cpp                                           :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/16 13:52:32 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/16 15:56:25 by aessakhi         ###   ########.fr       */
+/*   Created: 2023/02/16 15:56:39 by aessakhi          #+#    #+#             */
+/*   Updated: 2023/02/16 16:06:06 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef COMMANDLIST_HPP
-# define COMMANDLIST_HPP
+#include "CommandList.hpp"
 
-#include "main.hpp"
-#include "Server.hpp"
-#include "codes.hpp"
-
-class Server;
-
-void	cap(Server *srv, int &userfd, Command &cmd);
-void	pass(Server *srv, int &userfd, Command &cmd);
-void	nick(Server *srv, int &userfd, Command &cmd);
-
-#endif
+void	nick(Server *srv, int &userfd, Command &cmd)
+{
+	if (cmd.getParamList().empty())
+		srv->sendReply(userfd, "431 :No Nickname given");
+	/* Need to add the check against the user list */
+	else
+	{
+		srv->getUser(userfd)->setNickname(cmd.getParamList[0]);
+		std::cout << "Nickname succesfully added" << std::endl;
+	}
+}

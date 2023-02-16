@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 19:42:29 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/16 15:33:10 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/16 16:06:41 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,11 @@ bool	User::getPwd()
 	return (this->_pwd);
 }
 
+std::string	User::getNickname() const
+{
+	return (this->_nickname);
+}
+
 void	User::setAuth(bool state)
 {
 	this->_authenticated = state;
@@ -36,4 +41,9 @@ void	User::setAuth(bool state)
 void	User::setPwd(bool state)
 {
 	this->_pwd = state;
+}
+
+void	User::setNickname(std::string nickname)
+{
+	this->_nickname = nickname;
 }

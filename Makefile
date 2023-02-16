@@ -6,7 +6,7 @@
 #    By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/02 21:22:12 by aessakhi          #+#    #+#              #
-#    Updated: 2023/02/16 15:27:44 by aessakhi         ###   ########.fr        #
+#    Updated: 2023/02/16 16:08:01 by aessakhi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -23,6 +23,7 @@ SRC_NAMES =	main.cpp \
 			Command.cpp \
 			CAP.cpp \
 			PASS.cpp \
+			NICK.cpp \
 
 SRCS =	$(addprefix $(SRC_DIR)/, $(SRC_NAMES))
 

@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 19:26:20 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/16 15:33:28 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/16 16:02:56 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,9 +35,13 @@ public:
 
 	bool	getPwd();
 
+	std::string	getNickname() const;
+
 	void	setAuth(bool state);
 
 	void	setPwd(bool state);
+
+	void	setNickname(std::string nickname);
 
 };
 

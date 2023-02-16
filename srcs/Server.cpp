@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/16 15:49:56 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/16 16:07:48 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -198,6 +198,7 @@ void	Server::_initCmdMap()
 {
 	this->_cmdMap["CAP"] = &cap;
 	this->_cmdMap["PASS"] = &pass;
+	this->_cmdMap["NICK"] = &nick;
 }
 
 void	Server::init()
