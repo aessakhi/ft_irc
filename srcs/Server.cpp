@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   Server.cpp                                         :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/15 18:07:30 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/16 13:06:36 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -111,10 +111,13 @@ void	Server::_acceptnewUser()
 	}
 }
 
-void	Server::_execCmds(std::vector<std::string> cmds, int userfd)
+void	Server::_execCmds(std::vector<Command> &cmds, int userfd)
 {
-	(void)cmds;
 	(void)userfd;
+	for (std::vector<Command>::const_iterator it = cmds.begin(); it != cmds.end(); it++)
+	{
+		std::cout << "Command name: " << it->getCmd() << std::endl;
+	}
 }
 
 void	Server::_reply(int fd, std::string s)
@@ -150,12 +153,11 @@ void	Server::_receivemessage(struct epoll_event event)
 	std::cout << "-------------------------------" << std::endl;
 	std::vector<Command>	cmd_vector;
 	for (std::vector<std::string>::const_iterator it = cmds.begin(); it != cmds.end(); it++)
-	{
 		splitCmds(&cmd_vector, *it);
-	}
+	this->_execCmds(cmd_vector, event.data.fd);
 	if (this->_UserList[event.data.fd]->getAuth() == false)
 	{
-		std::string s("test");
+		std::string s("User");
 		//irssi needs to receive these numerical replies to confirm the connection. Need to add the expected details of the reply messages.
 		_reply(event.data.fd, RPL_WELCOME(s));
 		// _reply(event.data.fd, RPL_YOURHOST(s));
