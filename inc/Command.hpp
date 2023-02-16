@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/14 19:34:19 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/15 16:24:25 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/16 13:03:27 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,7 +25,12 @@ private:
 	std::vector<std::string>	_params;
 public:
 	Command(std::string name, std::string prefix, std::vector<std::string> param_list);
+
 	~Command();
+
+	std::string getCmd() const;
+	std::string getPrefix() const;
+	std::vector<std::string>	getParamList() const;
 };
 
 #endif

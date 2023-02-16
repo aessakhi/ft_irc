@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:33:17 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/15 16:27:46 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/16 12:59:30 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -52,7 +52,7 @@ private:
 	/* For now, calls recv() once and replies with codes if connection needs to be established */
 	void	_receivemessage(struct epoll_event event);
 
-	void	_execCmds(std::vector<std::string> cmds, int userfd);
+	void	_execCmds(std::vector<Command> &cmds, int userfd);
 
 	void	_removeUserfromServer(int fd);
 

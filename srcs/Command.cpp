@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 16:11:32 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/15 16:28:28 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/16 13:04:34 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,3 +18,18 @@ Command::Command(std::string name, std::string prefix, std::vector<std::string> 
 
 Command::~Command()
 {}
+
+std::string	Command::getCmd() const
+{
+	return (this->_cmd_name);
+}
+
+std::string	Command::getPrefix() const
+{
+	return (this->_prefix);
+}
+
+std::vector<std::string> Command::getParamList() const
+{
+	return (this->_params);
+}
