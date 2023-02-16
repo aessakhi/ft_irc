@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 17:53:06 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/15 16:42:59 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/16 14:08:54 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -64,7 +64,7 @@ std::vector<std::string> ft_split(std::string *str, std::string delimiter)
 	while (str->find(delimiter, 0) != std::string::npos)
 	{
 		end = str->find(delimiter, 0);
-		result.push_back(str->substr(0, end + delimiter.length()));
+		result.push_back(str->substr(0, end));
 		str->erase(0, end + delimiter.length());
 	}
 	return (result);
@@ -74,7 +74,7 @@ void	splitCmds(std::vector<Command> *cmd_vector, std::string cmd)
 {
 	size_t						end	= 0;
 	std::string					name;
-	std::string					prefix;
+	std::string					param;
 	std::vector<std::string>	param_list;
 
 	if ((end = cmd.find(" ")) != std::string::npos)
@@ -85,13 +85,13 @@ void	splitCmds(std::vector<Command> *cmd_vector, std::string cmd)
 	}
 	if ((end = cmd.find(":")) != std::string::npos)
 	{
-		prefix = cmd.substr(0, end);
+		param = cmd.substr(0, end);
 		cmd.erase(0, end + 1);
-		std::cout << "Prefix = " << prefix << std::endl;
+		std::cout << "Param = " << param << std::endl;
 	}
 	while ((end = cmd.find(" ")) != std::string::npos)
 	{
-		param_list.push_back(cmd.substr(0, end + 1));
+		param_list.push_back(cmd.substr(0, end));
 		cmd.erase(0, end + 1);
 	}
 	if (!cmd.empty())
@@ -100,5 +100,5 @@ void	splitCmds(std::vector<Command> *cmd_vector, std::string cmd)
 	{
 		std::cout << *it << std::endl;
 	}
-	cmd_vector->push_back(Command(name, prefix, param_list));
+	cmd_vector->push_back(Command(name, param, param_list));
 }

@@ -6,12 +6,13 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/16 13:06:36 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/16 15:49:56 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "Server.hpp"
 #include "codes.hpp"
+#include "CommandList.hpp"
 
 Server::Server(char *port, char *password): _port(std::string(port)), _pwd(std::string(password)), _listenfd(0), _epollfd(0)
 {}
@@ -114,13 +115,18 @@ void	Server::_acceptnewUser()
 void	Server::_execCmds(std::vector<Command> &cmds, int userfd)
 {
 	(void)userfd;
-	for (std::vector<Command>::const_iterator it = cmds.begin(); it != cmds.end(); it++)
+	for (std::vector<Command>::iterator it = cmds.begin(); it != cmds.end(); it++)
 	{
-		std::cout << "Command name: " << it->getCmd() << std::endl;
+		std::map<std::string, void(*)(Server *srv, int &fd, Command &cmd_struct)>::const_iterator it_map;
+		it_map = this->_cmdMap.find(it->getCmd());
+		if (it_map != this->_cmdMap.end())
+			this->_cmdMap[it->getCmd()](this, userfd, *it);
+		else
+			std::cout << "Ignore cmd" << std::endl;
 	}
 }
 
-void	Server::_reply(int fd, std::string s)
+void	Server::sendReply(int fd, std::string s)
 {
 	s += "\r\n";
 	send(fd, s.data(), s.size(), MSG_NOSIGNAL);
@@ -159,7 +165,7 @@ void	Server::_receivemessage(struct epoll_event event)
 	{
 		std::string s("User");
 		//irssi needs to receive these numerical replies to confirm the connection. Need to add the expected details of the reply messages.
-		_reply(event.data.fd, RPL_WELCOME(s));
+		this->sendReply(event.data.fd, RPL_WELCOME(s));
 		// _reply(event.data.fd, RPL_YOURHOST(s));
 		// _reply(event.data.fd, RPL_CREATED(s, t));
 		// _reply(event.data.fd, RPL_MYINFO(s, ".", "."));
@@ -188,10 +194,18 @@ void	Server::_removeUserfromServer(int userfd)
 	}
 }
 
+void	Server::_initCmdMap()
+{
+	this->_cmdMap["CAP"] = &cap;
+	this->_cmdMap["PASS"] = &pass;
+}
+
 void	Server::init()
 {
 	struct	epoll_event ep_event[50];
 	int		nfds;
+
+	this->_initCmdMap();
 
 	this->_createsocket();
 

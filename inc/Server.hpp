@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:33:17 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/16 12:59:30 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/16 14:45:38 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,6 +16,7 @@
 #include "main.hpp"
 #include "User.hpp"
 #include "Command.hpp"
+#include "CommandList.hpp"
 //Need to stock the user list -> pair<int, User*> , channel list -> Map easier? pair<std::string, Channel*> ?
 
 class Server
@@ -39,7 +40,10 @@ private:
 	std::map<int, User *>	_UserList;
 
 	std::map<int, std::string>	_buffers;
-	
+
+	std::map<std::string, void(*)(Server *srv, int &userfd, Command &cmd)>	_cmdMap;
+
+	void	_initCmdMap();
 	/* Initializes _epollfd and adds _listenfd to the list of entries. */
 	void	_create_epoll();
 
@@ -57,7 +61,6 @@ private:
 	void	_removeUserfromServer(int fd);
 
 	/* Easier send() */
-	void	_reply(int fd, std::string s);
 
 public:
 
@@ -70,6 +73,7 @@ public:
 	// "Initializes" the server. For now also contains the epoll_wait loop.
 	void	init();
 
+	void	sendReply(int fd, std::string s);
 	/* Member accessors */
 
 	// Returns password required for a new connection.
