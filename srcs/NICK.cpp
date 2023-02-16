@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 15:56:39 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/16 16:17:05 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/16 16:33:41 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,8 @@ void	nick(Server *srv, int &userfd, Command &cmd)
 	client = "New user";
 	if (cmd.getParamList().empty())
 		srv->sendReply(userfd, ERR_NONICKNAMEGIVEN(client));
-	/* Need to add the check against the user list */
+	else if (srv->getUserbyNickname(cmd.getParamList()[0]) != NULL)
+		srv->sendReply(userfd, ERR_NICKNAMEINUSE(client, cmd.getParamList()[0]));
 	else
 	{
 		srv->getUser(userfd)->setNickname(cmd.getParamList()[0]);
