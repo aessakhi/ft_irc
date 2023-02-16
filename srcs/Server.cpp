@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/16 16:32:10 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/16 16:56:27 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -249,7 +249,7 @@ User	*Server::getUser(int fd) const
 
 User	*Server::getUserbyNickname(const std::string nickname) const
 {
-	for (std::map<int , User *>::const_iterator	it; it != this->_UserList.end(); it++)
+	for (std::map<int , User *>::const_iterator	it = this->_UserList.begin(); it != this->_UserList.end(); it++)
 	{
 		if (nickname.compare(it->second->getNickname()) == 0)
 			return (it->second);
