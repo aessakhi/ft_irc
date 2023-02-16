@@ -3,10 +3,10 @@
 /*                                                        :::      ::::::::   */
 /*   codes.hpp                                          :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
+/*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 14:12:34 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/16 16:12:41 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/16 16:28:20 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -110,10 +110,16 @@
 #define ERR_CANNOTSENDTOCHAN(client, channel) ("404 " + client + " " + channel + " :Cannot send to channel")
 #define ERR_TOOMANYCHANNELS(client, channel) ("405 " + client + " " + channel + " :You have joined too many channels")
 #define ERR_WASNOSUCHNICK(client) ("406 " + client + " :There was no such nickname")
+#define ERR_TOOMANYTARGETS(client, target) ("407 " + client + " " + target + " :Duplicate recipients. No message delivered")
 #define ERR_NOORIGIN(client) ("409 " + client + " :No origin specified")
+#define ERR_NORECIPIENT(client) ("411 " + client + " :No recipient given")
+#define ERR_NOTEXTTOSEND(client) ("412 " + client + " :No text to send")
+#define ERR_NOTOPLEVEL(client, mask) ("413 " + client + " " + mask + " :No toplevel domain specified")
+#define ERR_WILDTOPLEVEL(client, mask) ("414 " + client + " " + mask + " :Wildcard in toplevel domain")
 #define ERR_INPUTTOOLONG(client) ("417 " + client + " :Input line was too long")
 #define ERR_UNKNOWNCOMMAND(client, command) ("421 " + client + " " + command + " :Unknown command")
 #define ERR_NOMOTD(client) ("422 " + client + " :MOTD file is missing")
+#define ERR_NOADMININFO(client, server) ("423 " + client + " " + server + " :No administrative info available")
 #define ERR_NONICKNAMEGIVEN(client) ("431 " + client + " :No nickname given")
 #define ERR_ERRONEUSNICKNAME(client, nick) ("432 " + client + " " + nick + " :Erroneus nickname")
 #define ERR_NICKNAMEINUSE(client, nick) ("433 " + client + " " + nick + " :Nickname is already in use")
