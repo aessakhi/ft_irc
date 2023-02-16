@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/16 16:07:48 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/16 16:32:10 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -117,7 +117,7 @@ void	Server::_execCmds(std::vector<Command> &cmds, int userfd)
 	(void)userfd;
 	for (std::vector<Command>::iterator it = cmds.begin(); it != cmds.end(); it++)
 	{
-		std::map<std::string, void(*)(Server *srv, int &fd, Command &cmd_struct)>::const_iterator it_map;
+		std::map<std::string, void(*)(Server *, int &, Command &)>::const_iterator it_map;
 		it_map = this->_cmdMap.find(it->getCmd());
 		if (it_map != this->_cmdMap.end())
 			this->_cmdMap[it->getCmd()](this, userfd, *it);
@@ -246,3 +246,14 @@ User	*Server::getUser(int fd) const
 		return (this->_UserList.find(fd)->second);
 	return (NULL);
 }
+
+User	*Server::getUserbyNickname(const std::string nickname) const
+{
+	for (std::map<int , User *>::const_iterator	it; it != this->_UserList.end(); it++)
+	{
+		if (nickname.compare(it->second->getNickname()) == 0)
+			return (it->second);
+	}
+	return (NULL);
+}
+

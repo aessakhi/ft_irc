@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/02 21:33:17 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/16 14:45:38 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/16 16:27:09 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -84,6 +84,8 @@ public:
 
 	// Returns User * instance corresponding to fd, NULL if no User * matches that fd.
 	User	*getUser(int fd) const;
+
+	User	*getUserbyNickname(const std::string nickname) const;
 
 };
 
