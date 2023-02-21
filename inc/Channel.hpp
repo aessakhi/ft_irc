@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 16:33:22 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/21 14:30:16 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/21 14:32:05 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -218,6 +218,16 @@ class Channel
 		- err_noerror on success
 		*/
 		err_codes invite(User *from, User *to);
+
+		/*
+		Tries to kick user from the channel
+		Can return :
+		- err_notonchannel
+		- err_chanoprivsneeded
+		- err_useronchannel
+		- err_noerror on success
+		*/
+		err_codes kick(User *from, User *to);
 };
 
 #endif

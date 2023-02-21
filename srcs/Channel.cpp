@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 17:26:20 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/21 14:30:21 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/21 14:36:17 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -189,6 +189,22 @@ err_codes Channel::invite(User *from, User *to)
 		return err_useronchannel;
 
 	addInvite(to);
+
+	return err_noerror;
+}
+
+err_codes Channel::kick(User *from, User *to)
+{
+	if (!isMember(from))
+		return err_notonchannel;
+	
+	if (!isOp(from))
+		return err_chanoprivsneeded;
+
+	if (!isMember(to))
+		return err_usernotinchannel;
+	
+	std::remove(_members.begin(), _members.end(), to);
 
 	return err_noerror;
 }
