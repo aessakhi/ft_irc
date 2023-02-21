@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 17:53:06 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/16 14:08:54 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/21 14:49:53 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,7 +50,7 @@ int program_arguments_check(int argc, char **argv)
 }
 
 /* Might need to be tweaked a bit, might be an issue when a string has no trailing \r\n */
-std::vector<std::string> ft_split(std::string *str, std::string delimiter)
+std::vector<std::string> split(std::string *str, std::string delimiter)
 {
 	std::vector<std::string> result;
 
@@ -66,6 +66,26 @@ std::vector<std::string> ft_split(std::string *str, std::string delimiter)
 		end = str->find(delimiter, 0);
 		result.push_back(str->substr(0, end));
 		str->erase(0, end + delimiter.length());
+	}
+	return (result);
+}
+
+std::vector<std::string> split(std::string str, std::string delimiter)
+{
+	std::vector<std::string> result;
+
+	size_t	end = 0;
+
+	if (str.find(delimiter) == std::string::npos)
+	{
+		str.erase(std::string::npos);
+		return (std::vector<std::string>());
+	}
+	while (str.find(delimiter, 0) != std::string::npos)
+	{
+		end = str.find(delimiter, 0);
+		result.push_back(str.substr(0, end));
+		str.erase(0, end + delimiter.length());
 	}
 	return (result);
 }
@@ -91,7 +111,8 @@ void	splitCmds(std::vector<Command> *cmd_vector, std::string cmd)
 	}
 	while ((end = cmd.find(" ")) != std::string::npos)
 	{
-		param_list.push_back(cmd.substr(0, end));
+		if (end != 0)
+			param_list.push_back(cmd.substr(0, end));
 		cmd.erase(0, end + 1);
 	}
 	if (!cmd.empty())
