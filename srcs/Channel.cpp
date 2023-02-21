@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 17:26:20 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/21 11:45:06 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/21 13:30:35 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ Channel::~Channel() {}
 
 /* -----ACCESSORS----- */
 
-std::string	Channel::getName() const
+const std::string & Channel::getName() const
 { return _name ; }
 
 bool	Channel::banMode() const
@@ -101,3 +101,72 @@ bool	Channel::isFull() const
 
 bool	Channel::checkKey(std::string s) const
 { return !(s.compare(_key)) ; }
+
+/* -----COMMANDS----- */
+
+err_codes Channel::join(User *user, std::string s = "")
+{
+	// Mode checks
+
+	if (keyMode())
+	{
+		if (!checkKey(s))
+			return err_badchannelkey;
+	}
+
+	if (banMode())
+	{
+		if (banExceptMode() && !isBanExcept(user) && isBanned(user))
+			return err_bannedfromchan;
+		
+		if (!banExceptMode() && isBanned(user))
+			return err_bannedfromchan;
+	}
+
+	if (limitMode())
+	{
+		if (isFull())
+			return err_channelisfull;
+	}
+
+	if (inviteMode())
+	{
+		if (inviteExceptMode() && !isInviteExcept(user) && !isInvited(user))
+			return err_inviteonlychan;
+		
+		if (!inviteExceptMode() && !isInvited(user))
+			return err_inviteonlychan;
+	}
+
+	// Adding user
+
+	if (_members.empty())
+		addOperator(user);
+	addMember(user);
+
+	return err_noerror;
+}
+
+err_codes	Channel::part(User *user)
+{
+	if (!isMember(user))
+		return err_notonchannel;
+	
+	std::remove(_members.begin(), _members.end(), user);
+
+	return err_noerror;
+}
+
+err_codes	Channel::changeTopic(User * user, std::string new_topic)
+{
+	if (!isMember(user))
+		return err_notonchannel;
+
+	if (protectedTopicMode() && !isOp(user))
+		return err_chanoprivsneeded;
+
+	_topic = new_topic;
+	_topic_is_set = true;
+
+	return err_noerror;
+}

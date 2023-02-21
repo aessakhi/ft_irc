@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 12:39:34 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/21 11:01:34 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/21 12:36:14 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,6 +35,7 @@
 
 #include "exceptions.hpp"
 #include "Command.hpp"
+#include "codes.hpp"
 
 #define RECV_BUFFER_SIZE 512
 
