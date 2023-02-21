@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 16:33:22 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/21 13:26:57 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/21 14:32:05 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,7 +30,11 @@ class Channel
 		std::vector<User *> _operators;
 
 		/* Topic of the channel */
-		std::string	topic;
+		std::string	_topic;
+
+		/* If true, topic has been cleared.
+		This allows for differenciating between no topic and an empty string as topic. */
+		bool	_topic_is_set;
 
 		/* If _ban_mode, list of all users that are banned from this channel */
 		std::vector<User *> _banned;
@@ -87,19 +91,43 @@ class Channel
 
 	/* -----ACCESSORS----- */
 
-		std::string	getName() const;
+		/* Returns channel name */
+		const std::string & getName() const;
 
+		/* Returns channel topic */
+		const std::string & getTopic() const;
+
+		/* Returns if channel is in ban mode */
 		bool	banMode() const;
+
+		/* Returns if channel is in ban-except mode */
 		bool	banExceptMode() const;
+
+		/* Returns if channel is in limit mode */
 		bool	limitMode() const;
+
+		/* Returns if channel is in invite mode */
 		bool	inviteMode() const;
+
+		/* Returns if channel is in invite-except mode */
 		bool	inviteExceptMode() const;
+
+		/* Returns if channel requires a key to join */
 		bool	keyMode() const;
+
+		/* Returns if channel is in moderated mode */
 		bool	moderatedMode() const;
+
+		/* Returns if channel is in secret mode */
 		bool	secretMode() const;
+
+		/* Returns if only operators can change the topic */
 		bool	protectedTopicMode() const;
+
+		/* Returns if users need to join to send messages to the channel */
 		bool	noExternalMessagesMode() const;
 
+		/* Returns max number of members */
 		size_t	capacity() const;
 
 	/* -----ADDING USERS TO LISTS----- */
@@ -120,7 +148,7 @@ class Channel
 		void	addInviteExcept(User *user);
 
 		/* Adds a user to the list of invited users */
-		void	invite(User *user);
+		void	addInvite(User *user);
 		
 	/* -----ATTRIBUTE CHECKS----- */
 
@@ -147,7 +175,59 @@ class Channel
 
 		/* Returns true if the given string matches the key required to join */
 		bool	checkKey(std::string s) const;
+		
+		/* Returns true if channel has a topic */
+		bool	isTopicSet() const;
+		
+	/* -----COMMANDS----- */
+		
+		/*
+		Tries to add user to the channel.
+		Can return :
+		- err_badchannelkey
+		- err_bannedfromchan
+		- err_channelisfull
+		- err_inviteonlychan
+		- err_noerror on success
+		*/
+		err_codes join(User *user, std::string s);
 
+		/*
+		Tries to remove user from the channel.
+		Can return :
+		- err_notonchannel
+		- err_noerror on success
+		*/
+		err_codes part(User *user);
+		
+		/*
+		Tries to change the channel's topic.
+		Can return :
+		- err_notonchannel
+		- err_chanoprivsneeded
+		- err_noerror on success
+		*/
+		err_codes changeTopic(User *user, std::string new_topic);
+
+		/*
+		Tries to add user to the list of invited users
+		Can return :
+		- err_notonchannel
+		- err_chanoprivsneeded
+		- err_useronchannel
+		- err_noerror on success
+		*/
+		err_codes invite(User *from, User *to);
+
+		/*
+		Tries to kick user from the channel
+		Can return :
+		- err_notonchannel
+		- err_chanoprivsneeded
+		- err_useronchannel
+		- err_noerror on success
+		*/
+		err_codes kick(User *from, User *to);
 };
 
 #endif

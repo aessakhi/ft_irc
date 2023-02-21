@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 14:12:34 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/21 12:12:06 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/21 12:38:00 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -157,6 +157,8 @@
 #define ERR_NOPRIVS(client, priv) ("723 " + client + " " + priv + " :Insufficient oper privileges.")
 
 enum err_codes {
+	err_noerror = 0,
+	
 	err_unknownerror = 400,
 	err_nosuchnick = 401,
 	err_nosuchserver = 402,
