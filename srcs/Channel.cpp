@@ -5,7 +5,7 @@ Channel::Channel(const std::string & name) : _name(name)
 
 Channel::~Channel() {}
 
-/* -----ACCESSORS----- */
+/* ----------ACCESSORS---------- */
 
 const std::string & Channel::getName() const
 { return _name ; }
@@ -46,7 +46,7 @@ bool	Channel::noExternalMessagesMode() const
 size_t	Channel::capacity() const
 { return _capacity ; }
 
-/* -----ADDING USERS TO LISTS----- */
+/* ----------ADDING USERS TO LISTS---------- */
 
 void	Channel::addMember(User *user)
 { _members.push_back(user); }
@@ -66,7 +66,7 @@ void	Channel::addInviteExcept(User *user)
 void	Channel::addInvite(User * user)
 { _invited.push_back(user) ; }
 
-/* -----ATTRIBUTE CHECKS----- */
+/* ----------ATTRIBUTE CHECKS---------- */
 
 bool	Channel::isMember(User *user) const
 { return std::find(_members.begin(), _members.end(), user) == _members.end() ; }
@@ -75,17 +75,30 @@ bool	Channel::isOp(User *user) const
 { return std::find(_operators.begin(), _operators.end(), user) == _operators.end() ; }
 
 /* The 4 methods below might need to handle user masks */
+
+bool	Channel::_find_mask(std::vector<User *> vect, User * user) const
+{
+	std::vector<User *>::const_iterator it = vect.begin();
+	std::vector<User *>::const_iterator ite = vect.end();
+	for (; it != ite; it++)
+	{
+		if (wildcompare((*it)->getMask(), user->getMask()))
+			return true;
+	}
+	return false;
+}
+
 bool	Channel::isBanned(User *user) const
-{ return std::find(_banned.begin(), _banned.end(), user) == _banned.end() ; }
+{ return _find_mask(_banned, user) ; }
 
 bool	Channel::isBanExcept(User *user) const
-{ return std::find(_ban_except.begin(), _ban_except.end(), user) == _ban_except.end() ; }
+{ return _find_mask(_ban_except, user) ; }
 
 bool	Channel::isInvited(User *user) const
-{ return std::find(_invited.begin(), _invited.end(), user) == _invited.end() ; }
+{ return _find_mask(_invited, user) ; }
 
 bool	Channel::isInviteExcept(User *user) const
-{ return std::find(_invite_except.begin(), _invite_except.end(), user) == _invite_except.end() ; }
+{ return _find_mask(_invite_except, user) ; }
 
 bool	Channel::isFull() const
 { return _members.size() == _capacity ; }
@@ -96,7 +109,7 @@ bool	Channel::checkKey(std::string s) const
 bool	Channel::isTopicSet() const
 { return _topic_is_set ; }
 
-/* -----COMMANDS----- */
+/* ----------COMMANDS---------- */
 
 err_codes Channel::join(User *user, std::string s = "")
 {

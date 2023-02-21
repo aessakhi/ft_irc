@@ -71,6 +71,9 @@ class Channel
 		/* If true, users need to join the channel to send messages to it */
 		bool	_no_external_messages_mode;
 
+		/*  */
+		bool	_find_mask(std::vector<User *> vect, User * user) const;
+
 	public:
 		
 		Channel(const std::string & name);
