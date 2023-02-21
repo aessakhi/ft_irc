@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 17:26:20 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/16 17:54:36 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/21 10:31:07 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,3 +72,5 @@ void	Channel::addBanExcept(User *user)
 void	Channel::addInviteExcept(User *user)
 { _invite_except.push_back(user); }
 
+void	Channel::invite(User * user)
+{ _invited.push_back(user) ; }

@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 16:33:22 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/21 10:25:36 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/21 10:29:45 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -115,6 +115,9 @@ class Channel
 
 		/* Adds a user to the list of invite-exempt users. */
 		void	addInviteExcept(User *user);
+
+		/* Adds a user to the list of invited users */
+		void	invite(User *user);
 		
 };
 
