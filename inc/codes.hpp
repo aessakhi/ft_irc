@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/15 14:12:34 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/16 16:28:20 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/21 12:12:06 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -108,46 +108,107 @@
 #define ERR_NOSUCHSERVER(client, server) ("402 " + client + " " + server + " :No such server")
 #define ERR_NOSUCHCHANNEL(client, channel) ("403 " + client + " " + channel + " :No such channel")
 #define ERR_CANNOTSENDTOCHAN(client, channel) ("404 " + client + " " + channel + " :Cannot send to channel")
+
 #define ERR_TOOMANYCHANNELS(client, channel) ("405 " + client + " " + channel + " :You have joined too many channels")
 #define ERR_WASNOSUCHNICK(client) ("406 " + client + " :There was no such nickname")
 #define ERR_TOOMANYTARGETS(client, target) ("407 " + client + " " + target + " :Duplicate recipients. No message delivered")
 #define ERR_NOORIGIN(client) ("409 " + client + " :No origin specified")
 #define ERR_NORECIPIENT(client) ("411 " + client + " :No recipient given")
+
 #define ERR_NOTEXTTOSEND(client) ("412 " + client + " :No text to send")
 #define ERR_NOTOPLEVEL(client, mask) ("413 " + client + " " + mask + " :No toplevel domain specified")
 #define ERR_WILDTOPLEVEL(client, mask) ("414 " + client + " " + mask + " :Wildcard in toplevel domain")
 #define ERR_INPUTTOOLONG(client) ("417 " + client + " :Input line was too long")
 #define ERR_UNKNOWNCOMMAND(client, command) ("421 " + client + " " + command + " :Unknown command")
+
 #define ERR_NOMOTD(client) ("422 " + client + " :MOTD file is missing")
 #define ERR_NOADMININFO(client, server) ("423 " + client + " " + server + " :No administrative info available")
 #define ERR_NONICKNAMEGIVEN(client) ("431 " + client + " :No nickname given")
 #define ERR_ERRONEUSNICKNAME(client, nick) ("432 " + client + " " + nick + " :Erroneus nickname")
 #define ERR_NICKNAMEINUSE(client, nick) ("433 " + client + " " + nick + " :Nickname is already in use")
+
 #define ERR_USERNOTINCHANNEL(client, nick, channel) ("441 " + client + " " + nick + " " + channel + " :They aren't on that channel")
 #define ERR_NOTONCHANNEL(client, channel) ("442 " + client + " " + channel + " :You are not on that channel")
 #define ERR_USERONCHANNEL(client, nick, channel) ("443 " + client + " " + nick + " " + channel + " :is already on channel")
 #define ERR_NOTREGISTERED(client) ("451 " + client + " :You have not registered")
 #define ERR_NEEDMOREPARAMS(client, command) ("461 " + client + " " + command + " :Not enough parameters")
+
 #define ERR_ALREADYREGISTERED(client) ("462 " + client + " :You may not reregister")
 #define ERR_PASSWDMISMATCH(client) ("464 " + client + " :Password incorrect")
 #define ERR_YOUREBANNEDCREEP(client) ("465 " + client + " :You are banned from this server.")
 #define ERR_CHANNELISFULL(client, channel) ("471 " + client + " " + channel + " :Cannot join channel (+l)")
 #define ERR_UNKNOWNMODE(client, modechar) ("472 " + client + " " + modechar + " :is unknown mode char to me")
+
 #define ERR_INVITEONLYCHAN(client, channel) ("473 " + client + " " + channel + " :Cannot join channel (+i)")
 #define ERR_BANNEDFROMCHAN(client, channel) ("474 " + client + " " + channel + " :Cannot join channel (+b)")
 #define ERR_BADCHANNELKEY(client, channel) ("475 " + client + " " + channel + " :Cannot join channel (+k)")
 #define ERR_BADCHANMASK(channel) ("476 " + channel + " :Bad Channel Mask")
 #define ERR_NOPRIVILEGES(client) ("481 " + client + " :Permission Denied- You're not an IRC operator")
+
 #define ERR_CHANOPRIVSNEEDED(client, channel) ("482 " + client + " " + channel + " :You're not channel operator")
 #define ERR_CANTKILLSERVER(client) ("483 " + client + " :You cant kill a server!")
 #define ERR_NOOPERHOST(client) ("491 " + client + " :No O-lines for your host")
 #define ERR_UMODEUNKNOWNFLAG(client) ("501 " + client + " :Unknown MODE flag")
 #define ERR_USERSDONTMATCH(client) ("502 " + client + " :Cant change mode for other users")
+
 #define ERR_HELPNOTFOUND(client, subject) ("524 " + client + " " + subject + " :No help available on this topic")
 #define ERR_INVALIDKEY(client, channel) ("525 " + client + " " + channel + " :Key is not well-formed")
-
 #define ERR_INVALIDMODEPARAM(client, target, modechar, param, description) ("696 " + client + " " + target + " " + modechar + " " + param + " :" + description)
-
 #define ERR_NOPRIVS(client, priv) ("723 " + client + " " + priv + " :Insufficient oper privileges.")
+
+enum err_codes {
+	err_unknownerror = 400,
+	err_nosuchnick = 401,
+	err_nosuchserver = 402,
+	err_nosuchchannel = 403,
+	err_cannotsendtochan = 404,
+	
+	err_toomanychannels = 405,
+	err_wasnosuchnick = 406,
+	err_toomanytargets = 407,
+	err_noorigin = 409,
+	err_norecipient = 411,
+	
+	err_notexttosend = 412,
+	err_notoplevel = 413,
+	err_wildtoplevel = 414,
+	err_inputtoolong = 417,
+	err_unknowncommand = 421,
+	
+	err_nomotd = 422,
+	err_noadmininfo = 423,
+	err_nonicknamegiven = 431,
+	err_erroneusnickname = 432,
+	err_nicknameinuse = 433,
+	
+	err_usernotinchannel = 441,
+	err_notonchannel = 442,
+	err_useronchannel = 443,
+	err_notregistered = 451,
+	err_needmoreparams = 461,
+
+	err_alreadyregistered = 462,
+	err_passwdmismatch = 464,
+	err_yourebannedcreep = 465,
+	err_channelisfull = 471,
+	err_unknownmode = 472,
+
+	err_inviteonlychan = 473,
+	err_bannedfromchan = 474,
+	err_badchannelkey = 475,
+	err_badchanmask = 476,
+	err_noprivileges = 481,
+
+	err_chanoprivsneeded = 482,
+	err_cantkillserver = 483,
+	err_nooperhost = 491,
+	err_umodeunknownflag = 501,
+	err_usersdontmatch = 502,
+	
+	err_helpnotfound = 524,
+	err_invalidkey = 525,
+	err_invalidmodeparam = 696,
+	err_noprivs = 723
+};
 
 #endif
