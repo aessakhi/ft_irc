@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 17:26:20 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/21 10:31:07 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/21 11:45:06 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,3 +74,30 @@ void	Channel::addInviteExcept(User *user)
 
 void	Channel::invite(User * user)
 { _invited.push_back(user) ; }
+
+/* -----ATTRIBUTE CHECKS----- */
+
+bool	Channel::isMember(User *user) const
+{ return std::find(_members.begin(), _members.end(), user) == _members.end() ; }
+
+bool	Channel::isOp(User *user) const
+{ return std::find(_operators.begin(), _operators.end(), user) == _operators.end() ; }
+
+/* The 4 methods below might need to handle user masks */
+bool	Channel::isBanned(User *user) const
+{ return std::find(_banned.begin(), _banned.end(), user) == _banned.end() ; }
+
+bool	Channel::isBanExcept(User *user) const
+{ return std::find(_ban_except.begin(), _ban_except.end(), user) == _ban_except.end() ; }
+
+bool	Channel::isInvited(User *user) const
+{ return std::find(_invited.begin(), _invited.end(), user) == _invited.end() ; }
+
+bool	Channel::isInviteExcept(User *user) const
+{ return std::find(_invite_except.begin(), _invite_except.end(), user) == _invite_except.end() ; }
+
+bool	Channel::isFull() const
+{ return _members.size() == _capacity ; }
+
+bool	Channel::checkKey(std::string s) const
+{ return !(s.compare(_key)) ; }

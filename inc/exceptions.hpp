@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 18:20:39 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/16 18:38:05 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/21 10:49:55 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,6 +72,16 @@ class FdCloseException : public std::exception
 		virtual const char *what() const throw()
 		{
 			return ("Fatal error on a call to close()");
+		}
+};
+
+class NotAChannelOperatorException : public std::exception
+{
+	public:
+		
+		virtual const char *what() const throw()
+		{
+			return ("User isnt a channel operator");
 		}
 };
 

@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/10 12:39:34 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/16 18:26:51 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/21 11:01:34 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -31,6 +31,7 @@
 #include <sys/epoll.h>
 #include <signal.h>
 #include <stdexcept>
+#include <algorithm>
 
 #include "exceptions.hpp"
 #include "Command.hpp"

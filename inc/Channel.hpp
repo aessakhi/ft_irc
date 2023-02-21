@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 16:33:22 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/21 10:29:45 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/21 11:44:54 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -28,6 +28,9 @@ class Channel
 
 		/* List of all users that are operators for this channel */
 		std::vector<User *> _operators;
+
+		/* Topic of the channel */
+		std::string	topic;
 
 		/* If _ban_mode, list of all users that are banned from this channel */
 		std::vector<User *> _banned;
@@ -119,6 +122,32 @@ class Channel
 		/* Adds a user to the list of invited users */
 		void	invite(User *user);
 		
+	/* -----ATTRIBUTE CHECKS----- */
+
+		/* Checks if user is a member */
+		bool	isMember(User *user) const ;
+
+		/* Checks if user is an operator */
+		bool	isOp(User *user) const ;
+
+		/* Checks if user is banned */
+		bool	isBanned(User *user) const ;
+
+		/* Checks if user is ban-exempt */
+		bool	isBanExcept(User *user) const ;
+
+		/* Checks if user has been invited */
+		bool	isInvited(User *user) const ;
+
+		/* Checks if user is invite-exempt */
+		bool	isInviteExcept(User *user) const ;
+
+		/* Returns true if the channel is at max capacity */
+		bool	isFull() const;
+
+		/* Returns true if the given string matches the key required to join */
+		bool	checkKey(std::string s) const;
+
 };
 
 #endif
