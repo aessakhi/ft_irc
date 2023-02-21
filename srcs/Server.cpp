@@ -121,7 +121,6 @@ void	Server::_receivemessage(struct epoll_event event)
 {
 	char buf[RECV_BUFFER_SIZE];
 	ssize_t ret;
-	std::string msg;
 
 	memset(buf, 0, RECV_BUFFER_SIZE);
 	ret = recv(event.data.fd, buf, RECV_BUFFER_SIZE, 0);
@@ -130,9 +129,7 @@ void	Server::_receivemessage(struct epoll_event event)
 	buf[ret] = 0;
 	printRecv(buf);
 	this->_buffers[event.data.fd].append(buf);
-	/* Need to change the way the packets are received (In order the process a command, you have to first aggregate de received packets in order to rebuild it)*/
 	std::vector<std::string>	cmds;
-	/* Need to split the msg using \r\n placing the cmds in a vector. The first command vector will be used for authentication. If it doesn't respect the pre-requisites (PASS, NICK, USER), remove the user from epollfd and the User map */
 	cmds = split(&this->_buffers[event.data.fd], "\r\n");
 	buf[0] = 0;
 	std::vector<Command>	cmd_vector;
