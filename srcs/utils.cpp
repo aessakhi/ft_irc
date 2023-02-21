@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   utils.cpp                                          :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/10 17:53:06 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/21 15:51:16 by aessakhi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "main.hpp"
 #include "Command.hpp"
 
@@ -118,4 +106,50 @@ void	splitCmds(std::vector<Command> *cmd_vector, std::string cmd)
 		std::cout << *it << std::endl;
 	}
 	cmd_vector->push_back(Command(name, param, param_list));
+}
+
+/* Returns true if s1 and s2 are similar when interpreting wildcards */
+bool	wildcardPointerCompare(const char * s1, const char * s2)
+{
+	for (int i = 0; s1[i] || s2[i]; i++)
+	{
+		// case-insensitive basic comparison
+		if (s1[i] && s2[i] && (toupper(s1[i]) == toupper(s2[i])) )
+			continue;
+		
+		// single char wildcard
+		if ( (s1[i] != s2[i]) && (s1[i] == '?' || s2[i] == '?') )
+			continue;
+		
+		// * wildcard on s1
+		if ( (s1[i] != s2[i]) && (s1[i] == '*') )
+		{
+			// skip 0, 1, 2... characters in s2
+			for (int test = 0; s2[test]; test++)
+			{
+				if (wildcardPointerCompare(s1 + i + 1, s2 + i + test))
+					return true;
+			}
+		}
+
+		// * wildcard on s2
+		if ( (s1[i] != s2[i]) && (s2[i] == '*') )
+		{
+			// skip 0, 1, 2... characters in s1
+			for (int test = 0; s1[test]; test++)
+			{
+				if (wildcardPointerCompare(s1 + i + test, s2 + i + 1))
+					return true;
+			}
+		}
+		
+		return false;
+	}
+
+	return true;
+}
+
+bool	wildcompare(std::string s1, std::string s2)
+{
+	return wildcardPointerCompare(s1.data(), s2.data());
 }
