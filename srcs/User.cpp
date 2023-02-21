@@ -77,3 +77,8 @@ void	User::setRealname(std::string realname)
 {
 	this->_realname = realname;
 }
+
+const std::string User::getMask() const
+{
+	return _nickname + "!" + _realname + "@" + _hostname;
+}

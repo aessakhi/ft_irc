@@ -95,6 +95,9 @@ public:
 	/* Sets user's realname */
 	void	setRealname(std::string realname);
 
+	/* Returns "nickname!realname\@hostname" */
+	const std::string getMask() const;
+
 };
 
 #endif
