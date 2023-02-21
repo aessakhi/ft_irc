@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 19:42:29 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/21 15:14:46 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/21 15:45:39 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -67,13 +67,7 @@ void	User::setUser(bool state)
 
 bool	User::checkAuth()
 {
-	if (_user == true && _pwd == true && _nick == true)
-	{
-		std::cout << "Check auth" << std::endl;
-		return (true);
-	}
-	std::cout << "Check auth failed" << std::endl;
-	return (false);
+	return (_user && _pwd && _nick);
 }
 
 void	User::setNickname(std::string nickname)
