@@ -21,4 +21,6 @@ public:
 	std::vector<std::string>	getParamList() const;
 };
 
+std::ostream & operator<<(std::ostream & out, const Command & cmd);
+
 #endif

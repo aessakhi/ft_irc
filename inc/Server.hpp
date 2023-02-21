@@ -2,9 +2,7 @@
 # define SERVER_HPP
 
 #include "main.hpp"
-#include "User.hpp"
-#include "Command.hpp"
-#include "CommandList.hpp"
+
 //Need to stock the user list -> pair<int, User*> , channel list -> Map easier? pair<std::string, Channel*> ?
 
 class Server

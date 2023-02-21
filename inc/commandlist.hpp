@@ -2,8 +2,6 @@
 # define COMMANDLIST_HPP
 
 #include "main.hpp"
-#include "Server.hpp"
-#include "codes.hpp"
 
 class Server;
 

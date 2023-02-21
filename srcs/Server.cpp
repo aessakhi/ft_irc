@@ -1,6 +1,4 @@
 #include "Server.hpp"
-#include "codes.hpp"
-#include "CommandList.hpp"
 
 Server::Server(char *port, char *password): _port(std::string(port)), _pwd(std::string(password)), _listenfd(0), _epollfd(0)
 {}
@@ -96,24 +94,28 @@ void	Server::_acceptnewUser()
 
 void	Server::_execCmds(std::vector<Command> &cmds, int userfd)
 {
-	(void)userfd;
 	for (std::vector<Command>::iterator it = cmds.begin(); it != cmds.end(); it++)
 	{
 		std::map<std::string, void(*)(Server *, int &, Command &)>::const_iterator it_map;
-		it_map = this->_cmdMap.find(it->getCmd());
+		it_map = this->_cmdMap.find(toupper(it->getCmd()));
 		if (it_map != this->_cmdMap.end())
-			this->_cmdMap[it->getCmd()](this, userfd, *it);
+		{
+			printFcall(it->getCmd());
+			this->_cmdMap[toupper(it->getCmd())](this, userfd, *it);
+		}
 		else
-			std::cout << "Ignore cmd" << std::endl;
+		{
+			std::cout << YLW << "Ignore cmd" << RESET << std::endl;
+		}
 	}
 }
 
 void	Server::sendReply(int fd, std::string s)
 {
+
+	printReply(s);
 	s += "\r\n";
 	send(fd, s.data(), s.size(), MSG_NOSIGNAL);
-	std::cout << "Sending " << s.size() << "bytes" << std::endl;
-	std::cout << ">> " << s;
 }
 
 void	Server::_receivemessage(struct epoll_event event)
@@ -125,23 +127,24 @@ void	Server::_receivemessage(struct epoll_event event)
 	memset(buf, 0, RECV_BUFFER_SIZE);
 	ret = recv(event.data.fd, buf, RECV_BUFFER_SIZE, 0);
 	if (ret == -1)
-	{
-		std::cerr << "recv error" << std::endl;
-		return ;
-	}
+		return printError("recv error");
 	buf[ret] = 0;
+	printRecv(buf);
 	this->_buffers[event.data.fd].append(buf);
 	/* Need to change the way the packets are received (In order the process a command, you have to first aggregate de received packets in order to rebuild it)*/
 	std::vector<std::string>	cmds;
 	/* Need to split the msg using \r\n placing the cmds in a vector. The first command vector will be used for authentication. If it doesn't respect the pre-requisites (PASS, NICK, USER), remove the user from epollfd and the User map */
 	cmds = split(&this->_buffers[event.data.fd], "\r\n");
 	buf[0] = 0;
-	for (std::vector<std::string>::const_iterator it = cmds.begin(); it != cmds.end(); it++)
-		std::cout << *it << std::endl;
-	std::cout << "-------------------------------" << std::endl;
 	std::vector<Command>	cmd_vector;
+
 	for (std::vector<std::string>::const_iterator it = cmds.begin(); it != cmds.end(); it++)
 		splitCmds(&cmd_vector, *it);
+	
+	for (size_t i = 0; i < cmd_vector.size(); i++)
+	{
+		std::cout << BGRN << cmd_vector[i] << RESET << std::endl;
+	}
 	this->_execCmds(cmd_vector, event.data.fd);
 	/* _removeUserfromServer(event.data.fd); */
 }
@@ -149,10 +152,7 @@ void	Server::_receivemessage(struct epoll_event event)
 void	Server::_removeUserfromServer(int userfd)
 {
 	if (this->getUser(userfd) == 0)
-	{
-		std::cerr << "Invalid user" << std::endl;
-		return ;
-	}
+		return printError("Invalid user");
 	this->_UserList.erase(userfd);
 	if (epoll_ctl(this->_epollfd, EPOLL_CTL_DEL, userfd, NULL) == -1)
 	{

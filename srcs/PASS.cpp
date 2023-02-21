@@ -1,4 +1,4 @@
-#include "CommandList.hpp"
+#include "main.hpp"
 
 void	pass(Server *srv, int &userfd, Command &cmd)
 {
@@ -14,7 +14,6 @@ void	pass(Server *srv, int &userfd, Command &cmd)
 	}
 	else if (cmd.getParamList()[0].compare(srv->getpwd()) == 0)
 	{
-		std::cout << "Pass func" << std::endl;
 		srv->getUser(userfd)->setPwd(true);
 		if (srv->getUser(userfd)->checkAuth() == true && srv->getUser(userfd)->getAuth() == false)
 		{

@@ -1,5 +1,4 @@
 #include "main.hpp"
-#include "Command.hpp"
 
 /* Returns true only if the given string could be a port. */
 static bool _port_is_digit(char *port)
@@ -12,25 +11,24 @@ static bool _port_is_digit(char *port)
 	return (port[0] != 0);
 }
 
-/*	Basic check for input arguments.
-	Returns 0 if arguments are formatted correctly, -1 otherwise. */
+
 int program_arguments_check(int argc, char **argv)
 {
 	if (argc != 3)
 	{
-		std::cerr << "Error: Wrong number of arguments. Usage: ./ircsserv <port> <password>" << std::endl;
+		printError("Error: Wrong number of arguments. Usage: ./ircsserv <port> <password>");
 		return -1;
 	}
 
 	if (!_port_is_digit(argv[1]))
 	{
-		std::cerr << "Error: Port should be a numeric value" << std::endl;
+		printError("Error: Port should be a numeric value");
 		return -1;
 	}
 
 	if (!argv[2][0])
 	{
-		std::cerr << "Error: Password cannot be empty." << std::endl;
+		printError("Error: Password cannot be empty.");
 		return -1;
 	}
 	
@@ -86,13 +84,11 @@ void	splitCmds(std::vector<Command> *cmd_vector, std::string cmd)
 	{
 		name = cmd.substr(0, end);
 		cmd.erase(0, end + 1);
-		std::cout << "Name = " << name << std::endl;
 	}
 	if ((end = cmd.find(":")) != std::string::npos)
 	{
 		param = cmd.substr(0, end);
 		cmd.erase(0, end + 1);
-		std::cout << "Param = " << param << std::endl;
 	}
 	while ((end = cmd.find(" ")) != std::string::npos)
 	{
@@ -101,15 +97,10 @@ void	splitCmds(std::vector<Command> *cmd_vector, std::string cmd)
 	}
 	if (!cmd.empty())
 		param_list.push_back(cmd);
-	for (std::vector<std::string>::const_iterator it = param_list.begin(); it != param_list.end(); it++)
-	{
-		std::cout << *it << std::endl;
-	}
 	cmd_vector->push_back(Command(name, param, param_list));
 }
 
-/* Returns true if s1 and s2 are similar when interpreting wildcards */
-bool	wildcardPointerCompare(const char * s1, const char * s2)
+bool	wildcompare(const char * s1, const char * s2)
 {
 	for (int i = 0; s1[i] || s2[i]; i++)
 	{
@@ -127,7 +118,7 @@ bool	wildcardPointerCompare(const char * s1, const char * s2)
 			// skip 0, 1, 2... characters in s2
 			for (int test = 0; s2[test]; test++)
 			{
-				if (wildcardPointerCompare(s1 + i + 1, s2 + i + test))
+				if (wildcompare(s1 + i + 1, s2 + i + test))
 					return true;
 			}
 		}
@@ -138,7 +129,7 @@ bool	wildcardPointerCompare(const char * s1, const char * s2)
 			// skip 0, 1, 2... characters in s1
 			for (int test = 0; s1[test]; test++)
 			{
-				if (wildcardPointerCompare(s1 + i + test, s2 + i + 1))
+				if (wildcompare(s1 + i + test, s2 + i + 1))
 					return true;
 			}
 		}
@@ -151,5 +142,21 @@ bool	wildcardPointerCompare(const char * s1, const char * s2)
 
 bool	wildcompare(std::string s1, std::string s2)
 {
-	return wildcardPointerCompare(s1.data(), s2.data());
+	return wildcompare(s1.data(), s2.data());
+}
+
+std::string toupper(std::string s)
+{
+	std::string copy = s;
+	for (size_t i = 0; i < s.size(); i++)
+		copy[i] = static_cast<char>(toupper(s[i]));
+	return s;
+}
+
+std::string	no_crlf(std::string s)
+{
+	size_t max = s.size();
+	if (s[max - 2] == '\r' && s[max - 1] == '\n')
+		return s.substr(0, max - 2);
+	return s;
 }

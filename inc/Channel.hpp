@@ -2,7 +2,6 @@
 # define CHANNEL_HPP
 
 #include "main.hpp"
-#include "User.hpp"
 
 class Channel
 {

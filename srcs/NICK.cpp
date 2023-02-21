@@ -1,4 +1,4 @@
-#include "CommandList.hpp"
+#include "main.hpp"
 
 void	nick(Server *srv, int &userfd, Command &cmd)
 {
@@ -12,7 +12,6 @@ void	nick(Server *srv, int &userfd, Command &cmd)
 	else
 	{
 		/* Need to check here if there are disallowed characters */
-		std::cout << "Nick func" << std::endl;
 		srv->getUser(userfd)->setNickname(cmd.getParamList()[0]);
 		srv->getUser(userfd)->setNick(true);
 		if (srv->getUser(userfd)->checkAuth() == true && srv->getUser(userfd)->getAuth() == false)

@@ -3,17 +3,24 @@ NAME = ircserv
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRC_DIR =	srcs
-SRC_NAMES =	main.cpp \
-			utils.cpp \
-			User.cpp \
-			Server.cpp \
-			Command.cpp \
-			CAP.cpp \
-			PASS.cpp \
-			NICK.cpp \
-			USER.cpp \
-			Channel.cpp \
+SRC_DIR =		srcs
+
+# CLASSES
+SRC_NAMES +=	Channel.cpp \
+				Command.cpp \
+				Server.cpp \
+				User.cpp \
+
+# COMMANDS
+SRC_NAMES +=	CAP.cpp \
+				NICK.cpp \
+				PASS.cpp \
+				USER.cpp \
+
+# OTHER FILES
+SRC_NAMES +=	main.cpp \
+				utils.cpp \
+				print.cpp \
 
 SRCS =	$(addprefix $(SRC_DIR)/, $(SRC_NAMES))
 
@@ -22,14 +29,19 @@ OBJ_NAMES	= $(SRC_NAMES:.cpp=.o)
 OBJS		= $(addprefix $(OBJ_DIR)/, $(OBJ_NAMES))
 
 INC_DIR =	inc
+
+# CLASSES
+INC_NAMES +=	Channel.hpp \
+				Command.hpp \
+				Server.hpp \
+				User.hpp \
+
+# OTHER FILES
 INC_NAMES =	main.hpp \
-			User.hpp \
-			Server.hpp \
 			codes.hpp \
-			Command.hpp \
-			CommandList.hpp \
-			Channel.hpp \
-			exceptions.hpp
+			colors.hpp \
+			commandlist.hpp \
+			exceptions.hpp \
 
 INC = $(addprefix $(INC_DIR)/, $(INC_NAMES))
 

@@ -1,5 +1,4 @@
 #include "main.hpp"
-#include "CommandList.hpp"
 
 void	user(Server *srv, int &userfd, Command &cmd)
 {
@@ -18,7 +17,6 @@ void	user(Server *srv, int &userfd, Command &cmd)
 		std::vector<std::string> name;
 		std::string	realname;
 
-		std::cout << "User func" << std::endl;
 		name = split(cmd.getParam(), " ");
 		srv->getUser(userfd)->setUsername(name[0]);
 		if (!cmd.getParamList().empty())
