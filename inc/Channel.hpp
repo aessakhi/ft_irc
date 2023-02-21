@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.hpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 16:33:22 by ldesnoye          #+#    #+#             */
 /*   Updated: 2023/02/21 14:32:05 by ldesnoye         ###   ########.fr       */
@@ -49,7 +49,7 @@ class Channel
 		bool	_ban_except_mode;
 
 		/* If _limit_mode, max number of clients that can join the channel. */
-		unsigned long	_capacity;
+		size_t	_capacity;
 
 		/* If true, clients cannot join after there are already _capacity members */
 		bool	_limit_mode;
@@ -127,8 +127,8 @@ class Channel
 		/* Returns if users need to join to send messages to the channel */
 		bool	noExternalMessagesMode() const;
 
-		/* Returns max numbers of members */
-		int		capacity() const;
+		/* Returns max number of members */
+		size_t	capacity() const;
 
 	/* -----ADDING USERS TO LISTS----- */
 

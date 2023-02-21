@@ -3,7 +3,7 @@
 /*                                                        :::      ::::::::   */
 /*   Channel.cpp                                        :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
-/*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
+/*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 17:26:20 by ldesnoye          #+#    #+#             */
 /*   Updated: 2023/02/21 14:36:17 by ldesnoye         ###   ########.fr       */
@@ -55,7 +55,7 @@ bool	Channel::protectedTopicMode() const
 bool	Channel::noExternalMessagesMode() const
 { return _no_external_messages_mode ; }
 
-int		Channel::capacity() const
+size_t	Channel::capacity() const
 { return _capacity ; }
 
 /* -----ADDING USERS TO LISTS----- */
