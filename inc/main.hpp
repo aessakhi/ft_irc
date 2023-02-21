@@ -91,4 +91,7 @@ void	printFcall(std::string s);
 /* Print s on std::cout in blue without trailing \\r\\n. */
 void	printRecv(std::string s);
 
+/* Print cmd on std::cout in green detailing the different attributes. */
+void	printSep(Command cmd);
+
 #endif

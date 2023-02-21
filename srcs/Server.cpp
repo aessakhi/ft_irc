@@ -142,7 +142,7 @@ void	Server::_receivemessage(struct epoll_event event)
 	
 	for (size_t i = 0; i < cmd_vector.size(); i++)
 	{
-		std::cout << BGRN << cmd_vector[i] << RESET << std::endl;
+		printSep(cmd_vector[i]);
 	}
 	this->_execCmds(cmd_vector, event.data.fd);
 	/* _removeUserfromServer(event.data.fd); */

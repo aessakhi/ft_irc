@@ -29,3 +29,18 @@ void	printRecv(std::string s)
 {
 	std::cout << BBLU << "<< \"" << no_crlf(s) << "\"" << RESET << std::endl;
 }
+
+void	printSep(Command cmd)
+{
+	std::cout << BGRN << "NAME = \"" << cmd.getCmd() << "\"" << RESET << std::endl;
+	std::cout << BGRN << "PARAM = \"" << cmd.getParam() << "\"" << RESET << std::endl;
+	std::cout << BGRN << "PARAMLIST = \"";
+	std::vector<std::string>vect = cmd.getParamList();
+	for (size_t i = 0; i < vect.size(); i++)
+	{
+		std::cout << vect[i];
+		if (i + 1 != vect.size())
+			std::cout << " ";
+	}
+	std::cout << "\"" << RESET << std::endl;
+}
