@@ -112,7 +112,6 @@ void	Server::_execCmds(std::vector<Command> &cmds, int userfd)
 
 void	Server::sendReply(int fd, std::string s)
 {
-
 	printReply(s);
 	s += "\r\n";
 	send(fd, s.data(), s.size(), MSG_NOSIGNAL);

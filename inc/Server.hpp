@@ -25,11 +25,15 @@ private:
 	/* List of <fd, User *> pairs */
 	std::map<int, User *>	_UserList;
 
+	/* Buffers to store partial commands */
 	std::map<int, std::string>	_buffers;
 
+	/* Map containing functions and their identifier */
 	std::map<std::string, void(*)(Server *srv, int &userfd, Command &cmd)>	_cmdMap;
 
+	/* Initializes _cmdMap */
 	void	_initCmdMap();
+
 	/* Initializes _epollfd and adds _listenfd to the list of entries. */
 	void	_create_epoll();
 
@@ -42,11 +46,10 @@ private:
 	/* For now, calls recv() once and replies with codes if connection needs to be established */
 	void	_receivemessage(struct epoll_event event);
 
+	/* Loops through cmds and calls the corresponding functions */
 	void	_execCmds(std::vector<Command> &cmds, int userfd);
 
 	void	_removeUserfromServer(int fd);
-
-	/* Easier send() */
 
 public:
 
@@ -56,21 +59,24 @@ public:
 
 	/* Functions */
 
-	// "Initializes" the server. For now also contains the epoll_wait loop.
+	/* "Initializes" the server. For now also contains the epoll_wait loop. */
 	void	init();
 
+	/* Easier send() */
 	void	sendReply(int fd, std::string s);
+
 	/* Member accessors */
 
-	// Returns password required for a new connection.
+	/* Returns password required for a new connection. */
 	std::string	getpwd() const;
 
-	// Returns port used for connecting to the server.
+	/* Returns port used for connecting to the server. */
 	std::string	getport() const;
 
-	// Returns User * instance corresponding to fd, NULL if no User * matches that fd.
+	/* Returns User * instance corresponding to fd, NULL if no User * matches that fd. */
 	User	*getUser(int fd) const;
 
+	/* Returns User * instance with given nickname, NULL if no User * matches that fd. */
 	User	*getUserbyNickname(const std::string nickname) const;
 
 };
