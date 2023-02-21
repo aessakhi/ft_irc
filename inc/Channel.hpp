@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 16:33:22 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/21 13:30:56 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/21 14:14:44 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,7 +49,7 @@ class Channel
 		bool	_ban_except_mode;
 
 		/* If _limit_mode, max number of clients that can join the channel. */
-		int		_capacity;
+		unsigned long	_capacity;
 
 		/* If true, clients cannot join after there are already _capacity members */
 		bool	_limit_mode;
@@ -93,6 +93,9 @@ class Channel
 
 		/* Returns channel name */
 		const std::string & getName() const;
+
+		/* Returns channel topic */
+		const std::string & getTopic() const;
 
 		/* Returns if channel is in ban mode */
 		bool	banMode() const;
@@ -172,6 +175,9 @@ class Channel
 
 		/* Returns true if the given string matches the key required to join */
 		bool	checkKey(std::string s) const;
+		
+		/* Returns true if channel has a topic */
+		bool	isTopicSet() const;
 		
 	/* -----COMMANDS----- */
 		

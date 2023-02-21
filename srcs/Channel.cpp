@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 17:26:20 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/21 13:30:35 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/21 14:15:33 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -101,6 +101,9 @@ bool	Channel::isFull() const
 
 bool	Channel::checkKey(std::string s) const
 { return !(s.compare(_key)) ; }
+
+bool	Channel::isTopicSet() const
+{ return _topic_is_set ; }
 
 /* -----COMMANDS----- */
 
