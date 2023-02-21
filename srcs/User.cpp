@@ -6,7 +6,7 @@
 /*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/12 19:42:29 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/21 15:45:39 by aessakhi         ###   ########.fr       */
+/*   Updated: 2023/02/21 16:19:04 by aessakhi         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,6 +41,11 @@ bool	User::getUser()
 std::string	User::getNickname() const
 {
 	return (this->_nickname);
+}
+
+std::string	User::getRealname() const
+{
+	return (this->_realname);
 }
 
 /* Set functions for the booleans */

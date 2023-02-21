@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   User.hpp                                           :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/12 19:26:20 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/21 15:15:03 by aessakhi         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #ifndef USER_HPP
 # define USER_HPP
 
@@ -48,6 +36,7 @@ public:
 	bool	getUser();
 
 	std::string	getNickname() const;
+	std::string	getRealname() const;
 
 
 	void	setAuth(bool state);

@@ -23,13 +23,12 @@ void	user(Server *srv, int &userfd, Command &cmd)
 		srv->getUser(userfd)->setUsername(name[0]);
 		if (!cmd.getParamList().empty())
 		{
-			std::cout << "Here" << std::endl;
 			name = cmd.getParamList();
 			for (std::vector<std::string>::const_iterator it = name.begin(); it != name.end(); it++)
 			{
-				realname + *it;
+				realname = realname + *it;
 				if (it + 1 != name.end())
-					realname + " ";
+					realname = realname + " ";
 			}
 		}
 		srv->getUser(userfd)->setRealname(realname);
