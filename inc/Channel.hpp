@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 16:33:22 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/16 17:54:22 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/21 10:25:36 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -46,6 +46,9 @@ class Channel
 
 		/* If true, clients cannot join after there are already _capacity members */
 		bool	_limit_mode;
+
+		/* If _invite_mode, list of users that have been invited to the channel and can join */
+		std::vector<User *> _invited;
 
 		/* If true, clients cannot join unless they have been invited to the channel */
 		bool	_invite_mode;
