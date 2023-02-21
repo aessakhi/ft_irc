@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 16:33:22 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/21 14:14:44 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/21 14:30:16 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -148,7 +148,7 @@ class Channel
 		void	addInviteExcept(User *user);
 
 		/* Adds a user to the list of invited users */
-		void	invite(User *user);
+		void	addInvite(User *user);
 		
 	/* -----ATTRIBUTE CHECKS----- */
 
@@ -208,6 +208,16 @@ class Channel
 		- err_noerror on success
 		*/
 		err_codes changeTopic(User *user, std::string new_topic);
+
+		/*
+		Tries to add user to the list of invited users
+		Can return :
+		- err_notonchannel
+		- err_chanoprivsneeded
+		- err_useronchannel
+		- err_noerror on success
+		*/
+		err_codes invite(User *from, User *to);
 };
 
 #endif

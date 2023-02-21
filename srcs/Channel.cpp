@@ -6,7 +6,7 @@
 /*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2023/02/16 17:26:20 by ldesnoye          #+#    #+#             */
-/*   Updated: 2023/02/21 14:15:33 by ldesnoye         ###   ########.fr       */
+/*   Updated: 2023/02/21 14:30:21 by ldesnoye         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -21,6 +21,9 @@ Channel::~Channel() {}
 
 const std::string & Channel::getName() const
 { return _name ; }
+
+const std::string & Channel::getTopic() const
+{ return _topic ; }
 
 bool	Channel::banMode() const
 { return _ban_mode ; }
@@ -72,7 +75,7 @@ void	Channel::addBanExcept(User *user)
 void	Channel::addInviteExcept(User *user)
 { _invite_except.push_back(user); }
 
-void	Channel::invite(User * user)
+void	Channel::addInvite(User * user)
 { _invited.push_back(user) ; }
 
 /* -----ATTRIBUTE CHECKS----- */
@@ -170,6 +173,22 @@ err_codes	Channel::changeTopic(User * user, std::string new_topic)
 
 	_topic = new_topic;
 	_topic_is_set = true;
+
+	return err_noerror;
+}
+
+err_codes Channel::invite(User *from, User *to)
+{
+	if (!isMember(from))
+		return err_notonchannel;
+	
+	if (inviteMode() && !isOp(from))
+		return err_chanoprivsneeded;
+
+	if (isMember(to))
+		return err_useronchannel;
+
+	addInvite(to);
 
 	return err_noerror;
 }
