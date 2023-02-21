@@ -1,15 +1,3 @@
-/* ************************************************************************** */
-/*                                                                            */
-/*                                                        :::      ::::::::   */
-/*   Server.cpp                                         :+:      :+:    :+:   */
-/*                                                    +:+ +:+         +:+     */
-/*   By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+        */
-/*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2023/02/02 21:34:26 by aessakhi          #+#    #+#             */
-/*   Updated: 2023/02/16 18:38:18 by ldesnoye         ###   ########.fr       */
-/*                                                                            */
-/* ************************************************************************** */
-
 #include "Server.hpp"
 #include "codes.hpp"
 #include "CommandList.hpp"
@@ -146,7 +134,7 @@ void	Server::_receivemessage(struct epoll_event event)
 	/* Need to change the way the packets are received (In order the process a command, you have to first aggregate de received packets in order to rebuild it)*/
 	std::vector<std::string>	cmds;
 	/* Need to split the msg using \r\n placing the cmds in a vector. The first command vector will be used for authentication. If it doesn't respect the pre-requisites (PASS, NICK, USER), remove the user from epollfd and the User map */
-	cmds = ft_split(&this->_buffers[event.data.fd], "\r\n");
+	cmds = split(&this->_buffers[event.data.fd], "\r\n");
 	buf[0] = 0;
 	for (std::vector<std::string>::const_iterator it = cmds.begin(); it != cmds.end(); it++)
 		std::cout << *it << std::endl;
@@ -155,16 +143,6 @@ void	Server::_receivemessage(struct epoll_event event)
 	for (std::vector<std::string>::const_iterator it = cmds.begin(); it != cmds.end(); it++)
 		splitCmds(&cmd_vector, *it);
 	this->_execCmds(cmd_vector, event.data.fd);
-	if (this->_UserList[event.data.fd]->getAuth() == false)
-	{
-		std::string s("User");
-		//irssi needs to receive these numerical replies to confirm the connection. Need to add the expected details of the reply messages.
-		this->sendReply(event.data.fd, RPL_WELCOME(s));
-		// _reply(event.data.fd, RPL_YOURHOST(s));
-		// _reply(event.data.fd, RPL_CREATED(s, t));
-		// _reply(event.data.fd, RPL_MYINFO(s, ".", "."));
-		this->_UserList[event.data.fd]->setAuth(true);
-	}
 	/* _removeUserfromServer(event.data.fd); */
 }
 
@@ -191,6 +169,7 @@ void	Server::_initCmdMap()
 	this->_cmdMap["CAP"] = &cap;
 	this->_cmdMap["PASS"] = &pass;
 	this->_cmdMap["NICK"] = &nick;
+	this->_cmdMap["USER"] = &user;
 }
 
 void	Server::init()

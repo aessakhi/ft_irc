@@ -3,10 +3,10 @@
 #                                                         :::      ::::::::    #
 #    Makefile                                           :+:      :+:    :+:    #
 #                                                     +:+ +:+         +:+      #
-#    By: ldesnoye <ldesnoye@student.42.fr>          +#+  +:+       +#+         #
+#    By: aessakhi <aessakhi@student.42.fr>          +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2023/02/02 21:22:12 by aessakhi          #+#    #+#              #
-#    Updated: 2023/02/16 18:27:51 by ldesnoye         ###   ########.fr        #
+#    Updated: 2023/02/21 14:24:54 by aessakhi         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -24,6 +24,7 @@ SRC_NAMES =	main.cpp \
 			CAP.cpp \
 			PASS.cpp \
 			NICK.cpp \
+			USER.cpp \
 			Channel.cpp \
 
 SRCS =	$(addprefix $(SRC_DIR)/, $(SRC_NAMES))
