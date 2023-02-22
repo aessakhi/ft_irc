@@ -224,7 +224,7 @@ User	*Server::getUserbyNickname(const std::string nickname) const
 {
 	for (std::map<int , User *>::const_iterator	it = this->_UserList.begin(); it != this->_UserList.end(); it++)
 	{
-		if (nickname.compare(it->second->getNickname()) == 0)
+		if (nickname == it->second->getNickname())
 			return (it->second);
 	}
 	return (NULL);
@@ -234,8 +234,21 @@ int		Server::getUserfd(const std::string nickname) const
 {
 	for (std::map<int , User *>::const_iterator	it = this->_UserList.begin(); it != this->_UserList.end(); it++)
 	{
-		if (nickname.compare(it->second->getNickname()) == 0)
+		if (nickname == it->second->getNickname())
 			return (it->first);
 	}
 	return (-1);
+}
+
+Channel * Server::getChannel(const std::string & channel_name)
+{
+	std::map<std::string, Channel *>::const_iterator it = _channelMap.begin();
+	std::map<std::string, Channel *>::const_iterator ite = _channelMap.end();
+	for (; it != ite; it++)
+	{
+		if (channel_name == it->first)
+			return it->second;
+	}
+
+	return NULL;
 }

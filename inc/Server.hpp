@@ -32,6 +32,9 @@ private:
 	/* Buffers to store partial commands */
 	std::map<int, std::string>	_buffers;
 
+	/* Map containing the channels and their name */
+	std::map<std::string, Channel *> _channelMap;
+
 	/* Map containing functions and their identifier */
 	std::map<std::string, void(*)(Server *srv, int &userfd, Command &cmd)>	_cmdMap;
 
@@ -88,6 +91,9 @@ public:
 
 	/* Returns fd of a User */
 	int		getUserfd(const std::string nickname) const;
+
+	/* Returns a channel * from its name */
+	Channel *	getChannel(const std::string & channel_name);
 
 };
 
