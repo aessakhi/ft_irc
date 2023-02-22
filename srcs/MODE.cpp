@@ -1,5 +1,18 @@
 #include "main.hpp"
 
+/* Add c to the correct string. */
+static void	clc(char c, std::map<char, bool> stock, std::string * added, std::string * removed)
+{
+	std::map<char, bool>::const_iterator found = stock.find(c);
+	if (found != stock.end())
+	{
+		if (stock[c])
+			added->push_back(c);
+		else
+			removed->push_back(c);
+	}
+}
+
 /*
 User modes :
 a = away
@@ -29,16 +42,7 @@ static void	usermode(Server *srv, int &userfd, Command &cmd)
 	// If no modestring is given, reply with the modes of the user.
 	if (cmd.paramNumber() == 1)
 	{
-		std::string modes("+");
-		if (user->isOperator())
-			modes += 'o';
-		if (user->isInvisible())
-			modes += 'i';
-		if (user->isWallops())
-			modes += 'w';
-		if (user->isAway())
-			modes += 'a';
-		srv->sendReply(userfd, RPL_UMODEIS(user->getNickname(), modes));
+		srv->sendReply(userfd, RPL_UMODEIS(user->getNickname(), user->getModeString()));
 		return;
 	}
 
@@ -104,32 +108,9 @@ static void	usermode(Server *srv, int &userfd, Command &cmd)
 
 	std::map<char, bool>::const_iterator found;
 
-	found = stock.find('o');
-	if (found != stock.end())
-	{
-		if (stock['o'])
-			added.push_back('o');
-		else
-			removed.push_back('o');
-	}
-
-	found = stock.find('i');
-	if (found != stock.end())
-	{
-		if (stock['i'])
-			added.push_back('i');
-		else
-			removed.push_back('i');
-	}
-
-	found = stock.find('w');
-	if (found != stock.end())
-	{
-		if (stock['w'])
-			added.push_back('w');
-		else
-			removed.push_back('w');
-	}
+	clc('o', stock, &added, &removed);
+	clc('i', stock, &added, &removed);
+	clc('w', stock, &added, &removed);
 
 	std::string reply_str;
 	if (added.size() > 1)
@@ -157,6 +138,17 @@ n = no external messages
 */
 static void	channelmode(Server *srv, int &userfd, Command &cmd)
 {
+/* 
+	std::string target = cmd.getParam(0);
+	User * user = srv->getUser(userfd);
+
+	// Error if target is a channel that doesnt exist
+	if (srv->getChannel(target) == NULL)
+	{
+		srv->sendReply(userfd, ERR_NOSUCHCHANNEL(user->getNickname(), target));
+		return;
+	}
+*/
 	(void)srv;
 	(void)userfd;
 	(void)cmd;
@@ -174,11 +166,13 @@ void	mode(Server *srv, int &userfd, Command &cmd)
 	// Command for channels
 	if (cmd.getParam(0)[0] == '#')
 	{
-		return channelmode(srv, userfd, cmd);
+		channelmode(srv, userfd, cmd);
+		return;
 	}
 	// Command for users
 	else
 	{
-		return usermode(srv, userfd, cmd);
+		usermode(srv, userfd, cmd);
+		return;
 	}
 }
