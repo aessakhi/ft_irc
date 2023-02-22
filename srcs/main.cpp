@@ -11,7 +11,7 @@ int main(int argc, char **argv)
 		return -1;
 	}
 
-	Server ircserv(argv[1], argv[2]);
+	Server ircserv("ircserv", argv[1], argv[2]);
 
 	ircserv.init();
 }

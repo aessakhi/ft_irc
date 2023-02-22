@@ -3,10 +3,10 @@
 
 /* REPLIES */
 
-#define RPL_WELCOME(client) ("001 " + client + " :Welcome to ft_irc, " + client)
-#define RPL_YOURHOST(client) ("002 " + client + " :Your host is ft_irc")
+#define RPL_WELCOME(client) ("001 " + client + " :Welcome to ft_irc network, " + client)
+#define RPL_YOURHOST(client, servername) ("002 " + client + " :Your host is " + servername + ", running version 1.0")
 #define RPL_CREATED(client, datetime) ("003 " + client + " :This server was created " + datetime)
-#define RPL_MYINFO(client, available_user_modes, available_channel_modes) (client + " ft_irc 1.0 " + available_user_modes + available_channel_modes)
+#define RPL_MYINFO(client, servername, available_user_modes, available_channel_modes) (client + " " + servername + " 1.0 " + available_user_modes + available_channel_modes)
 
 // #define RPL_ISUPPORT ???
 
@@ -32,11 +32,11 @@
 #define RPL_UNAWAY(client) ("305 " + client + " :You are no longer marked as being away")
 #define RPL_NOWAWAY(client) ("306 " + client + " :You have been marked as being away")
 
-#define RPL_WHOREPLY(client, channel, username, host, nick, flags, realname) ("352 " + client + ' ' + channel + ' ' + username + ' ' + host + " ft_irc " + nick + ' ' + flags + " :0 " + realname)
+#define RPL_WHOREPLY(client, channel, username, host, servername, nick, flags, realname) ("352 " + client + ' ' + channel + ' ' + username + ' ' + host + " " + servername + " " + nick + ' ' + flags + " :0 " + realname)
 #define RPL_ENDOFWHO(client, mask) ("315 " + client + " " + mask + " :End of WHO list")
 #define RPL_WHOISREGNICK(client, nick) ("307 " + client + " " + nick + " :has identified for this nick")
 #define RPL_WHOISUSER(client, nick, username, host, realname) ("311 " + client + " " + nick + " " + username + " " + host + " * :" + realname)
-#define RPL_WHOISSERVER(client, nick) ("312 " + client + " " + nick + " ft_irc :Custom server")
+#define RPL_WHOISSERVER(client, nick, servername) ("312 " + client + " " + nick + " " + servername + " :Custom server")
 #define RPL_WHOISOPERATOR(client, nick) ("313 " + client + " " + nick + " :is an IRC operator")
 #define RPL_WHOWASUSER(client, nick, username, host, realname) ("314 " + client + " " + nick + " " + username + " " + host + " * :" + realname)
 #define RPL_WHOISIDLE(client, nick, secs, signon) ("317 " + client + " " + nick + " " + secs + " " + signon + " :seconds idle, signon time")
@@ -63,17 +63,17 @@
 #define RPL_EXCEPTLIST(client, channel, mask) ("348 " + client + " " + channel + " " + mask)
 #define RPL_ENDOFEXCEPTLIST(client, channel) ("349 " + client + " " + channel + " :End of Channel exception List")
 
-#define RPL_VERSION(client) ("351 " + client + " 1.0 ft_irc")
+#define RPL_VERSION(client, servername) ("351 " + client + " 1.0 " + servername)
 #define RPL_NAMREPLY(client, symbol, channel, users) ("353 " + client + " " + symbol + " " + channel + " :" + users)
 #define RPL_ENDOFNAMES(client, channel) ("366 " + client + " " + channel + " :End of /NAMES list")
-#define RPL_LINKS(client) ("364 " + client + " * ft_irc :0 this server")
+#define RPL_LINKS(client, servername) ("364 " + client + " * " + servername + " :0 this server")
 #define RPL_ENDOFLINKS(client) ("365 " + client + " * :End of /LINKS list")
 #define RPL_BANLIST(client, channel, mask) ("367 " + client + " " + channel + " " + mask)
 #define RPL_ENDOFBANLIST(client, channel) ("368 " + client + " " + channel + " :End of channel ban list")
 #define RPL_ENDOFWHOWAS(client, nick) ("369 " + client + " " + nick + " :End of WHOWAS")
-#define RPL_INFO(client) ("371 " + client + " :ft_irc")
+#define RPL_INFO(client, string) ("371 " + client + " :" + string)
 #define RPL_ENDOFINFO(client) ("374 " + client + " :End of INFO list")
-#define RPL_MOTDSTART(client) ("375 " + client + "  :- ft_irc Message of the day - ")
+#define RPL_MOTDSTART(client, servername) ("375 " + client + "  :- " + servername + " Message of the day - ")
 #define RPL_MOTD(client, line) ("372 " + client + " :" line)
 #define RPL_ENDOFMOTD(client) ("376 " + client + " :End of /MOTD command.")
 #define RPL_WHOISHOST(client, nick, host) ("378 " + client + " " + nick + "  :is connecting from " + host)
@@ -81,7 +81,7 @@
 
 #define RPL_YOUREOPER(client) ("381 " + client + " :You are now an IRC operator")
 #define RPL_REHASHING(client, config_file) ("382 " + client + " " + config_file + " :Rehashing")
-#define RPL_TIME(client, time) ("391 " + client + " ft_irc :" + time)
+#define RPL_TIME(client, servername, time) ("391 " + client + " " + servername + " :" + time)
 
 #define RPL_WHOISSECURE(client, nick) ("670 " + client + " " + nick + " :is using a secure connection")
 

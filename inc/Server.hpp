@@ -11,10 +11,14 @@ private:
 
 	Server();
 
+	/* Server name */
+	const std::string &	_name;
+
 	/* Port used for connecting to the server */
-	std::string	_port;
+	const std::string &	_port;
+
 	/* Password requested for connecting to the server */
-	std::string	_pwd;
+	const std::string &	_pwd;
 
 	/* Socket on which the server listens for new incoming connection requests */
 	int	_listenfd;
@@ -53,7 +57,7 @@ private:
 
 public:
 
-	Server(char *port, char *password);
+	Server(const std::string & name, const std::string & port, const std::string & password);
 
 	~Server();
 
@@ -66,6 +70,9 @@ public:
 	void	sendReply(int fd, std::string s);
 
 	/* Member accessors */
+
+	/* Returns server name */
+	const std::string &	getName() const;
 
 	/* Returns password required for a new connection. */
 	std::string	getpwd() const;

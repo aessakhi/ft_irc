@@ -14,7 +14,7 @@ void	ping(Server *srv, int &userfd, Command &cmd)
 
 	// PONG
 	std::vector<std::string> param_list = cmd.getParamList();
-	param_list.insert(param_list.begin(), "ft_irc");
+	param_list.insert(param_list.begin(), srv->getName());
 	Command reply("PONG", param_list, "");
 	srv->sendReply(userfd, reply.getStr());
 }

@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-Server::Server(char *port, char *password): _port(std::string(port)), _pwd(std::string(password)), _listenfd(0), _epollfd(0)
+Server::Server(const std::string & name, const std::string & port, const std::string & password): _name(name), _port(port), _pwd(password), _listenfd(0), _epollfd(0)
 {}
 
 Server::~Server(){}
@@ -194,6 +194,11 @@ void	Server::init()
 				this->_receivemessage(ep_event[i]);
 		}
 	}
+}
+
+const std::string &	Server::getName() const
+{
+	return (this->_name);
 }
 
 std::string	Server::getpwd() const
