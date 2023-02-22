@@ -154,5 +154,7 @@ std::string	no_crlf(std::string s)
 	size_t max = s.size();
 	if (s[max - 2] == '\r' && s[max - 1] == '\n')
 		return s.substr(0, max - 2);
+	if (s[max - 1] == '\r' || s[max - 1] == '\n')
+		return s.substr(0, max - 1);
 	return s;
 }

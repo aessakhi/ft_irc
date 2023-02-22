@@ -25,9 +25,28 @@ void	printFcall(std::string s)
 	std::cout << YLW << "Calling " << toupper(s) << " function" << RESET << std::endl;
 }
 
-void	printRecv(std::string s)
+void	printRecv(char * s, size_t n)
 {
-	std::cout << BBLU << "<< \"" << no_crlf(s) << "\"" << RESET << std::endl;
+	std::cout << BBLU << "<< \"";
+	if (n >= 2)
+	{
+		if (s[n - 2] == '\r' && s[n - 1] == '\n')
+			n -= 2;
+		else if (s[n - 1] == '\n' || s[n - 1] == '\r')
+			n--;
+	}
+	if (n == 1 && (s[0] == '\n' || s[0] == '\r'))
+		n--;
+	
+	for (size_t i = 0; i < n; i++)
+		std::cout << s[i];
+	std::cout << "\"" << RESET << std::endl;
+}
+
+void	printRecv(std::string s, size_t n)
+{
+	std::string	to_print(s, 0, n);
+	std::cout << BBLU << "<< \"" << no_crlf(to_print) << "\"" << RESET << std::endl;
 }
 
 void	printSep(Command cmd)

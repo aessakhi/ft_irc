@@ -82,14 +82,17 @@ void	vectprint(std::ostream & out, std::vector<std::string> vect);
 /* Print s on std::cerr in red. */
 void	printError(std::string s);
 
-/* Print s on std::cout in blue. */
+/* Print sent replies on std::cout in blue. */
 void	printReply(std::string s);
 
-/* Print s on std::cout in yellow. */
+/* Print command function calls on std::cout in yellow. */
 void	printFcall(std::string s);
 
-/* Print s on std::cout in blue without trailing \\r\\n. */
-void	printRecv(std::string s);
+/* Print n chars of received messages on std::cout in blue without trailing \\r\\n. */
+void	printRecv(char * s, size_t n);
+
+/* Print n char of received messages on std::cout in blue without trailing \\r\\n. */
+void	printRecv(std::string s, size_t n);
 
 /* Print cmd on std::cout in green detailing the different attributes. */
 void	printSep(Command cmd);
