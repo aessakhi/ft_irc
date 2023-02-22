@@ -146,7 +146,7 @@ std::string toupper(std::string s)
 	std::string copy = s;
 	for (size_t i = 0; i < s.size(); i++)
 		copy[i] = static_cast<char>(toupper(s[i]));
-	return s;
+	return copy;
 }
 
 std::string	no_crlf(std::string s)
