@@ -75,10 +75,10 @@ public:
 	const std::string &	getName() const;
 
 	/* Returns password required for a new connection. */
-	std::string	getpwd() const;
+	const std::string &	getpwd() const;
 
 	/* Returns port used for connecting to the server. */
-	std::string	getport() const;
+	const std::string &	getport() const;
 
 	/* Returns User * instance corresponding to fd, NULL if no User * matches that fd. */
 	User	*getUser(int fd) const;

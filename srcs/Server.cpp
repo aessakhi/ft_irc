@@ -201,12 +201,12 @@ const std::string &	Server::getName() const
 	return (this->_name);
 }
 
-std::string	Server::getpwd() const
+const std::string &	Server::getpwd() const
 {
 	return (this->_pwd);
 }
 
-std::string	Server::getport() const
+const std::string &	Server::getport() const
 {
 	return (this->_port);
 }
