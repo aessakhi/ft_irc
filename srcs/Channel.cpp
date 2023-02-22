@@ -66,6 +66,9 @@ void	Channel::addInviteExcept(User *user)
 void	Channel::addInvite(User * user)
 { _invited.push_back(user) ; }
 
+void	Channel::addVoice(User * user)
+{ _voice.push_back(user) ; }
+
 /* ----------ATTRIBUTE CHECKS---------- */
 
 bool	Channel::isMember(User *user) const
