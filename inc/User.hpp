@@ -50,6 +50,9 @@ private:
 	/* If true, the user is away */
 	bool	_is_away;
 
+	/* If user is away, this is the away message */
+	std::string _away_msg;
+
 public:
 
 	User(int fd);
@@ -110,6 +113,9 @@ public:
 	/* Sets user's wallops state */
 	void	setWallops(bool state);
 
+	/* Sets user's away state */
+	void	setAway(bool state);
+
 	/* Returns if user is invisible */
 	bool	isInvisible() const;
 
@@ -118,6 +124,12 @@ public:
 
 	/* Returns if user is wallops */
 	bool	isWallops() const;
+
+	/* Returns if user is away */
+	bool	isAway() const;
+
+	/* Returns the user's away message */
+	const std::string	getAwayMessage() const;
 
 };
 

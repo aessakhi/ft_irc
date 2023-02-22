@@ -98,6 +98,11 @@ void	User::setWallops(bool state)
 	this->_is_wallops = state;
 }
 
+void	User::setAway(bool state)
+{
+	this->_is_away = state;
+}
+
 bool	User::isInvisible() const
 {
 	return this->_is_invisible;
@@ -111,4 +116,14 @@ bool	User::isOperator() const
 bool	User::isWallops() const
 {
 	return this->_is_wallops;
+}
+
+bool	User::isAway() const
+{
+	return this->_is_away;
+}
+
+const std::string	User::getAwayMessage() const
+{
+	return this->_away_msg;
 }
