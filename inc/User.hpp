@@ -101,6 +101,15 @@ public:
 	/* Returns "nickname!realname\@hostname" */
 	const std::string getMask() const;
 
+	/* Sets user's invisible state */
+	void	setInvisible(bool state);
+
+	/* Sets user's operator state */
+	void	setOperator(bool state);
+
+	/* Sets user's wallops state */
+	void	setWallops(bool state);
+
 	/* Returns if user is invisible */
 	bool	isInvisible() const;
 
