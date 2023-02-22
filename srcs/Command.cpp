@@ -8,6 +8,11 @@ Command::~Command()
 
 std::string	Command::getCmd() const
 {
+	return (toupper(this->_cmd_name));
+}
+
+std::string	Command::getRawCmd() const
+{
 	return (this->_cmd_name);
 }
 

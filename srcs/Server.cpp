@@ -97,7 +97,7 @@ void	Server::_execCmds(std::vector<Command> &cmds, int userfd)
 	for (std::vector<Command>::iterator it = cmds.begin(); it != cmds.end(); it++)
 	{
 		std::map<std::string, void(*)(Server *, int &, Command &)>::const_iterator it_map;
-		it_map = this->_cmdMap.find(toupper(it->getCmd()));
+		it_map = this->_cmdMap.find(it->getCmd());
 		if (it_map != this->_cmdMap.end())
 		{
 			printFcall(it->getCmd());

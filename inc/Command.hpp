@@ -16,7 +16,11 @@ public:
 
 	~Command();
 
+	/* Returns upper version of the cmd. */
 	std::string getCmd() const;
+
+	/* Returns cmd, might contain lower chars. */
+	std::string	getRawCmd() const;
 	std::string getParam() const;
 	std::vector<std::string>	getParamList() const;
 };
