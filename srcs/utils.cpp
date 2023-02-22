@@ -57,18 +57,14 @@ std::vector<std::string> split(std::string str, std::string delimiter)
 {
 	std::vector<std::string> result;
 
-	size_t	end = 0;
+	size_t	start = 0;
+	size_t	end = str.find(delimiter);
 
-	if (str.find(delimiter) == std::string::npos)
+	while (end != std::string::npos)
 	{
-		str.erase(std::string::npos);
-		return (std::vector<std::string>());
-	}
-	while (str.find(delimiter, 0) != std::string::npos)
-	{
-		end = str.find(delimiter, 0);
-		result.push_back(str.substr(0, end));
-		str.erase(0, end + delimiter.length());
+		result.push_back(str.substr(start, end));
+		start = end + 2;
+		end = str.find(delimiter, start);
 	}
 	return (result);
 }
