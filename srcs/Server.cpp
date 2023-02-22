@@ -84,7 +84,8 @@ void	Server::_acceptnewUser()
 	/* User will need to be destroyed if authenticate fails or when the connection is closed */
 	this->_UserList[new_fd] = new User(new_fd);
 	memset(&ev, 0, sizeof(struct epoll_event));
-	ev.events = EPOLLIN;
+	/* Need to recheck the flags to use, EPOLLIN is alright, but other flags might be useful */
+	ev.events = EPOLLIN | EPOLLRDHUP;
 	ev.data.fd = new_fd;
 	if (epoll_ctl(this->_epollfd, EPOLL_CTL_ADD, new_fd, &ev) == -1)
 	{
@@ -224,9 +225,31 @@ User	*Server::getUserbyNickname(const std::string nickname) const
 {
 	for (std::map<int , User *>::const_iterator	it = this->_UserList.begin(); it != this->_UserList.end(); it++)
 	{
-		if (nickname.compare(it->second->getNickname()) == 0)
+		if (nickname == it->second->getNickname())
 			return (it->second);
 	}
 	return (NULL);
 }
 
+int		Server::getUserfd(const std::string nickname) const
+{
+	for (std::map<int , User *>::const_iterator	it = this->_UserList.begin(); it != this->_UserList.end(); it++)
+	{
+		if (nickname == it->second->getNickname())
+			return (it->first);
+	}
+	return (-1);
+}
+
+Channel * Server::getChannel(const std::string & channel_name)
+{
+	std::map<std::string, Channel *>::const_iterator it = _channelMap.begin();
+	std::map<std::string, Channel *>::const_iterator ite = _channelMap.end();
+	for (; it != ite; it++)
+	{
+		if (channel_name == it->first)
+			return it->second;
+	}
+
+	return NULL;
+}

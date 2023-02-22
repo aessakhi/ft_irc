@@ -59,6 +59,9 @@ class Channel
 		/* If true, users need to provide the correct key in order to join */
 		bool	_key_mode;
 
+		/* If _moderated_mode, users in the _voice list will still be able to talk */
+		std::vector<User *> _voice;
+
 		/* If true, users need privileges to send messages on the channel */
 		bool	_moderated_mode;
 
@@ -139,6 +142,9 @@ class Channel
 
 		/* Adds a user to the list of invited users */
 		void	addInvite(User *user);
+
+		/* Adds a user to the list of voice users */
+		void	addVoice(User *user);
 		
 	/* -----ATTRIBUTE CHECKS----- */
 

@@ -7,84 +7,101 @@
 
 class Server
 {
-private:
+	private:
 
-	Server();
+		Server();
 
-	/* Server name */
-	const std::string &	_name;
+	/* ----------SETUP ATTRIBUTES---------- */
 
-	/* Port used for connecting to the server */
-	const std::string &	_port;
+		/* Server name */
+		const std::string &	_name;
 
-	/* Password requested for connecting to the server */
-	const std::string &	_pwd;
+		/* Port used for connecting to the server */
+		const std::string &	_port;
 
-	/* Socket on which the server listens for new incoming connection requests */
-	int	_listenfd;
+		/* Password requested for connecting to the server */
+		const std::string &	_pwd;
 
-	/* Single fd used by epoll to warn for incoming data on every fd */
-	int	_epollfd;
+		/* Socket on which the server listens for new incoming connection requests */
+		int	_listenfd;
 
-	/* List of <fd, User *> pairs */
-	std::map<int, User *>	_UserList;
+		/* Single fd used by epoll to warn for incoming data on every fd */
+		int	_epollfd;
+	
+	/* ----------ATTRIBUTES LIST---------- */
 
-	/* Buffers to store partial commands */
-	std::map<int, std::string>	_buffers;
+		/* List of <fd, User *> pairs */
+		std::map<int, User *>	_UserList;
 
-	/* Map containing functions and their identifier */
-	std::map<std::string, void(*)(Server *srv, int &userfd, Command &cmd)>	_cmdMap;
+		/* Buffers to store partial commands */
+		std::map<int, std::string>	_buffers;
 
-	/* Initializes _cmdMap */
-	void	_initCmdMap();
+		/* Map containing the channels and their name */
+		std::map<std::string, Channel *> _channelMap;
 
-	/* Initializes _epollfd and adds _listenfd to the list of entries. */
-	void	_create_epoll();
+		/* Map containing functions and their identifier */
+		std::map<std::string, void(*)(Server *srv, int &userfd, Command &cmd)>	_cmdMap;
 
-	/* Prepares _listenfd for accepting new connection requests. */
-	void	_createsocket();
+	/* ----------INIT FUNCTIONS---------- */
 
-	/* Add new User * to the _UserList and the corresponding fd to the _epollfd. */
-	void	_acceptnewUser();
+		/* Initializes _cmdMap */
+		void	_initCmdMap();
 
-	/* For now, calls recv() once and replies with codes if connection needs to be established */
-	void	_receivemessage(struct epoll_event event);
+		/* Initializes _epollfd and adds _listenfd to the list of entries. */
+		void	_create_epoll();
 
-	/* Loops through cmds and calls the corresponding functions */
-	void	_execCmds(std::vector<Command> &cmds, int userfd);
+		/* Prepares _listenfd for accepting new connection requests. */
+		void	_createsocket();
 
-	void	_removeUserfromServer(int fd);
+	/* ----------EXECUTION FUNCTIONS---------- */
 
-public:
+		/* Add new User * to the _UserList and the corresponding fd to the _epollfd. */
+		void	_acceptnewUser();
 
-	Server(const std::string & name, const std::string & port, const std::string & password);
+		/* For now, calls recv() once and replies with codes if connection needs to be established */
+		void	_receivemessage(struct epoll_event event);
 
-	~Server();
+		/* Loops through cmds and calls the corresponding functions */
+		void	_execCmds(std::vector<Command> &cmds, int userfd);
 
-	/* Functions */
+		void	_removeUserfromServer(int fd);
 
-	/* "Initializes" the server. For now also contains the epoll_wait loop. */
-	void	init();
+	public:
 
-	/* Easier send() */
-	void	sendReply(int fd, std::string s);
+		Server(const std::string & name, const std::string & port, const std::string & password);
 
-	/* Member accessors */
+		~Server();
 
-	/* Returns server name */
-	const std::string &	getName() const;
+	/* ----------EXECUTION FUNCTIONS---------- */
 
-	/* Returns password required for a new connection. */
-	const std::string &	getpwd() const;
+		/* "Initializes" the server. For now also contains the epoll_wait loop. */
+		void	init();
 
-	/* Returns port used for connecting to the server. */
-	const std::string &	getport() const;
+		/* Easier send() */
+		void	sendReply(int fd, std::string s);
 
-	/* Returns User * instance corresponding to fd, NULL if no User * matches that fd. */
-	User	*getUser(int fd) const;
+	/* ----------MEMBER ACCESSORS---------- */
 
-	/* Returns User * instance with given nickname, NULL if no User * matches that fd. */
-	User	*getUserbyNickname(const std::string nickname) const;
+		/* Returns server name */
+		const std::string &	getName() const;
+
+		/* Returns password required for a new connection. */
+		const std::string &	getpwd() const;
+
+		/* Returns port used for connecting to the server. */
+		const std::string &	getport() const;
+
+		/* Returns User * instance corresponding to fd, NULL if no User * matches that fd. */
+		User	*getUser(int fd) const;
+
+		/* Returns User * instance with given nickname, NULL if no User * matches that fd. */
+		User	*getUserbyNickname(const std::string nickname) const;
+
+		/* Returns fd of a User */
+		int		getUserfd(const std::string nickname) const;
+
+		/* Returns a channel * from its name */
+		Channel *	getChannel(const std::string & channel_name);
 
 };
 

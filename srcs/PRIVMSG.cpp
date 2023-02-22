@@ -12,11 +12,14 @@ static void	privmsg_channel(Server *srv, int &userfd, Command &cmd, std::string 
 static void	privmsg_user(Server *srv, int &userfd, Command &cmd, std::string &client)
 {
 	std::cout << "Target is a user" << std::endl;
-	if (srv->getUserbyNickname(cmd.getParam(0)) == NULL)
+	int targetfd = srv->getUserfd(cmd.getParam(0));
+	std::cout << targetfd << std::endl;
+	if (targetfd == -1)
 	{
-		srv->sendReply(userfd, ERR_NORECIPIENT(client));
+		srv->sendReply(userfd, ERR_NOSUCHNICK(client, client));
 		return ;
 	}
+	srv->sendReply(targetfd, ":" + srv->getUser(userfd)->getMask() + " PRIVMSG " + cmd.getParam(0) + " :" + cmd.getLastParam());
 }
 
 void	privmsg(Server *srv, int &userfd, Command &cmd)

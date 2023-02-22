@@ -80,7 +80,27 @@ void	User::setRealname(std::string realname)
 
 const std::string User::getMask() const
 {
-	return _nickname + "!" + _realname + "@" + _hostname;
+	return _nickname + "!" + _username + "@" + _hostname;
+}
+
+void	User::setInvisible(bool state)
+{
+	this->_is_invisible = state;
+}
+
+void	User::setOperator(bool state)
+{
+	this->_is_operator = state;
+}
+
+void	User::setWallops(bool state)
+{
+	this->_is_wallops = state;
+}
+
+void	User::setAway(bool state)
+{
+	this->_is_away = state;
 }
 
 void	User::setInvisible(bool state)
