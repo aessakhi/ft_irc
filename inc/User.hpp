@@ -50,6 +50,9 @@ private:
 	/* If true, the user is away */
 	bool	_is_away;
 
+	/* If user is away, this is the away message */
+	std::string _away_msg;
+
 public:
 
 	User(int fd);
@@ -101,16 +104,16 @@ public:
 	/* Returns "nickname!realname\@hostname" */
 	const std::string getMask() const;
 
-	/* Sets user as invisible */
+	/* Sets user's invisible state */
 	void	setInvisible(bool state);
 
-	/* Sets user as operator */
+	/* Sets user's operator state */
 	void	setOperator(bool state);
 
-	/* Sets user as wallops */
+	/* Sets user's wallops state */
 	void	setWallops(bool state);
 
-	/* Sets user as away */
+	/* Sets user's away state */
 	void	setAway(bool state);
 
 	/* Returns if user is invisible */
@@ -124,6 +127,10 @@ public:
 
 	/* Returns if user is away */
 	bool	isAway() const;
+
+	/* Returns the user's away message */
+	const std::string	getAwayMessage() const;
+
 };
 
 #endif

@@ -13,6 +13,7 @@ SRC_NAMES +=	Channel.cpp \
 
 # COMMANDS
 SRC_NAMES +=	CAP.cpp \
+				MODE.cpp \
 				NICK.cpp \
 				PASS.cpp \
 				USER.cpp \
