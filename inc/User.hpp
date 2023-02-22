@@ -47,6 +47,9 @@ private:
 	/* If true, the user is WALLOPS */
 	bool	_is_wallops;
 
+	/* If true, the user is away */
+	bool	_is_away;
+
 public:
 
 	User(int fd);

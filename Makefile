@@ -17,6 +17,7 @@ SRC_NAMES +=	CAP.cpp \
 				PASS.cpp \
 				USER.cpp \
 				PING.cpp \
+				PRIVMSG.cpp \
 
 # OTHER FILES
 SRC_NAMES +=	main.cpp \
