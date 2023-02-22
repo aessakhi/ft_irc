@@ -147,3 +147,19 @@ const std::string	User::getAwayMessage() const
 {
 	return this->_away_msg;
 }
+
+const std::string	User::getModeString() const
+{
+	std::string modes("+");
+
+	if (this->isOperator())
+		modes += 'o';
+	if (this->isInvisible())
+		modes += 'i';
+	if (this->isWallops())
+		modes += 'w';
+	if (this->isAway())
+		modes += 'a';
+	
+	return modes;
+}

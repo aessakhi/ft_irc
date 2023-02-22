@@ -131,6 +131,9 @@ public:
 	/* Returns the user's away message */
 	const std::string	getAwayMessage() const;
 
+	/* Returns the user's mode string */
+	const std::string	getModeString() const;
+
 };
 
 #endif
