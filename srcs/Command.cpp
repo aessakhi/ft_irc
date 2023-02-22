@@ -49,6 +49,27 @@ std::string	Command::getLastParam() const
 	return (last);
 }
 
+std::string Command::getStr() const
+{
+	std::string	ret = getPrefix();
+	if (!ret.empty() && !getCmd().empty())
+		ret += ' ';
+	if (!getCmd().empty())
+		ret += getCmd();
+	size_t nb = paramNumber();
+	if (nb)
+	{
+		ret += ' ';
+		for (size_t i = 0; i < nb; i++)
+		{
+			ret += getParam(i);
+			if (i + 1 != nb)
+				ret += ' ';
+		}
+	}
+	return ret;
+}
+
 std::ostream & operator<<(std::ostream & out, const Command & cmd)
 {
 	std::vector<std::string> params = cmd.getParamList();

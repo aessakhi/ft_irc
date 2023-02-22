@@ -49,6 +49,9 @@ public:
 
 	/* Returns the last parameter, without the starting ':' if there was one. */
 	std::string	getLastParam() const;
+
+	/* Returns command as a string */
+	std::string getStr() const;
 };
 
 std::ostream & operator<<(std::ostream & out, const Command & cmd);
