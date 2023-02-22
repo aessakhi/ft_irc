@@ -5,131 +5,139 @@
 
 class User
 {
-private:
-	User();
+	private:
+		User();
 
-	/* The fd to use for communication with the client */
-	int			_fd;
+		/* The fd to use for communication with the client */
+		int			_fd;
 
-	/* These 3 bool will be used to check the authentification of the user */
-	/* For instance, if the password is empty, we'll still accept the connection of the user but won't send the reply msg until these 3 bools are set to true */
-	
-	/* If true, user field has been set */
-	bool		_user;
+	/* ----------AUTHENTIFICATION BOOLEANS---------- */
 
-	/* If true, correct password has been given */
-	bool		_pwd;
+		/* If true, user field has been set */
+		bool		_user;
 
-	/* If true, nick field has been set */
-	bool		_nick;
+		/* If true, correct password has been given */
+		bool		_pwd;
 
-	/*  */
-	bool		_authenticated;
+		/* If true, nick field has been set */
+		bool		_nick;
 
-	/* User's nickname */
-	std::string	_nickname;
+		/*  */
+		bool		_authenticated;
 
-	/* User's username */
-	std::string	_username;
+	/* ----------NAMES---------- */
 
-	/* User's hostname */
-	std::string	_hostname;
+		/* User's nickname */
+		std::string	_nickname;
 
-	/* User's real name */
-	std::string	_realname;
+		/* User's username */
+		std::string	_username;
 
-	/* If true, the user is invisible */
-	bool	_is_invisible;
+		/* User's hostname */
+		std::string	_hostname;
 
-	/* If true, the user is a server operator */
-	bool	_is_operator;
+		/* User's real name */
+		std::string	_realname;
 
-	/* If true, the user is WALLOPS */
-	bool	_is_wallops;
+	/* ----------MODES---------- */
 
-	/* If true, the user is away */
-	bool	_is_away;
+		/* If true, the user is invisible */
+		bool	_is_invisible;
 
-	/* If user is away, this is the away message */
-	std::string _away_msg;
+		/* If true, the user is a server operator */
+		bool	_is_operator;
 
-public:
+		/* If true, the user is WALLOPS */
+		bool	_is_wallops;
 
-	User(int fd);
+		/* If true, the user is away */
+		bool	_is_away;
 
-	~User();
+		/* If user is away, this is the away message */
+		std::string _away_msg;
 
-	/*  */
-	bool	getAuth();
+	public:
 
-	/* Returns if the user has given the correct password */
-	bool	getPwd();
+		User(int fd);
 
-	/* Returns if the user has set his nickname */
-	bool	getNick();
+		~User();
 
-	/* Returns if the user has set his username */
-	bool	getUser();
+	/* ----------ACCESSORS---------- */
 
-	/* Returns nickname */
-	std::string	getNickname() const;
+		/*  */
+		bool	getAuth();
 
-	/* Returns real name */
-	std::string	getRealname() const;
+		/* Returns if the user has given the correct password */
+		bool	getPwd();
 
-	/* Sets _authenticated value */
-	void	setAuth(bool state);
+		/* Returns if the user has set his nickname */
+		bool	getNick();
 
-	/* Sets _pwd value */
-	void	setPwd(bool state);
+		/* Returns if the user has set his username */
+		bool	getUser();
 
-	/* Sets _nick value */
-	void	setNick(bool state);
+		/* Returns nickname */
+		std::string	getNickname() const;
 
-	/* Sets _user value */
-	void	setUser(bool state);
+		/* Returns real name */
+		std::string	getRealname() const;
 
-	/* Returns true if _pwd, _nick, _user are true */
-	bool	checkAuth();
+		/* Returns if user is invisible */
+		bool	isInvisible() const;
 
-	/* Sets user's nickname */
-	void	setNickname(std::string nickname);
+		/* Returns if user is a server operator */
+		bool	isOperator() const;
 
-	/* Sets user's username */
-	void	setUsername(std::string username);
+		/* Returns if user is wallops */
+		bool	isWallops() const;
 
-	/* Sets user's realname */
-	void	setRealname(std::string realname);
+		/* Returns if user is away */
+		bool	isAway() const;
 
-	/* Returns "nickname!realname\@hostname" */
-	const std::string getMask() const;
+		/* Returns the user's away message */
+		const std::string	getAwayMessage() const;
 
-	/* Sets user's invisible state */
-	void	setInvisible(bool state);
+		/* Returns true if _pwd, _nick, _user are true */
+		bool	checkAuth();
 
-	/* Sets user's operator state */
-	void	setOperator(bool state);
+		/* Returns "nickname!realname\@hostname" */
+		const std::string getMask() const;
 
-	/* Sets user's wallops state */
-	void	setWallops(bool state);
 
-	/* Sets user's away state */
-	void	setAway(bool state);
+	/* ----------SETTERS---------- */
 
-	/* Returns if user is invisible */
-	bool	isInvisible() const;
+		/* Sets _authenticated value */
+		void	setAuth(bool state);
 
-	/* Returns if user is a server operator */
-	bool	isOperator() const;
+		/* Sets _pwd value */
+		void	setPwd(bool state);
 
-	/* Returns if user is wallops */
-	bool	isWallops() const;
+		/* Sets _nick value */
+		void	setNick(bool state);
 
-	/* Returns if user is away */
-	bool	isAway() const;
+		/* Sets _user value */
+		void	setUser(bool state);
 
-	/* Returns the user's away message */
-	const std::string	getAwayMessage() const;
+		/* Sets user's nickname */
+		void	setNickname(std::string nickname);
+
+		/* Sets user's username */
+		void	setUsername(std::string username);
+
+		/* Sets user's realname */
+		void	setRealname(std::string realname);
+
+		/* Sets user's invisible state */
+		void	setInvisible(bool state);
+
+		/* Sets user's operator state */
+		void	setOperator(bool state);
+
+		/* Sets user's wallops state */
+		void	setWallops(bool state);
+
+		/* Sets user's away state */
+		void	setAway(bool state);
 
 	/* Returns the user's mode string */
 	const std::string	getModeString() const;
