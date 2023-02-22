@@ -210,7 +210,7 @@ err_codes Channel::kick(User *from, User *to)
 	return err_noerror;
 }
 
-std::vector<std::string> Channel::names(User *user) const
+std::vector<std::string> Channel::namesVect(User *user) const
 {
 	std::vector<std::string> name_vect;
 	std::vector<User *>::const_iterator it;
@@ -234,4 +234,19 @@ std::vector<std::string> Channel::names(User *user) const
 		name_vect.push_back(current_name);
 	}
 	return name_vect;
+}
+
+std::string Channel::namesStr(User *user) const
+{
+	std::string ret;
+	std::vector<std::string> vect = namesVect(user);
+
+	for (size_t i = 0; i < vect.size(); i++)
+	{
+		ret += vect[i];
+		if (i + 1 == vect.size())
+			ret += ' ';
+	}
+
+	return ret;
 }

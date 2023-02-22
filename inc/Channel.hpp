@@ -222,7 +222,10 @@ class Channel
 		/* Returns the list of names of the users on this channel, with prefixes.
 		If a user is invisible, the requesting user has to be in the channel to view them.
 		If a user is an operator, their name is prefixed by a '@' */
-		std::vector<std::string> names(User *user) const;
+		std::vector<std::string> namesVect(User *user) const;
+
+		/* Returns the list of names as a string of format "[prefix]<nick>{ [prefix]<nick>}" */
+		std::string namesStr(User *user) const;
 };
 
 #endif
