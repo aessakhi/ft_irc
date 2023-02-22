@@ -35,20 +35,19 @@ int program_arguments_check(int argc, char **argv)
 	return 0;
 }
 
-/* Might need to be tweaked a bit, might be an issue when a string has no trailing \r\n */
 std::vector<std::string> split(std::string *str, std::string delimiter)
 {
 	std::vector<std::string> result;
 
-	size_t	end = 0;
+	size_t	end = str->find(delimiter);
 
-	if (str->find(delimiter) == std::string::npos)
+	if (end == std::string::npos)
 		return (std::vector<std::string>());
-	while (str->find(delimiter, 0) != std::string::npos)
+	while (end != std::string::npos)
 	{
-		end = str->find(delimiter, 0);
 		result.push_back(str->substr(0, end));
 		str->erase(0, end + delimiter.length());
+		end = str->find(delimiter);
 	}
 	return (result);
 }
@@ -69,31 +68,48 @@ std::vector<std::string> split(std::string str, std::string delimiter)
 	return (result);
 }
 
-void	splitCmds(std::vector<Command> *cmd_vector, std::string cmd)
+Command	splitCmd(std::string s)
 {
-	size_t						end	= 0;
-	std::string					name;
-	std::string					param;
-	std::vector<std::string>	param_list;
+	std::string	prefix;
+	std::string	command_name;
+	std::vector<std::string>	parameter_list;
 
-	if ((end = cmd.find(" ")) != std::string::npos)
+	// prefix grab
+	if (s[0] == ':')
 	{
-		name = cmd.substr(0, end);
-		cmd.erase(0, end + 1);
+		size_t prefix_end = s.find(' ');
+		prefix = s.substr(0, prefix_end);
+		s.erase(0, prefix_end);
 	}
-	if ((end = cmd.find(":")) != std::string::npos)
+
+	// command grab
+	size_t cmd_start = s.find_first_not_of(' ');
+	size_t cmd_end = s.find(' ', cmd_start);
+
+	if (cmd_start != s.npos)
 	{
-		param = cmd.substr(0, end);
-		cmd.erase(0, end + 1);
+		command_name = s.substr(cmd_start, cmd_end);
+		s.erase(0, cmd_end);
 	}
-	while ((end = cmd.find(" ")) != std::string::npos)
+
+	// param-list grab
+
+	size_t arg_start = s.find_first_not_of(' ');
+	size_t arg_end;
+
+	while (arg_start != s.npos)
 	{
-		param_list.push_back(cmd.substr(0, end));
-		cmd.erase(0, end + 1);
+		if (s[arg_start] == ':')
+			arg_end = s.npos;
+		else
+			arg_end = s.find(' ', arg_start);
+		parameter_list.push_back(s.substr(arg_start, arg_end - arg_start));
+		s.erase(0, arg_end);
+		arg_start = s.find_first_not_of(' ');
 	}
-	if (!cmd.empty())
-		param_list.push_back(cmd);
-	cmd_vector->push_back(Command(name, param, param_list));
+
+	Command cmd(command_name, parameter_list, prefix);
+	return (cmd);
 }
 
 bool	wildcompare(const char * s1, const char * s2)

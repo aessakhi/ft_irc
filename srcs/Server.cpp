@@ -122,7 +122,6 @@ void	Server::_receivemessage(struct epoll_event event)
 	char buf[RECV_BUFFER_SIZE];
 	ssize_t ret;
 
-	// memset(buf, 0, RECV_BUFFER_SIZE);
 	ret = recv(event.data.fd, buf, RECV_BUFFER_SIZE, 0);
 	if (ret == -1)
 	{
@@ -136,12 +135,11 @@ void	Server::_receivemessage(struct epoll_event event)
 	std::vector<Command>	cmd_vector;
 
 	for (std::vector<std::string>::const_iterator it = cmds.begin(); it != cmds.end(); it++)
-		splitCmds(&cmd_vector, *it);
+		cmd_vector.push_back(splitCmd(*it));
 	
 	for (size_t i = 0; i < cmd_vector.size(); i++)
-	{
 		printSep(cmd_vector[i]);
-	}
+		
 	this->_execCmds(cmd_vector, event.data.fd);
 	/* _removeUserfromServer(event.data.fd); */
 }

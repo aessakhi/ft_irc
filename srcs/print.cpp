@@ -1,6 +1,6 @@
 #include "main.hpp"
 
-void	vectprint(std::ostream & out, std::vector<std::string> vect)
+void	printVect(std::ostream & out, std::vector<std::string> vect)
 {
 	for (size_t i = 0; i < vect.size(); i++)
 	{
@@ -51,15 +51,28 @@ void	printRecv(std::string s, size_t n)
 
 void	printSep(Command cmd)
 {
+	if (cmd.hasPrefix())
+		std::cout << BGRN << "PREFIX = \"" << cmd.getPrefix() << "\"" << RESET << std::endl;
 	std::cout << BGRN << "NAME = \"" << cmd.getCmd() << "\"" << RESET << std::endl;
-	std::cout << BGRN << "PARAM = \"" << cmd.getParam() << "\"" << RESET << std::endl;
 	std::cout << BGRN << "PARAMLIST = \"";
 	std::vector<std::string>vect = cmd.getParamList();
 	for (size_t i = 0; i < vect.size(); i++)
 	{
 		std::cout << vect[i];
 		if (i + 1 != vect.size())
-			std::cout << " ";
+			std::cout << "\", \"";
 	}
 	std::cout << "\"" << RESET << std::endl;
+}
+
+void	printSep(std::vector<std::string> vect)
+{
+	std::cout << "(";
+	for (size_t i = 0; i < vect.size(); i++)
+	{
+		std::cout << vect[i];
+		if (i + 1 != vect.size())
+			std::cout << ", ";
+	}
+	std::cout << ")";
 }

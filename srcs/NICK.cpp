@@ -2,22 +2,27 @@
 
 void	nick(Server *srv, int &userfd, Command &cmd)
 {
-	std::string	client;
-
-	client = "";
-	if (cmd.getParamList().empty())
-		srv->sendReply(userfd, ERR_NONICKNAMEGIVEN(client));
-	else if (srv->getUserbyNickname(cmd.getParamList()[0]) != NULL)
-		srv->sendReply(userfd, ERR_NICKNAMEINUSE(client, cmd.getParamList()[0]));
-	else
+	// Number of args check
+	std::string	client = "";
+	if (cmd.paramNumber() == 0)
 	{
-		/* Need to check here if there are disallowed characters */
-		srv->getUser(userfd)->setNickname(cmd.getParamList()[0]);
-		srv->getUser(userfd)->setNick(true);
-		if (srv->getUser(userfd)->checkAuth() == true && srv->getUser(userfd)->getAuth() == false)
-		{
-			srv->getUser(userfd)->setAuth(true);
-			srv->sendReply(userfd, RPL_WELCOME(srv->getUser(userfd)->getNickname()));
-		}
+		srv->sendReply(userfd, ERR_NONICKNAMEGIVEN(client));
+		return;
+	}
+
+	// Check if nick not in use
+	if (srv->getUserbyNickname(cmd.getParamList()[0]) != NULL)
+	{
+		srv->sendReply(userfd, ERR_NICKNAMEINUSE(client, cmd.getParamList()[0]));
+		return;
+	}
+
+	/* Need to check here if there are disallowed characters */
+	srv->getUser(userfd)->setNickname(cmd.getParam(0));
+	srv->getUser(userfd)->setNick(true);
+	if (srv->getUser(userfd)->checkAuth() == true && srv->getUser(userfd)->getAuth() == false)
+	{
+		srv->getUser(userfd)->setAuth(true);
+		srv->sendReply(userfd, RPL_WELCOME(srv->getUser(userfd)->getNickname()));
 	}
 }
