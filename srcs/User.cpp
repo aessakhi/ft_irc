@@ -80,7 +80,7 @@ void	User::setRealname(std::string realname)
 
 const std::string User::getMask() const
 {
-	return _nickname + "!" + _realname + "@" + _hostname;
+	return _nickname + "!" + _username + "@" + _hostname;
 }
 
 void	User::setInvisible(bool state)
