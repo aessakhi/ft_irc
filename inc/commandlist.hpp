@@ -9,5 +9,6 @@ void	cap(Server *srv, int &userfd, Command &cmd);
 void	pass(Server *srv, int &userfd, Command &cmd);
 void	nick(Server *srv, int &userfd, Command &cmd);
 void	user(Server *srv, int &userfd, Command &cmd);
+void	ping(Server *srv, int &userfd, Command &cmd);
 
 #endif

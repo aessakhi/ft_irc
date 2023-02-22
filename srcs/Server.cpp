@@ -165,6 +165,7 @@ void	Server::_initCmdMap()
 	this->_cmdMap["PASS"] = &pass;
 	this->_cmdMap["NICK"] = &nick;
 	this->_cmdMap["USER"] = &user;
+	this->_cmdMap["PING"] = &ping;
 }
 
 void	Server::init()
