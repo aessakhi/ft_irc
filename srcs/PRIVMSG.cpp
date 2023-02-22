@@ -19,7 +19,7 @@ static void	privmsg_user(Server *srv, int &userfd, Command &cmd, std::string &cl
 		srv->sendReply(userfd, ERR_NOSUCHNICK(client, client));
 		return ;
 	}
-	srv->sendReply(targetfd, cmd.getLastParam());
+	srv->sendReply(targetfd, ":" + srv->getUser(userfd)->getMask() + " PRIVMSG " + cmd.getParam(0) + " :" + cmd.getLastParam());
 }
 
 void	privmsg(Server *srv, int &userfd, Command &cmd)
