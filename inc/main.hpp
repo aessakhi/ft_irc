@@ -54,9 +54,21 @@ class User;
 	Returns 0 if arguments are formatted correctly, -1 otherwise. */
 int program_arguments_check(int argc, char **argv);
 
+/* Splits str on delimiter.
+Erases the beginning of str if there is a \\r\\n in str. */
 std::vector<std::string> split(std::string *str, std::string delimiter);
+
+/* Splits str on delimiter. */
 std::vector<std::string> split(std::string str, std::string delimiter);
-void	splitCmds(std::vector<Command> *cmd_vector, std::string cmd);
+
+
+// void	splitCmds(std::vector<Command> *cmd_vector, std::string cmd);
+
+/* Returns a Command created from s.
+s should be of format "prefix command command-parameters\\r\\n".
+If there is a prefix, s begins with ':'.
+command-parameters can be terminated by a message containing spaces, in which case it begins by ':'. */
+Command	splitCmd(std::string s);
 
 /* Returns true if s1 and s2 are similar when interpreting wildcards */
 bool	wildcompare(std::string s1, std::string s2);
@@ -77,7 +89,7 @@ std::string toupper(std::string s);
 
 
 /* Prints a std::vector\<std::string> element by element. */
-void	vectprint(std::ostream & out, std::vector<std::string> vect);
+void	printVect(std::ostream & out, std::vector<std::string> vect);
 
 /* Print s on std::cerr in red. */
 void	printError(std::string s);
@@ -96,5 +108,8 @@ void	printRecv(std::string s, size_t n);
 
 /* Print cmd on std::cout in green detailing the different attributes. */
 void	printSep(Command cmd);
+
+/* Print vect on std::cout in green with elements visually separated. */
+void	printSep(std::vector<std::string> vect);
 
 #endif
