@@ -98,6 +98,15 @@ public:
 	/* Returns "nickname!realname\@hostname" */
 	const std::string getMask() const;
 
+	/* Returns if user is invisible */
+	bool	isInvisible() const;
+
+	/* Returns if user is a server operator */
+	bool	isOperator() const;
+
+	/* Returns if user is wallops */
+	bool	isWallops() const;
+
 };
 
 #endif

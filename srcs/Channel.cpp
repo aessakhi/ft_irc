@@ -209,3 +209,29 @@ err_codes Channel::kick(User *from, User *to)
 
 	return err_noerror;
 }
+
+std::vector<std::string> Channel::names(User *user) const
+{
+	std::vector<std::string> name_vect;
+	std::vector<User *>::const_iterator it;
+	std::vector<User *>::const_iterator ite;
+
+	bool see_invisible = isMember(user);
+
+	it = _members.begin();
+	ite = _members.end();
+
+	for (; it != ite; it++)
+	{
+		User * current = *it;
+		std::string current_name;
+
+		if (current->isInvisible() && !see_invisible)
+			continue;
+		if (isOp(current))
+			current_name += '@';
+		current_name += current->getNickname();
+		name_vect.push_back(current_name);
+	}
+	return name_vect;
+}

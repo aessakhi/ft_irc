@@ -1,6 +1,6 @@
 #include "User.hpp"
 
-User::User(int fd): _fd(fd), _user(0), _pwd(0), _nick(0), _authenticated(0)
+User::User(int fd): _fd(fd), _user(0), _pwd(0), _nick(0), _authenticated(0), _is_invisible(false), _is_operator(false), _is_wallops(false)
 {}
 
 User::~User()
@@ -81,4 +81,19 @@ void	User::setRealname(std::string realname)
 const std::string User::getMask() const
 {
 	return _nickname + "!" + _realname + "@" + _hostname;
+}
+
+bool	User::isInvisible() const
+{
+	return this->_is_invisible;
+}
+
+bool	User::isOperator() const
+{
+	return this->_is_operator;
+}
+
+bool	User::isWallops() const
+{
+	return this->_is_wallops;
 }

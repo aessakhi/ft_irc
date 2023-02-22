@@ -218,6 +218,11 @@ class Channel
 		- err_noerror on success
 		*/
 		err_codes kick(User *from, User *to);
+
+		/* Returns the list of names of the users on this channel, with prefixes.
+		If a user is invisible, the requesting user has to be in the channel to view them.
+		If a user is an operator, their name is prefixed by a '@' */
+		std::vector<std::string> names(User *user) const;
 };
 
 #endif
