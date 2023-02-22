@@ -86,6 +86,9 @@ public:
 	/* Returns User * instance with given nickname, NULL if no User * matches that fd. */
 	User	*getUserbyNickname(const std::string nickname) const;
 
+	/* Returns fd of a User */
+	int		getUserfd(const std::string nickname) const;
+
 };
 
 #endif
