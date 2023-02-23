@@ -24,6 +24,7 @@
 /* CLASSES */
 class Channel;
 class Command;
+class Mode;
 class Server;
 class User;
 class UserMask;
@@ -37,6 +38,7 @@ class UserMask;
 /* CLASS HEADERS */
 #include "Channel.hpp"
 #include "Command.hpp"
+#include "Mode.hpp"
 #include "Server.hpp"
 #include "User.hpp"
 #include "UserMask.hpp"
