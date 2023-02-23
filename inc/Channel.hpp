@@ -85,7 +85,7 @@ class Channel
 		Channel(const std::string & name);
 		virtual	~Channel();
 
-	/* -----ACCESSORS----- */
+	/* ----------ACCESSORS---------- */
 
 		/* Returns channel name */
 		const std::string & getName() const;
@@ -126,7 +126,7 @@ class Channel
 		/* Returns max number of members */
 		size_t	capacity() const;
 
-	/* -----ADDING USERS TO LISTS----- */
+	/* ----------ADDING USERS TO LISTS---------- */
 
 		/* Adds a user to the channel members without checking for permissions. */
 		void	addMember(User *user);
@@ -148,8 +148,52 @@ class Channel
 
 		/* Adds a user mask to the list of voice users */
 		void	addVoice(UserMask user);
-		
-	/* -----ATTRIBUTE CHECKS----- */
+
+	/* ----------ATTRIBUTE CHANGES---------- */
+
+		/* Set _ban_mode value to state */
+		void	setBanMode(bool state);
+
+		/* Set _ban_except_mode value to state */
+		void	setBanExceptMode(bool state);
+
+		/* Set _limit_mode value to state */
+		void	setLimitMode(bool state);
+
+		/* Set _capacity value to limit */
+		void	setLimit(size_t limit);
+
+		/* Set _invite_mode value to state */
+		void	setInviteMode(bool state);
+
+		/* Set _invite_except_mode value to state */
+		void	setInviteExceptMode(bool state);
+
+		/* Set _key_mode value to state */
+		void	setKeyMode(bool state);
+
+		/* Set _key value to new_key */
+		void	setKey(std::string new_key);
+
+		/* Set _moderated_mode value to state */
+		void	setModeratedMode(bool state);
+
+		/* Set _secret_mode value to state */
+		void	setSecretMode(bool state);
+
+		/* Set _protected_topic_mode value to state */
+		void	setProtectedTopicMode(bool state);
+
+		/* Set _no_external_messages_mode value to state */
+		void	setNoExternalMessagesMode(bool state);
+
+		/* Set _topic value to new_topic */
+		void	setTopic(std::string new_topic);
+
+		/* Unsets topic */
+		void	unsetTopic();
+
+	/* ----------ATTRIBUTE CHECKS---------- */
 
 		/* Checks if user is a member */
 		bool	isMember(User *user) const ;
@@ -178,7 +222,7 @@ class Channel
 		/* Returns true if channel has a topic */
 		bool	isTopicSet() const;
 		
-	/* -----COMMANDS----- */
+	/* ----------COMMANDS---------- */
 		
 		/*
 		Tries to add user to the channel.

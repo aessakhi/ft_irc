@@ -69,6 +69,54 @@ void	Channel::addInvite(User * user)
 void	Channel::addVoice(UserMask user)
 { _voice.push_back(user) ; }
 
+/* ----------ATTRIBUTE CHANGES---------- */
+
+void	Channel::setBanMode(bool state)
+{ _ban_mode = state; }
+
+void	Channel::setBanExceptMode(bool state)
+{ _ban_except_mode = state; }
+
+void	Channel::setLimitMode(bool state)
+{ _limit_mode = state; }
+
+void	Channel::setLimit(size_t limit)
+{ _capacity = limit ; }
+
+void	Channel::setInviteMode(bool state)
+{ _invite_mode = state; }
+
+void	Channel::setInviteExceptMode(bool state)
+{ _invite_except_mode = state; }
+
+void	Channel::setKeyMode(bool state)
+{ _key_mode = state; }
+
+void	Channel::setKey(std::string new_key)
+{ _key = new_key; }
+
+void	Channel::setModeratedMode(bool state)
+{ _moderated_mode = state; }
+
+void	Channel::setSecretMode(bool state)
+{ _secret_mode = state; }
+
+void	Channel::setProtectedTopicMode(bool state)
+{ _protected_topic_mode = state; }
+
+void	Channel::setNoExternalMessagesMode(bool state)
+{ _no_external_messages_mode = state; }
+
+void	Channel::setTopic(std::string new_topic)
+{
+	_topic = new_topic;
+	_topic_is_set = true;
+}
+
+void	Channel::unsetTopic()
+{ _topic_is_set = false ; }
+
+
 /* ----------ATTRIBUTE CHECKS---------- */
 
 bool	Channel::isMember(User *user) const
