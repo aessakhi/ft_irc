@@ -22,6 +22,7 @@ SRC_NAMES +=	CAP.cpp \
 				PING.cpp \
 				PRIVMSG.cpp \
 				AWAY.cpp \
+				JOIN.cpp \
 
 # OTHER FILES
 SRC_NAMES +=	main.cpp \
