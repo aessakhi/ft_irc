@@ -18,14 +18,11 @@ class UserMask
 		/* User's hostname */
 		std::string	_hostname;
 
-		/* User's real name */
-		std::string	_realname;
-
 	public:
 
 		UserMask();
 
-		UserMask(std::string nickname, std::string username, std::string hostname, std::string realname);
+		UserMask(std::string nickname, std::string username, std::string hostname);
 
 		UserMask(User * user);
 

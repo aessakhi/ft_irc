@@ -3,13 +3,13 @@
 UserMask::UserMask()
 {}
 
-UserMask::UserMask(std::string nickname, std::string username, std::string hostname, std::string realname) : _nickname(nickname), _username(username), _hostname(hostname), _realname(realname)
+UserMask::UserMask(std::string nickname, std::string username, std::string hostname) : _nickname(nickname), _username(username), _hostname(hostname)
 {}
 
-UserMask::UserMask(User * user) : _nickname(user->getNickname()), _username(user->getUsername()), _hostname(user->getHostname()), _realname(user->getRealname())
+UserMask::UserMask(User * user) : _nickname(user->getNickname()), _username(user->getUsername()), _hostname(user->getHostname())
 {}
 
-UserMask::UserMask(User user) : _nickname(user.getNickname()), _username(user.getUsername()), _hostname(user.getHostname()), _realname(user.getRealname())
+UserMask::UserMask(User user) : _nickname(user.getNickname()), _username(user.getUsername()), _hostname(user.getHostname())
 {}
 
 void	UserMask::initFromMask(std::string mask)
@@ -38,7 +38,6 @@ UserMask & UserMask::operator=(UserMask const & src)
 	_nickname = src._nickname;
 	_username = src._username;
 	_hostname = src._hostname;
-	_realname = src._realname;
 	return *this;
 }
 
