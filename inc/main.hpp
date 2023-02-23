@@ -80,6 +80,12 @@ bool	wildcompare(std::string s1, std::string s2);
 /* Returns true if s1 and s2 are similar when interpreting wildcards */
 bool	wildcompare(const char * s1, const char * s2);
 
+/* Returns true if s1 and s2 are similar when interpreting wildcards on s1 only */
+bool	sided_wildcompare(std::string s1, std::string s2);
+
+/* Returns true if s1 and s2 are similar when interpreting wildcards on s1 only */
+bool	sided_wildcompare(const char * s1, const char * s2);
+
 /* Returns a copy of s without the trailing \\r\\n */
 std::string	no_crlf(std::string s);
 

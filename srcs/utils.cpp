@@ -185,3 +185,37 @@ bool isMask(std::string s)
 	
 	return (a >= 1) && (b >= 3) && (s.size() >= 5) && (a + 1 < b);
 }
+
+bool	sided_wildcompare(const char * s1, const char * s2)
+{
+	for (int i = 0; s1[i] || s2[i]; i++)
+	{
+		// case-insensitive basic comparison
+		if (s1[i] && s2[i] && (toupper(s1[i]) == toupper(s2[i])) )
+			continue;
+		
+		// single char wildcard
+		if ( (s1[i] != s2[i]) && (s1[i] == '?' || s2[i] == '?') )
+			continue;
+		
+		// * wildcard on s1
+		if ( (s1[i] != s2[i]) && (s1[i] == '*') )
+		{
+			// skip 0, 1, 2... characters in s2
+			for (int test = 0; s2[test]; test++)
+			{
+				if (wildcompare(s1 + i + 1, s2 + i + test))
+					return true;
+			}
+		}
+
+		return false;
+	}
+
+	return true;
+}
+
+bool	sided_wildcompare(std::string s1, std::string s2)
+{
+	return sided_wildcompare(s1.data(), s2.data());
+}
