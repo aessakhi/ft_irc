@@ -174,3 +174,14 @@ std::string	no_crlf(std::string s)
 		return s.substr(0, max - 1);
 	return s;
 }
+
+bool isMask(std::string s)
+{
+	size_t a = s.find('!');
+	size_t b = s.find('@');
+
+	if (a == s.npos || b == s.npos)
+		return false;
+	
+	return (a >= 1) && (b >= 3) && (s.size() >= 5) && (a + 1 < b);
+}

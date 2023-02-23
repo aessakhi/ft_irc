@@ -13,8 +13,8 @@ class Channel
 		/* List of all users currently in the channel */
 		std::vector<User *> _members;
 
-		/* List of all users that are operators for this channel */
-		std::vector<User *> _operators;
+		/* List of all operator masks for this channel */
+		std::vector<UserMask> _operators;
 
 		/* Topic of the channel */
 		std::string	_topic;
@@ -23,14 +23,14 @@ class Channel
 		This allows for differenciating between no topic and an empty string as topic. */
 		bool	_topic_is_set;
 
-		/* If _ban_mode, list of all users that are banned from this channel */
-		std::vector<User *> _banned;
+		/* If _ban_mode, list of all user masks that are banned from this channel */
+		std::vector<UserMask> _banned;
 
 		/* If true, users that are in the _banned list will not be able to join the channel */
 		bool	_ban_mode;
 
-		/* If _ban_except_mode, list of users that are exempt from being banned */
-		std::vector<User *> _ban_except;
+		/* If _ban_except_mode, list of user masks that are exempt from being banned */
+		std::vector<UserMask> _ban_except;
 		
 		/* If true, users that are in the _ban_except list will be able to join the channel even if banned*/
 		bool	_ban_except_mode;
@@ -47,8 +47,8 @@ class Channel
 		/* If true, clients cannot join unless they have been invited to the channel */
 		bool	_invite_mode;
 
-		/* If _invite_except_mode, list of users that are exempt from needing an invite to join */
-		std::vector<User *> _invite_except;
+		/* If _invite_except_mode, list of user masks that are exempt from needing an invite to join */
+		std::vector<UserMask> _invite_except;
 
 		/* If true, users that are in the _invite_except list will be able to join the channel even without an invite */
 		bool	_invite_except_mode;
@@ -59,8 +59,8 @@ class Channel
 		/* If true, users need to provide the correct key in order to join */
 		bool	_key_mode;
 
-		/* If _moderated_mode, users in the _voice list will still be able to talk */
-		std::vector<User *> _voice;
+		/* If _moderated_mode, list of user masks still able to talk */
+		std::vector<UserMask> _voice;
 
 		/* If true, users need privileges to send messages on the channel */
 		bool	_moderated_mode;
@@ -76,6 +76,9 @@ class Channel
 
 		/*  */
 		bool	_find_mask(std::vector<User *> vect, User * user) const;
+
+		/*  */
+		bool	_find_mask(std::vector<UserMask> vect, User * user) const;
 
 	public:
 		
@@ -128,23 +131,23 @@ class Channel
 		/* Adds a user to the channel members without checking for permissions. */
 		void	addMember(User *user);
 		
-		/* Adds a user to the operators without checking for permissions. */
-		void	addOperator(User *user);
+		/* Adds a user mask to the operators without checking for permissions. */
+		void	addOperator(UserMask user);
 
-		/* Adds a user to the list of banned users. */
-		void	banUser(User *user);
+		/* Adds a user mask to the list of banned users. */
+		void	banUser(UserMask user);
 
-		/* Adds a user to the list of banned-exempt users. */
-		void	addBanExcept(User *user);
+		/* Adds a user mask to the list of banned-exempt users. */
+		void	addBanExcept(UserMask user);
 
-		/* Adds a user to the list of invite-exempt users. */
-		void	addInviteExcept(User *user);
+		/* Adds a user mask to the list of invite-exempt users. */
+		void	addInviteExcept(UserMask user);
 
 		/* Adds a user to the list of invited users */
 		void	addInvite(User *user);
 
-		/* Adds a user to the list of voice users */
-		void	addVoice(User *user);
+		/* Adds a user mask to the list of voice users */
+		void	addVoice(UserMask user);
 		
 	/* -----ATTRIBUTE CHECKS----- */
 

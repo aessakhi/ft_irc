@@ -31,6 +31,16 @@ std::string	User::getNickname() const
 	return (this->_nickname);
 }
 
+std::string	User::getUsername() const
+{
+	return (this->_username);
+}
+
+std::string	User::getHostname() const
+{
+	return (this->_hostname);
+}
+
 std::string	User::getRealname() const
 {
 	return (this->_realname);

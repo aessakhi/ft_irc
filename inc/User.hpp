@@ -79,6 +79,12 @@ class User
 		/* Returns nickname */
 		std::string	getNickname() const;
 
+		/* Returns username */
+		std::string	getUsername() const;
+
+		/* Returns nickname */
+		std::string	getHostname() const;
+
 		/* Returns real name */
 		std::string	getRealname() const;
 

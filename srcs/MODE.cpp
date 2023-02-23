@@ -99,6 +99,8 @@ static void	usermode(Server *srv, int &userfd, Command &cmd)
 			stock['i'] = add;
 			continue;
 		}
+
+		// If letter is unrecognized, send error
 		srv->sendReply(userfd, ERR_UMODEUNKNOWNFLAG(user->getNickname()));
 	}
 
@@ -120,38 +122,87 @@ static void	usermode(Server *srv, int &userfd, Command &cmd)
 	if (removed.size() > 1)
 		reply_str.append(removed);
 
-	srv->sendReply(userfd, ":" + srv->getName() + " MODE " + user->getNickname() + " :" + reply_str);
+	srv->sendReply(userfd, ":" + user->getNickname() + " MODE " + user->getNickname() + " :" + reply_str);
 }
 
 /*
 Channel modes :
-b = ban
-e = ban-except
-l = limit
-i = invite only
-I = invite-except
-k = key
-m = moderated
-s = secret
-t = protected topic
-n = no external messages
+	-> requiring mask:
+		b = ban
+		e = ban-except
+		I = invite-except
+		o = op user
+		v = voice user
+	-> requiring other arg:
+		l = limit
+		k = key
+	-> no arg:
+		i = invite only
+		m = moderated
+		s = secret
+		t = protected topic
+		n = no external messages
 */
 static void	channelmode(Server *srv, int &userfd, Command &cmd)
 {
-/* 
+
 	std::string target = cmd.getParam(0);
 	User * user = srv->getUser(userfd);
+	Channel * channel = srv->getChannel(target);
 
 	// Error if target is a channel that doesnt exist
-	if (srv->getChannel(target) == NULL)
+	if (channel == NULL)
 	{
 		srv->sendReply(userfd, ERR_NOSUCHCHANNEL(user->getNickname(), target));
 		return;
 	}
-*/
-	(void)srv;
-	(void)userfd;
-	(void)cmd;
+
+	// If no modestring is given, reply with the modes of the channel.
+	if (cmd.paramNumber() == 1)
+	{
+		//sendreply
+		return;
+	}
+
+	// -----If modestring is given, check user privileges-----
+
+	if (!channel->isOp(user))
+	{
+		srv->sendReply(userfd, ERR_CHANOPRIVSNEEDED(user->getNickname(), target));
+		return;
+	}
+
+	// -----Parse modestring and change modes-----
+
+	// std::string modestring = cmd.getParam(1);
+	// // arguments points to the arglist after the modestring
+	// std::vector<std::string>::const_iterator arguments = cmd.getParamList().begin();
+	// arguments += 2;
+
+	// // If first char isnt + or -, handle error however we want
+	// if (modestring[0] != '+' && modestring[0] != '-')
+	// {
+	// 	srv->sendReply(userfd, ERR_UMODEUNKNOWNFLAG(user->getNickname()));
+	// 	return;
+	// }
+
+	// bool add = (modestring[0] == '+');
+	// std::map<char, bool> stock;
+	// for (size_t i = 0; i < modestring.size(); i++)
+	// {
+	// 	char current = modestring[i];
+	// 	if (current == '+' || current == '-')
+	// 	{
+	// 		add = (current == '+');
+	// 		if (i + 1 == modestring.size())
+	// 			srv->sendReply(userfd, ERR_UMODEUNKNOWNFLAG(user->getNickname()));
+	// 		continue;
+	// 	}
+
+	// 	// If letter is unrecognized, send error
+	// 	srv->sendReply(userfd, ERR_UMODEUNKNOWNFLAG(user->getNickname()));
+	// }
+
 }
 
 void	mode(Server *srv, int &userfd, Command &cmd)

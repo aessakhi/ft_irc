@@ -26,6 +26,7 @@ class Channel;
 class Command;
 class Server;
 class User;
+class UserMask;
 
 /* OTHER FILES */
 #include "codes.hpp"
@@ -38,6 +39,7 @@ class User;
 #include "Command.hpp"
 #include "Server.hpp"
 #include "User.hpp"
+#include "UserMask.hpp"
 
 
 #define RECV_BUFFER_SIZE 512
@@ -82,11 +84,10 @@ std::string	no_crlf(std::string s);
 /* Returns the uppercase version of s. */
 std::string toupper(std::string s);
 
-
+/* Returns true if s is of format *!*\@* where * is at least one char. */
+bool isMask(std::string s);
 
 /* ---------- print.cpp ---------- */
-
-
 
 /* Prints a std::vector\<std::string> element by element. */
 void	printVect(std::ostream & out, std::vector<std::string> vect);

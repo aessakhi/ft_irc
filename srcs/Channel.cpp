@@ -51,33 +51,28 @@ size_t	Channel::capacity() const
 void	Channel::addMember(User *user)
 { _members.push_back(user); }
 
-void	Channel::addOperator(User *user)
+void	Channel::addOperator(UserMask user)
 { _operators.push_back(user); }
 
-void	Channel::banUser(User *user)
+void	Channel::banUser(UserMask user)
 { _banned.push_back(user); }
 
-void	Channel::addBanExcept(User *user)
+void	Channel::addBanExcept(UserMask user)
 { _ban_except.push_back(user); }
 
-void	Channel::addInviteExcept(User *user)
+void	Channel::addInviteExcept(UserMask user)
 { _invite_except.push_back(user); }
 
 void	Channel::addInvite(User * user)
 { _invited.push_back(user) ; }
 
-void	Channel::addVoice(User * user)
+void	Channel::addVoice(UserMask user)
 { _voice.push_back(user) ; }
 
 /* ----------ATTRIBUTE CHECKS---------- */
 
 bool	Channel::isMember(User *user) const
 { return std::find(_members.begin(), _members.end(), user) == _members.end() ; }
-
-bool	Channel::isOp(User *user) const
-{ return std::find(_operators.begin(), _operators.end(), user) == _operators.end() ; }
-
-/* The 4 methods below might need to handle user masks */
 
 bool	Channel::_find_mask(std::vector<User *> vect, User * user) const
 {
@@ -90,6 +85,21 @@ bool	Channel::_find_mask(std::vector<User *> vect, User * user) const
 	}
 	return false;
 }
+
+bool	Channel::_find_mask(std::vector<UserMask> vect, User * user) const
+{
+	std::vector<UserMask>::const_iterator it = vect.begin();
+	std::vector<UserMask>::const_iterator ite = vect.end();
+	for (; it != ite; it++)
+	{
+		if (wildcompare(it->getMask(), user->getMask()))
+			return true;
+	}
+	return false;
+}
+
+bool	Channel::isOp(User *user) const
+{ return _find_mask(_operators, user) ; }
 
 bool	Channel::isBanned(User *user) const
 { return _find_mask(_banned, user) ; }
