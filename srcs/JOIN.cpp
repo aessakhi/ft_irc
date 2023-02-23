@@ -10,11 +10,7 @@ void	join(Server *srv, int &userfd, Command &cmd)
 	/* Like with PRIVMSG will need to split the targets to send it to each individual targets */
 	/* Need verification if the target starts with '#', shouldn't happen with irssi but someone might try it with nc */
 	if (srv->getChannel(cmd.getParam(0)) == NULL)
-	{
-		std::cout << "Creating a channel with name " << cmd.getParam(0) << std::endl;
 		srv->getChannelMap()->insert(std::make_pair(cmd.getParam(0), new Channel(cmd.getParam(0))));
-	}
-	std::cout << cmd.getParam(0) << std::endl;
-	std::cout << srv->getChannelMap()->size() << std::endl;
-	srv->getChannel(cmd.getParam(0));
+	std::cout << srv->getChannel(cmd.getParam(0))->getName() << std::endl;
+	std::cout << srv->getChannel(cmd.getParam(0))->join(srv->getUser(userfd), cmd.getLastParam()) << std::endl;
 }

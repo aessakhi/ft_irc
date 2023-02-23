@@ -110,7 +110,7 @@ class Server
 		/* Returns a channel * from its name */
 		Channel *	getChannel(const std::string & channel_name);
 
-		/* Return the channel map, need to use it in JOIN since the channel map is private*/
+		/* Return the channel map, need to use it in JOIN since the channel map is private */
 		std::map<std::string, Channel *> *getChannelMap();
 };
 
