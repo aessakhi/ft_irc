@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-Server::Server(const std::string & name, const std::string & port, const std::string & password): _name(name), _port(port), _pwd(password), _listenfd(0), _epollfd(0)
+Server::Server(const std::string & name, const std::string & port, const std::string & password, const std::string hostname): _name(name), _port(port), _pwd(password),_hostname(hostname), _listenfd(0), _epollfd(0)
 {}
 
 Server::~Server(){}

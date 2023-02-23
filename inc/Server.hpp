@@ -3,6 +3,8 @@
 
 #include "main.hpp"
 
+
+#define HOSTNAME "localhost"
 //Need to stock the user list -> pair<int, User*> , channel list -> Map easier? pair<std::string, Channel*> ?
 
 class Server
@@ -21,6 +23,9 @@ class Server
 
 		/* Password requested for connecting to the server */
 		const std::string &	_pwd;
+
+		/* Hostname*/
+		const std::string	_hostname;
 
 		/* Socket on which the server listens for new incoming connection requests */
 		int	_listenfd;
@@ -68,7 +73,7 @@ class Server
 
 	public:
 
-		Server(const std::string & name, const std::string & port, const std::string & password);
+		Server(const std::string & name, const std::string & port, const std::string & password, const std::string hostname);
 
 		~Server();
 
