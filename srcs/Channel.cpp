@@ -13,20 +13,11 @@ const std::string & Channel::getName() const
 const std::string & Channel::getTopic() const
 { return _topic ; }
 
-bool	Channel::banMode() const
-{ return _ban_mode ; }
-
-bool	Channel::banExceptMode() const
-{ return _ban_except_mode ; }
-
 bool	Channel::limitMode() const
 { return _limit_mode ; }
 
 bool	Channel::inviteMode() const
 { return _invite_mode ; }
-
-bool	Channel::inviteExceptMode() const
-{ return _invite_except_mode ; }
 
 bool	Channel::keyMode() const
 { return _key_mode ; }
@@ -46,38 +37,84 @@ bool	Channel::noExternalMessagesMode() const
 size_t	Channel::capacity() const
 { return _capacity ; }
 
+std::vector<UserMask>	Channel::getOperators() const
+{ return _operators ; }
+
+std::vector<UserMask>	Channel::getBanned() const
+{ return _banned ; }
+
+std::vector<UserMask>	Channel::getBanExcept() const
+{ return _ban_except ; }
+
+std::vector<UserMask>	Channel::getInviteExcept() const
+{ return _invite_except ; }
+
+std::vector<UserMask>	Channel::getVoiced() const
+{ return _voiced ; }
+
 /* ----------ADDING USERS TO LISTS---------- */
 
 void	Channel::addMember(User *user)
 { _members.push_back(user); }
 
-void	Channel::addOperator(User *user)
+void	Channel::addOperator(UserMask user)
 { _operators.push_back(user); }
 
-void	Channel::banUser(User *user)
+void	Channel::banUser(UserMask user)
 { _banned.push_back(user); }
 
-void	Channel::addBanExcept(User *user)
+void	Channel::addBanExcept(UserMask user)
 { _ban_except.push_back(user); }
 
-void	Channel::addInviteExcept(User *user)
+void	Channel::addInviteExcept(UserMask user)
 { _invite_except.push_back(user); }
 
 void	Channel::addInvite(User * user)
 { _invited.push_back(user) ; }
 
-void	Channel::addVoice(User * user)
-{ _voice.push_back(user) ; }
+void	Channel::addVoiced(UserMask user)
+{ _voiced.push_back(user) ; }
+
+/* ----------ATTRIBUTE CHANGES---------- */
+
+void	Channel::setLimitMode(bool state)
+{ _limit_mode = state; }
+
+void	Channel::setLimit(size_t limit)
+{ _capacity = limit ; }
+
+void	Channel::setInviteMode(bool state)
+{ _invite_mode = state; }
+
+void	Channel::setKeyMode(bool state)
+{ _key_mode = state; }
+
+void	Channel::setKey(std::string new_key)
+{ _key = new_key; }
+
+void	Channel::setModeratedMode(bool state)
+{ _moderated_mode = state; }
+
+void	Channel::setSecretMode(bool state)
+{ _secret_mode = state; }
+
+void	Channel::setProtectedTopicMode(bool state)
+{ _protected_topic_mode = state; }
+
+void	Channel::setNoExternalMessagesMode(bool state)
+{ _no_external_messages_mode = state; }
+
+void	Channel::setTopic(std::string new_topic)
+{ _topic = new_topic; }
+
+void	Channel::unsetTopic()
+{ _topic = "" ; }
+
 
 /* ----------ATTRIBUTE CHECKS---------- */
 
 bool	Channel::isMember(User *user) const
 { return std::find(_members.begin(), _members.end(), user) == _members.end() ; }
-
-bool	Channel::isOp(User *user) const
-{ return std::find(_operators.begin(), _operators.end(), user) == _operators.end() ; }
-
-/* The 4 methods below might need to handle user masks */
 
 bool	Channel::_find_mask(std::vector<User *> vect, User * user) const
 {
@@ -90,6 +127,21 @@ bool	Channel::_find_mask(std::vector<User *> vect, User * user) const
 	}
 	return false;
 }
+
+bool	Channel::_find_mask(std::vector<UserMask> vect, User * user) const
+{
+	std::vector<UserMask>::const_iterator it = vect.begin();
+	std::vector<UserMask>::const_iterator ite = vect.end();
+	for (; it != ite; it++)
+	{
+		if (wildcompare(it->getMask(), user->getMask()))
+			return true;
+	}
+	return false;
+}
+
+bool	Channel::isOp(User *user) const
+{ return _find_mask(_operators, user) ; }
 
 bool	Channel::isBanned(User *user) const
 { return _find_mask(_banned, user) ; }
@@ -110,7 +162,7 @@ bool	Channel::checkKey(std::string s) const
 { return !(s.compare(_key)) ; }
 
 bool	Channel::isTopicSet() const
-{ return _topic_is_set ; }
+{ return !(_topic.compare("")) ; }
 
 /* ----------COMMANDS---------- */
 
@@ -124,14 +176,8 @@ err_codes Channel::join(User *user, std::string s = "")
 			return err_badchannelkey;
 	}
 
-	if (banMode())
-	{
-		if (banExceptMode() && !isBanExcept(user) && isBanned(user))
-			return err_bannedfromchan;
-		
-		if (!banExceptMode() && isBanned(user))
-			return err_bannedfromchan;
-	}
+	if (!isBanExcept(user) && isBanned(user))
+		return err_bannedfromchan;
 
 	if (limitMode())
 	{
@@ -141,10 +187,7 @@ err_codes Channel::join(User *user, std::string s = "")
 
 	if (inviteMode())
 	{
-		if (inviteExceptMode() && !isInviteExcept(user) && !isInvited(user))
-			return err_inviteonlychan;
-		
-		if (!inviteExceptMode() && !isInvited(user))
+		if (!isInviteExcept(user) && !isInvited(user))
 			return err_inviteonlychan;
 	}
 
@@ -176,7 +219,6 @@ err_codes	Channel::changeTopic(User * user, std::string new_topic)
 		return err_chanoprivsneeded;
 
 	_topic = new_topic;
-	_topic_is_set = true;
 
 	return err_noerror;
 }

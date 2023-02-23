@@ -79,6 +79,12 @@ class User
 		/* Returns nickname */
 		std::string	getNickname() const;
 
+		/* Returns username */
+		std::string	getUsername() const;
+
+		/* Returns nickname */
+		std::string	getHostname() const;
+
 		/* Returns real name */
 		std::string	getRealname() const;
 
@@ -100,7 +106,7 @@ class User
 		/* Returns true if _pwd, _nick, _user are true */
 		bool	checkAuth();
 
-		/* Returns "nickname!realname\@hostname" */
+		/* Returns "nickname!username\@hostname" */
 		const std::string getMask() const;
 
 
@@ -138,6 +144,9 @@ class User
 
 		/* Sets user's away state */
 		void	setAway(bool state, std::string msg);
+
+	/* Returns the user's mode string */
+	const std::string	getModeString() const;
 
 };
 

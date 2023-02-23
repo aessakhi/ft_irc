@@ -8,8 +8,10 @@ SRC_DIR =		srcs
 # CLASSES
 SRC_NAMES +=	Channel.cpp \
 				Command.cpp \
+				Mode.cpp \
 				Server.cpp \
 				User.cpp \
+				UserMask.cpp \
 
 # COMMANDS
 SRC_NAMES +=	CAP.cpp \
@@ -37,8 +39,10 @@ INC_DIR =	inc
 # CLASSES
 INC_NAMES +=	Channel.hpp \
 				Command.hpp \
+				Mode.hpp \
 				Server.hpp \
 				User.hpp \
+				UserMask.hpp \
 
 # OTHER FILES
 INC_NAMES =	main.hpp \

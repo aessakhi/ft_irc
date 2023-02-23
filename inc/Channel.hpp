@@ -13,27 +13,17 @@ class Channel
 		/* List of all users currently in the channel */
 		std::vector<User *> _members;
 
-		/* List of all users that are operators for this channel */
-		std::vector<User *> _operators;
+		/* List of all operator masks for this channel */
+		std::vector<UserMask> _operators;
 
 		/* Topic of the channel */
 		std::string	_topic;
 
-		/* If true, topic has been cleared.
-		This allows for differenciating between no topic and an empty string as topic. */
-		bool	_topic_is_set;
+		/* List of all user masks that are banned from this channel */
+		std::vector<UserMask> _banned;
 
-		/* If _ban_mode, list of all users that are banned from this channel */
-		std::vector<User *> _banned;
-
-		/* If true, users that are in the _banned list will not be able to join the channel */
-		bool	_ban_mode;
-
-		/* If _ban_except_mode, list of users that are exempt from being banned */
-		std::vector<User *> _ban_except;
-		
-		/* If true, users that are in the _ban_except list will be able to join the channel even if banned*/
-		bool	_ban_except_mode;
+		/* List of user masks that are exempt from being banned */
+		std::vector<UserMask> _ban_except;
 
 		/* If _limit_mode, max number of clients that can join the channel. */
 		size_t	_capacity;
@@ -47,11 +37,8 @@ class Channel
 		/* If true, clients cannot join unless they have been invited to the channel */
 		bool	_invite_mode;
 
-		/* If _invite_except_mode, list of users that are exempt from needing an invite to join */
-		std::vector<User *> _invite_except;
-
-		/* If true, users that are in the _invite_except list will be able to join the channel even without an invite */
-		bool	_invite_except_mode;
+		/* If _invite_except_mode, list of user masks that are exempt from needing an invite to join */
+		std::vector<UserMask> _invite_except;
 
 		/* If _key_mode, key required to join the channel */
 		std::string	_key;
@@ -59,8 +46,8 @@ class Channel
 		/* If true, users need to provide the correct key in order to join */
 		bool	_key_mode;
 
-		/* If _moderated_mode, users in the _voice list will still be able to talk */
-		std::vector<User *> _voice;
+		/* If _moderated_mode, list of user masks still able to talk */
+		std::vector<UserMask> _voiced;
 
 		/* If true, users need privileges to send messages on the channel */
 		bool	_moderated_mode;
@@ -77,12 +64,15 @@ class Channel
 		/*  */
 		bool	_find_mask(std::vector<User *> vect, User * user) const;
 
+		/*  */
+		bool	_find_mask(std::vector<UserMask> vect, User * user) const;
+
 	public:
 		
 		Channel(const std::string & name);
 		virtual	~Channel();
 
-	/* -----ACCESSORS----- */
+	/* ----------ACCESSORS---------- */
 
 		/* Returns channel name */
 		const std::string & getName() const;
@@ -90,20 +80,11 @@ class Channel
 		/* Returns channel topic */
 		const std::string & getTopic() const;
 
-		/* Returns if channel is in ban mode */
-		bool	banMode() const;
-
-		/* Returns if channel is in ban-except mode */
-		bool	banExceptMode() const;
-
 		/* Returns if channel is in limit mode */
 		bool	limitMode() const;
 
 		/* Returns if channel is in invite mode */
 		bool	inviteMode() const;
-
-		/* Returns if channel is in invite-except mode */
-		bool	inviteExceptMode() const;
 
 		/* Returns if channel requires a key to join */
 		bool	keyMode() const;
@@ -123,30 +104,80 @@ class Channel
 		/* Returns max number of members */
 		size_t	capacity() const;
 
-	/* -----ADDING USERS TO LISTS----- */
+		/* Returns list of operator masks */
+		std::vector<UserMask>	getOperators() const;
+
+		/* Returns list of banned masks */
+		std::vector<UserMask>	getBanned() const;
+
+		/* Returns list of ban-exempt masks */
+		std::vector<UserMask>	getBanExcept() const;
+
+		/* Returns list of invite-exempt masks */
+		std::vector<UserMask>	getInviteExcept() const;
+
+		/* Returns list of voiced masks */
+		std::vector<UserMask>	getVoiced() const;
+
+	/* ----------ADDING USERS TO LISTS---------- */
 
 		/* Adds a user to the channel members without checking for permissions. */
 		void	addMember(User *user);
 		
-		/* Adds a user to the operators without checking for permissions. */
-		void	addOperator(User *user);
+		/* Adds a user mask to the operators without checking for permissions. */
+		void	addOperator(UserMask user);
 
-		/* Adds a user to the list of banned users. */
-		void	banUser(User *user);
+		/* Adds a user mask to the list of banned users. */
+		void	banUser(UserMask user);
 
-		/* Adds a user to the list of banned-exempt users. */
-		void	addBanExcept(User *user);
+		/* Adds a user mask to the list of banned-exempt users. */
+		void	addBanExcept(UserMask user);
 
-		/* Adds a user to the list of invite-exempt users. */
-		void	addInviteExcept(User *user);
+		/* Adds a user mask to the list of invite-exempt users. */
+		void	addInviteExcept(UserMask user);
 
 		/* Adds a user to the list of invited users */
 		void	addInvite(User *user);
 
-		/* Adds a user to the list of voice users */
-		void	addVoice(User *user);
-		
-	/* -----ATTRIBUTE CHECKS----- */
+		/* Adds a user mask to the list of voice users */
+		void	addVoiced(UserMask user);
+
+	/* ----------ATTRIBUTE CHANGES---------- */
+
+		/* Set _limit_mode value to state */
+		void	setLimitMode(bool state);
+
+		/* Set _capacity value to limit */
+		void	setLimit(size_t limit);
+
+		/* Set _invite_mode value to state */
+		void	setInviteMode(bool state);
+
+		/* Set _key_mode value to state */
+		void	setKeyMode(bool state);
+
+		/* Set _key value to new_key */
+		void	setKey(std::string new_key);
+
+		/* Set _moderated_mode value to state */
+		void	setModeratedMode(bool state);
+
+		/* Set _secret_mode value to state */
+		void	setSecretMode(bool state);
+
+		/* Set _protected_topic_mode value to state */
+		void	setProtectedTopicMode(bool state);
+
+		/* Set _no_external_messages_mode value to state */
+		void	setNoExternalMessagesMode(bool state);
+
+		/* Set _topic value to new_topic */
+		void	setTopic(std::string new_topic);
+
+		/* Unsets topic */
+		void	unsetTopic();
+
+	/* ----------ATTRIBUTE CHECKS---------- */
 
 		/* Checks if user is a member */
 		bool	isMember(User *user) const ;
@@ -175,7 +206,7 @@ class Channel
 		/* Returns true if channel has a topic */
 		bool	isTopicSet() const;
 		
-	/* -----COMMANDS----- */
+	/* ----------COMMANDS---------- */
 		
 		/*
 		Tries to add user to the channel.

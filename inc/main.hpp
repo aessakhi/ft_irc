@@ -24,8 +24,10 @@
 /* CLASSES */
 class Channel;
 class Command;
+class Mode;
 class Server;
 class User;
+class UserMask;
 
 /* OTHER FILES */
 #include "codes.hpp"
@@ -36,8 +38,10 @@ class User;
 /* CLASS HEADERS */
 #include "Channel.hpp"
 #include "Command.hpp"
+#include "Mode.hpp"
 #include "Server.hpp"
 #include "User.hpp"
+#include "UserMask.hpp"
 
 
 #define RECV_BUFFER_SIZE 512
@@ -76,17 +80,22 @@ bool	wildcompare(std::string s1, std::string s2);
 /* Returns true if s1 and s2 are similar when interpreting wildcards */
 bool	wildcompare(const char * s1, const char * s2);
 
+/* Returns true if s1 and s2 are similar when interpreting wildcards on s1 only */
+bool	sided_wildcompare(std::string s1, std::string s2);
+
+/* Returns true if s1 and s2 are similar when interpreting wildcards on s1 only */
+bool	sided_wildcompare(const char * s1, const char * s2);
+
 /* Returns a copy of s without the trailing \\r\\n */
 std::string	no_crlf(std::string s);
 
 /* Returns the uppercase version of s. */
 std::string toupper(std::string s);
 
-
+/* Returns true if s is of format *!*\@* where * is at least one char. */
+bool isMask(std::string s);
 
 /* ---------- print.cpp ---------- */
-
-
 
 /* Prints a std::vector\<std::string> element by element. */
 void	printVect(std::ostream & out, std::vector<std::string> vect);
