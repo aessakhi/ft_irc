@@ -204,7 +204,7 @@ bool	sided_wildcompare(const char * s1, const char * s2)
 			// skip 0, 1, 2... characters in s2
 			for (int test = 0; s2[test]; test++)
 			{
-				if (wildcompare(s1 + i + 1, s2 + i + test))
+				if (sided_wildcompare(s1 + i + 1, s2 + i + test))
 					return true;
 			}
 		}
