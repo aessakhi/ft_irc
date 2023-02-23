@@ -46,6 +46,21 @@ bool	Channel::noExternalMessagesMode() const
 size_t	Channel::capacity() const
 { return _capacity ; }
 
+std::vector<UserMask>	Channel::getOperators() const
+{ return _operators ; }
+
+std::vector<UserMask>	Channel::getBanned() const
+{ return _banned ; }
+
+std::vector<UserMask>	Channel::getBanExcept() const
+{ return _ban_except ; }
+
+std::vector<UserMask>	Channel::getInviteExcept() const
+{ return _invite_except ; }
+
+std::vector<UserMask>	Channel::getVoiced() const
+{ return _voiced ; }
+
 /* ----------ADDING USERS TO LISTS---------- */
 
 void	Channel::addMember(User *user)
@@ -67,7 +82,7 @@ void	Channel::addInvite(User * user)
 { _invited.push_back(user) ; }
 
 void	Channel::addVoice(UserMask user)
-{ _voice.push_back(user) ; }
+{ _voiced.push_back(user) ; }
 
 /* ----------ATTRIBUTE CHANGES---------- */
 

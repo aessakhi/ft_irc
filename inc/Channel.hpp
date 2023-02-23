@@ -60,7 +60,7 @@ class Channel
 		bool	_key_mode;
 
 		/* If _moderated_mode, list of user masks still able to talk */
-		std::vector<UserMask> _voice;
+		std::vector<UserMask> _voiced;
 
 		/* If true, users need privileges to send messages on the channel */
 		bool	_moderated_mode;
@@ -125,6 +125,21 @@ class Channel
 
 		/* Returns max number of members */
 		size_t	capacity() const;
+
+		/* Returns list of operator masks */
+		std::vector<UserMask>	getOperators() const;
+
+		/* Returns list of banned masks */
+		std::vector<UserMask>	getBanned() const;
+
+		/* Returns list of ban-exempt masks */
+		std::vector<UserMask>	getBanExcept() const;
+
+		/* Returns list of invite-exempt masks */
+		std::vector<UserMask>	getInviteExcept() const;
+
+		/* Returns list of voiced masks */
+		std::vector<UserMask>	getVoiced() const;
 
 	/* ----------ADDING USERS TO LISTS---------- */
 
