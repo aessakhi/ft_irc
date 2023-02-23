@@ -106,7 +106,7 @@ class User
 		/* Returns true if _pwd, _nick, _user are true */
 		bool	checkAuth();
 
-		/* Returns "nickname!realname\@hostname" */
+		/* Returns "nickname!username\@hostname" */
 		const std::string getMask() const;
 
 

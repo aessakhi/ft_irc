@@ -12,13 +12,20 @@ UserMask::UserMask(User * user) : _nickname(user->getNickname()), _username(user
 UserMask::UserMask(User user) : _nickname(user.getNickname()), _username(user.getUsername()), _hostname(user.getHostname()), _realname(user.getRealname())
 {}
 
-UserMask::UserMask(std::string mask)
+void	UserMask::initFromMask(std::string mask)
 {
 	size_t a = mask.find('!');
 	size_t b = mask.find('@');
 	_nickname = mask.substr(0, a);
 	_username = mask.substr(a + 1, b - (a + 1));
 	_hostname = mask.substr(b + 1, mask.npos);
+}
+
+void	UserMask::initFromNick(std::string nick)
+{
+	_nickname = nick;
+	_username = "*";
+	_hostname = "*";
 }
 
 UserMask::UserMask(UserMask const & src)

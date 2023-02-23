@@ -31,15 +31,17 @@ class UserMask
 
 		UserMask(User user);
 
-		UserMask(std::string mask);
-
 		UserMask(UserMask const & src);
+
+		void	initFromMask(std::string mask);
+
+		void	initFromNick(std::string nick);
 
 		UserMask & operator=(UserMask const & src);
 
 		~UserMask();
 
-		/* Returns "nickname!realname\@hostname" */
+		/* Returns "nickname!username\@hostname" */
 		const std::string getMask() const;
 
 };

@@ -127,7 +127,7 @@ static void	usermode(Server *srv, int &userfd, Command &cmd)
 
 /*
 Channel modes :
-	-> requiring mask:
+	-> requiring mask or nick:
 		b = ban
 		e = ban-except
 		I = invite-except
@@ -164,7 +164,7 @@ static void	channelmode(Server *srv, int &userfd, Command &cmd)
 		return;
 	}
 
-	// -----If modestring is given, check user privileges-----
+	// If modestring is given, check user privileges
 
 	if (!channel->isOp(user))
 	{
@@ -175,8 +175,10 @@ static void	channelmode(Server *srv, int &userfd, Command &cmd)
 	// -----Parse modestring and change modes-----
 
 	// std::string modestring = cmd.getParam(1);
+
 	// // arguments points to the arglist after the modestring
-	// std::vector<std::string>::const_iterator arguments = cmd.getParamList().begin();
+	// std::vector<std::string> param_list = cmd.getParamList();
+	// std::vector<std::string>::const_iterator arguments = param_list.begin();
 	// arguments += 2;
 
 	// // If first char isnt + or -, handle error however we want
