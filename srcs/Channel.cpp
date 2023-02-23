@@ -72,7 +72,7 @@ void	Channel::addInviteExcept(UserMask user)
 void	Channel::addInvite(User * user)
 { _invited.push_back(user) ; }
 
-void	Channel::addVoice(UserMask user)
+void	Channel::addVoiced(UserMask user)
 { _voiced.push_back(user) ; }
 
 /* ----------ATTRIBUTE CHANGES---------- */

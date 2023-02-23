@@ -140,7 +140,7 @@ class Channel
 		void	addInvite(User *user);
 
 		/* Adds a user mask to the list of voice users */
-		void	addVoice(UserMask user);
+		void	addVoiced(UserMask user);
 
 	/* ----------ATTRIBUTE CHANGES---------- */
 
