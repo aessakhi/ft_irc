@@ -252,11 +252,21 @@ Channel * Server::getChannel(const std::string & channel_name)
 {
 	std::map<std::string, Channel *>::const_iterator it = _channelMap.begin();
 	std::map<std::string, Channel *>::const_iterator ite = _channelMap.end();
+	std::cout << channel_name << std::endl;
 	for (; it != ite; it++)
 	{
+		std::cout << channel_name << std::endl;
 		if (channel_name == it->first)
+		{
+			std::cout << "Channel found" << std::endl;
 			return it->second;
+		}
 	}
-
+	std::cout << "Not found" << std::endl;
 	return NULL;
+}
+
+std::map<std::string, Channel *> *Server::getChannelMap()
+{
+	return &(this->_channelMap);
 }
