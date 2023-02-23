@@ -1,6 +1,6 @@
 #include "User.hpp"
 
-User::User(int fd): _fd(fd), _user(0), _pwd(0), _nick(0), _authenticated(0), _is_invisible(false), _is_operator(false), _is_wallops(false)
+User::User(int fd, std::string hostname): _fd(fd), _user(0),_pwd(0), _nick(0), _authenticated(0),_hostname(hostname), _is_invisible(false), _is_operator(false), _is_wallops(false)
 {}
 
 User::~User()

@@ -58,7 +58,7 @@ class User
 
 	public:
 
-		User(int fd);
+		User(int fd, std::string hostname);
 
 		~User();
 
