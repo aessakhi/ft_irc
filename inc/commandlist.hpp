@@ -12,5 +12,6 @@ void	user(Server *srv, int &userfd, Command &cmd);
 void	ping(Server *srv, int &userfd, Command &cmd);
 void	privmsg(Server *srv, int &userfd, Command &cmd);
 void	mode(Server *srv, int &userfd, Command &cmd);
+void	away(Server *srv, int &userfd, Command &cmd);
 
 #endif

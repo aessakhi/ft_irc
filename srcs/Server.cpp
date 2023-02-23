@@ -169,6 +169,7 @@ void	Server::_initCmdMap()
 	this->_cmdMap["PING"] = &ping;
 	this->_cmdMap["PRIVMSG"] = &privmsg;
 	this->_cmdMap["MODE"] = &mode;
+	this->_cmdMap["AWAY"] = &away;
 }
 
 void	Server::init()

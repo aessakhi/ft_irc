@@ -20,7 +20,7 @@ static void	privmsg_user(Server *srv, int &userfd, Command &cmd, std::string &cl
 		return ;
 	}
 	if (srv->getUser(targetfd)->isAway())
-		srv->sendReply(userfd, ":" + srv->getHostname() + " " + RPL_AWAY(client, client, srv->getUser(targetfd)->getAwayMessage()));
+		srv->sendReply(userfd, ":" + srv->getHostname() + " " + RPL_AWAY(srv->getUser(targetfd)->getNickname(), client, srv->getUser(targetfd)->getAwayMessage()));
 	srv->sendReply(targetfd, ":" + srv->getUser(userfd)->getMask() + " PRIVMSG " + cmd.getParam(0) + " :" + cmd.getLastParam());
 }
 
