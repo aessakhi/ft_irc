@@ -19,21 +19,11 @@ class Channel
 		/* Topic of the channel */
 		std::string	_topic;
 
-		/* If true, topic has been cleared.
-		This allows for differenciating between no topic and an empty string as topic. */
-		bool	_topic_is_set;
-
-		/* If _ban_mode, list of all user masks that are banned from this channel */
+		/* List of all user masks that are banned from this channel */
 		std::vector<UserMask> _banned;
 
-		/* If true, users that are in the _banned list will not be able to join the channel */
-		bool	_ban_mode;
-
-		/* If _ban_except_mode, list of user masks that are exempt from being banned */
+		/* List of user masks that are exempt from being banned */
 		std::vector<UserMask> _ban_except;
-		
-		/* If true, users that are in the _ban_except list will be able to join the channel even if banned*/
-		bool	_ban_except_mode;
 
 		/* If _limit_mode, max number of clients that can join the channel. */
 		size_t	_capacity;
@@ -49,9 +39,6 @@ class Channel
 
 		/* If _invite_except_mode, list of user masks that are exempt from needing an invite to join */
 		std::vector<UserMask> _invite_except;
-
-		/* If true, users that are in the _invite_except list will be able to join the channel even without an invite */
-		bool	_invite_except_mode;
 
 		/* If _key_mode, key required to join the channel */
 		std::string	_key;
@@ -93,20 +80,11 @@ class Channel
 		/* Returns channel topic */
 		const std::string & getTopic() const;
 
-		/* Returns if channel is in ban mode */
-		bool	banMode() const;
-
-		/* Returns if channel is in ban-except mode */
-		bool	banExceptMode() const;
-
 		/* Returns if channel is in limit mode */
 		bool	limitMode() const;
 
 		/* Returns if channel is in invite mode */
 		bool	inviteMode() const;
-
-		/* Returns if channel is in invite-except mode */
-		bool	inviteExceptMode() const;
 
 		/* Returns if channel requires a key to join */
 		bool	keyMode() const;
@@ -166,12 +144,6 @@ class Channel
 
 	/* ----------ATTRIBUTE CHANGES---------- */
 
-		/* Set _ban_mode value to state */
-		void	setBanMode(bool state);
-
-		/* Set _ban_except_mode value to state */
-		void	setBanExceptMode(bool state);
-
 		/* Set _limit_mode value to state */
 		void	setLimitMode(bool state);
 
@@ -180,9 +152,6 @@ class Channel
 
 		/* Set _invite_mode value to state */
 		void	setInviteMode(bool state);
-
-		/* Set _invite_except_mode value to state */
-		void	setInviteExceptMode(bool state);
 
 		/* Set _key_mode value to state */
 		void	setKeyMode(bool state);

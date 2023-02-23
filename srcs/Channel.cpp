@@ -13,20 +13,11 @@ const std::string & Channel::getName() const
 const std::string & Channel::getTopic() const
 { return _topic ; }
 
-bool	Channel::banMode() const
-{ return _ban_mode ; }
-
-bool	Channel::banExceptMode() const
-{ return _ban_except_mode ; }
-
 bool	Channel::limitMode() const
 { return _limit_mode ; }
 
 bool	Channel::inviteMode() const
 { return _invite_mode ; }
-
-bool	Channel::inviteExceptMode() const
-{ return _invite_except_mode ; }
 
 bool	Channel::keyMode() const
 { return _key_mode ; }
@@ -86,12 +77,6 @@ void	Channel::addVoice(UserMask user)
 
 /* ----------ATTRIBUTE CHANGES---------- */
 
-void	Channel::setBanMode(bool state)
-{ _ban_mode = state; }
-
-void	Channel::setBanExceptMode(bool state)
-{ _ban_except_mode = state; }
-
 void	Channel::setLimitMode(bool state)
 { _limit_mode = state; }
 
@@ -100,9 +85,6 @@ void	Channel::setLimit(size_t limit)
 
 void	Channel::setInviteMode(bool state)
 { _invite_mode = state; }
-
-void	Channel::setInviteExceptMode(bool state)
-{ _invite_except_mode = state; }
 
 void	Channel::setKeyMode(bool state)
 { _key_mode = state; }
@@ -123,13 +105,10 @@ void	Channel::setNoExternalMessagesMode(bool state)
 { _no_external_messages_mode = state; }
 
 void	Channel::setTopic(std::string new_topic)
-{
-	_topic = new_topic;
-	_topic_is_set = true;
-}
+{ _topic = new_topic; }
 
 void	Channel::unsetTopic()
-{ _topic_is_set = false ; }
+{ _topic = "" ; }
 
 
 /* ----------ATTRIBUTE CHECKS---------- */
@@ -183,7 +162,7 @@ bool	Channel::checkKey(std::string s) const
 { return !(s.compare(_key)) ; }
 
 bool	Channel::isTopicSet() const
-{ return _topic_is_set ; }
+{ return !(_topic.compare("")) ; }
 
 /* ----------COMMANDS---------- */
 
@@ -197,14 +176,8 @@ err_codes Channel::join(User *user, std::string s = "")
 			return err_badchannelkey;
 	}
 
-	if (banMode())
-	{
-		if (banExceptMode() && !isBanExcept(user) && isBanned(user))
-			return err_bannedfromchan;
-		
-		if (!banExceptMode() && isBanned(user))
-			return err_bannedfromchan;
-	}
+	if (!isBanExcept(user) && isBanned(user))
+		return err_bannedfromchan;
 
 	if (limitMode())
 	{
@@ -214,10 +187,7 @@ err_codes Channel::join(User *user, std::string s = "")
 
 	if (inviteMode())
 	{
-		if (inviteExceptMode() && !isInviteExcept(user) && !isInvited(user))
-			return err_inviteonlychan;
-		
-		if (!inviteExceptMode() && !isInvited(user))
+		if (!isInviteExcept(user) && !isInvited(user))
 			return err_inviteonlychan;
 	}
 
@@ -249,7 +219,6 @@ err_codes	Channel::changeTopic(User * user, std::string new_topic)
 		return err_chanoprivsneeded;
 
 	_topic = new_topic;
-	_topic_is_set = true;
 
 	return err_noerror;
 }
