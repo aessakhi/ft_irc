@@ -96,6 +96,8 @@ class Server
 		/* Returns port used for connecting to the server. */
 		const std::string &	getport() const;
 
+		const std::string	getHostname() const;
+
 		/* Returns User * instance corresponding to fd, NULL if no User * matches that fd. */
 		User	*getUser(int fd) const;
 

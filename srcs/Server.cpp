@@ -214,6 +214,11 @@ const std::string &	Server::getport() const
 	return (this->_port);
 }
 
+const std::string	Server::getHostname() const
+{
+	return (this->_hostname);
+}
+
 User	*Server::getUser(int fd) const
 {
 	if (this->_UserList.find(fd) != this->_UserList.end())
