@@ -39,6 +39,7 @@ void	privmsg(Server *srv, int &userfd, Command &cmd)
 		srv->sendReply(userfd, ERR_NOTEXTTOSEND(client));
 		return ;
 	}
+	/* If need be might need to change it to send msg to multiple users (split with ',')*/
 	if (cmd.getParamList().size() > 2)
 	{
 		srv->sendReply(userfd, ERR_TOOMANYTARGETS(client, cmd.getParam(0)));

@@ -137,7 +137,7 @@ class User
 		void	setWallops(bool state);
 
 		/* Sets user's away state */
-		void	setAway(bool state);
+		void	setAway(bool state, std::string msg);
 
 };
 

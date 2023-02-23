@@ -98,9 +98,10 @@ void	User::setWallops(bool state)
 	this->_is_wallops = state;
 }
 
-void	User::setAway(bool state)
+void	User::setAway(bool state, std::string msg)
 {
 	this->_is_away = state;
+	this->_away_msg = msg;
 }
 
 bool	User::isInvisible() const
