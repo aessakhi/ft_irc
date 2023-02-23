@@ -170,6 +170,7 @@ void	Server::_initCmdMap()
 	this->_cmdMap["PRIVMSG"] = &privmsg;
 	this->_cmdMap["MODE"] = &mode;
 	this->_cmdMap["AWAY"] = &away;
+	this->_cmdMap["JOIN"] = &join;
 }
 
 void	Server::init()
