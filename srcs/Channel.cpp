@@ -1,6 +1,6 @@
 #include "Channel.hpp"
 
-Channel::Channel(const std::string & name) : _name(name)
+Channel::Channel(const std::string & name) : _name(name), _no_external_messages_mode(0)
 {}
 
 Channel::~Channel() {}
@@ -117,7 +117,7 @@ void	Channel::unsetTopic()
 /* ----------ATTRIBUTE CHECKS---------- */
 
 bool	Channel::isMember(User *user) const
-{ return std::find(_members.begin(), _members.end(), user) == _members.end() ; }
+{ return std::find(_members.begin(), _members.end(), user) != _members.end() ; }
 
 bool	Channel::_find_mask(std::vector<User *> vect, User * user) const
 {
