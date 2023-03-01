@@ -10,6 +10,8 @@ static void	privmsg_channel(Server *srv, int &userfd, Command &cmd, std::string 
 		srv->sendReply(userfd, ERR_NOSUCHNICK(client, cmd.getParam(0)));
 		return ;
 	}
+	/* Need to check if the sender is banned AND NOT covered by a ban exception + WILL SILENTLY FAIL */
+	/* Also need to check if the channel is in moderated mode */
 	std::vector<User *> userlist = channel->getUsers();
 	for (std::vector<User *>::const_iterator it = userlist.begin(); it != userlist.end(); it++)
 	{
