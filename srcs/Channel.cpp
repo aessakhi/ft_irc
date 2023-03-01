@@ -37,6 +37,9 @@ bool	Channel::noExternalMessagesMode() const
 size_t	Channel::capacity() const
 { return _capacity ; }
 
+std::vector<User *>		Channel::getUsers() const
+{ return _members ; }
+
 std::vector<UserMask>	Channel::getOperators() const
 { return _operators ; }
 

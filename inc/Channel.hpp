@@ -104,6 +104,9 @@ class Channel
 		/* Returns max number of members */
 		size_t	capacity() const;
 
+		/* Returns vector of User * */
+		std::vector<User *>		getUsers() const;
+
 		/* Returns list of operator masks */
 		std::vector<UserMask>	getOperators() const;
 

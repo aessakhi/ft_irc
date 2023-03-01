@@ -3,10 +3,22 @@
 static void	privmsg_channel(Server *srv, int &userfd, Command &cmd, std::string &client)
 {
 	std::cout << "Target is a channel" << std::endl;
-	(void)srv;
-	(void)userfd;
-	(void)cmd;
-	(void)client;
+
+	Channel	*channel = srv->getChannel(cmd.getParam(0));
+	if (channel == NULL) /* Channel doesn't exist */
+	{
+		srv->sendReply(userfd, ERR_NOSUCHNICK(client, cmd.getParam(0)));
+		return ;
+	}
+	std::vector<User *> userlist = channel->getUsers();
+	for (std::vector<User *>::const_iterator it = userlist.begin(); it != userlist.end(); it++)
+	{
+		int	targetfd;
+
+		targetfd = srv->getUserfd((*it)->getNickname());
+		if (targetfd != userfd)
+			srv->sendReply(targetfd, ":" + srv->getUser(userfd)->getMask() + " PRIVMSG " + cmd.getParam(0) + " :" + cmd.getLastParam());
+	}
 }
 
 static void	privmsg_user(Server *srv, int &userfd, Command &cmd, std::string &client)
@@ -16,7 +28,7 @@ static void	privmsg_user(Server *srv, int &userfd, Command &cmd, std::string &cl
 	std::cout << targetfd << std::endl;
 	if (targetfd == -1)
 	{
-		srv->sendReply(userfd, ERR_NOSUCHNICK(client, client));
+		srv->sendReply(userfd, ERR_NOSUCHNICK(client, cmd.getParam(0)));
 		return ;
 	}
 	if (srv->getUser(targetfd)->isAway())
