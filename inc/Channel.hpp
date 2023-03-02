@@ -13,6 +13,9 @@ class Channel
 		/* List of all users currently in the channel */
 		std::vector<User *> _members;
 
+		/* Mode string */
+		std::string	_modestring;
+
 		/* List of all operator masks for this channel */
 		std::vector<UserMask> _operators;
 
@@ -67,6 +70,18 @@ class Channel
 		/*  */
 		bool	_find_mask(std::vector<UserMask> vect, User * user) const;
 
+		/* Set _limit_mode value to state */
+		void	_setLimitMode(bool state);
+
+		/* Set _capacity value to limit */
+		void	_setLimit(size_t limit);
+
+		/* Set _key_mode value to state */
+		void	_setKeyMode(bool state);
+
+		/* Set _key value to new_key */
+		void	_setKey(std::string new_key);
+
 	public:
 		
 		Channel(const std::string & name);
@@ -76,6 +91,9 @@ class Channel
 
 		/* Returns channel name */
 		const std::string & getName() const;
+
+		/* Returns channel modestring */
+		std::string getModes() const;
 
 		/* Returns channel topic */
 		const std::string & getTopic() const;
@@ -147,20 +165,14 @@ class Channel
 
 	/* ----------ATTRIBUTE CHANGES---------- */
 
-		/* Set _limit_mode value to state */
-		void	setLimitMode(bool state);
-
-		/* Set _capacity value to limit */
-		void	setLimit(size_t limit);
+		/* Set _limit_mode to state and _capacity (if given) to value */
+		void	setLimit(bool state, size_t value = 0);
 
 		/* Set _invite_mode value to state */
 		void	setInviteMode(bool state);
 
-		/* Set _key_mode value to state */
-		void	setKeyMode(bool state);
-
-		/* Set _key value to new_key */
-		void	setKey(std::string new_key);
+		/* Set _key_mode to state and _key (if given) to value */
+		void	setKey(bool state, std::string value = "");
 
 		/* Set _moderated_mode value to state */
 		void	setModeratedMode(bool state);
@@ -199,6 +211,9 @@ class Channel
 
 		/* Checks if user is invite-exempt */
 		bool	isInviteExcept(User *user) const ;
+
+		/* Checks if user is voiced */
+		bool	isVoiced(User *user) const ;
 
 		/* Returns true if the channel is at max capacity */
 		bool	isFull() const;

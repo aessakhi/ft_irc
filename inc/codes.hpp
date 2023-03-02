@@ -47,7 +47,7 @@
 #define RPL_LIST(client, channel, client_count, topic) ("322 " + client + " " + channel + " " + client_count + " :" + topic)
 #define RPL_LISTEND(client) ("323 " + client + " :End of /LIST")
 
-#define RPL_CHANNELMODEIS(client, channel, modestring, mode_arguments) ("324 " + client + " " + channel + " " + modestring + " " + mode_arguments)
+#define RPL_CHANNELMODEIS(client, channel, modestring) ("324 " + client + " " + channel + " " + modestring)
 #define RPL_CREATIONTIME(client, channel, creationtime) ("329 " + client + " " + channel + " " + creationtime)
 #define RPL_WHOISACCOUNT(client, nick, account) ("330 " + client + " " + nick + " " + account + " :is logged in as")
 #define RPL_NOTOPIC(client, channel) ("331 " + client + " " + channel + " :No topic is set")

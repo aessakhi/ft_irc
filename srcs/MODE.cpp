@@ -152,8 +152,7 @@ static bool _channel_mode_error(Server *srv, int &userfd, Command &cmd)
 	// If no modestring is given, reply with the modes of the channel.
 	if (cmd.paramNumber() == 1)
 	{
-		// ----------------------------------------------------REPLY HERE----------------------------------------------------
-		// sendReply
+		srv->sendReply(userfd, RPL_CHANNELMODEIS(user->getNickname(), target, channel->getModes()));
 		return true;
 	}
 
@@ -516,12 +515,11 @@ static void _applyModeChanges(std::vector<Mode> * mode_list, Server *srv, int &u
 			{
 				if (it->getAdd())
 				{
-					channel->setKeyMode(true);
-					channel->setKey(arg);
+					channel->setKey(true, arg);
 				}
 				else if (channel->checkKey(arg))
 				{
-					channel->setKeyMode(false);
+					channel->setKey(false);
 				}
 				else
 				{
@@ -549,12 +547,11 @@ static void _applyModeChanges(std::vector<Mode> * mode_list, Server *srv, int &u
 						break;
 					}
 					size_t max = atoi(arg.data());
-					channel->setLimitMode(true);
-					channel->setLimit(max);
+					channel->setLimit(true, max);
 				}
 				else
 				{
-					channel->setLimitMode(false);
+					channel->setLimit(false);
 				}
 				break;
 			}
