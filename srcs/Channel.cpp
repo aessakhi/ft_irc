@@ -1,6 +1,6 @@
 #include "Channel.hpp"
 
-Channel::Channel(const std::string & name) : _name(name)
+Channel::Channel(const std::string & name) : _name(name), _modestring(""), _limit_mode(false), _invite_mode(false), _key_mode(false), _moderated_mode(false), _secret_mode(false), _protected_topic_mode(false), _no_external_messages_mode(false) 
 {}
 
 Channel::~Channel() {}
@@ -9,6 +9,17 @@ Channel::~Channel() {}
 
 const std::string & Channel::getName() const
 { return _name ; }
+
+std::string Channel::getModes() const
+{
+	std::string ret;
+	if (_modestring.size())
+		ret += '+';
+	ret += _modestring;
+	if (_limit_mode)
+		ret += ' ' + _capacity;
+	return ret ;
+}
 
 const std::string & Channel::getTopic() const
 { return _topic ; }
@@ -77,32 +88,68 @@ void	Channel::addVoiced(UserMask user)
 
 /* ----------ATTRIBUTE CHANGES---------- */
 
-void	Channel::setLimitMode(bool state)
+void	Channel::_setLimitMode(bool state)
 { _limit_mode = state; }
 
-void	Channel::setLimit(size_t limit)
+void	Channel::_setLimit(size_t limit)
 { _capacity = limit ; }
 
-void	Channel::setInviteMode(bool state)
-{ _invite_mode = state; }
+void	Channel::setLimit(bool state, size_t value)
+{
+	if (!_limit_mode)
+		_modestring += "l";
+	_setLimitMode(state);
+	_setLimit(value);
+}
 
-void	Channel::setKeyMode(bool state)
+void	Channel::setInviteMode(bool state)
+{
+	if (!_invite_mode)
+		_modestring += "i";
+	_invite_mode = state;
+}
+
+void	Channel::_setKeyMode(bool state)
 { _key_mode = state; }
 
-void	Channel::setKey(std::string new_key)
+void	Channel::_setKey(std::string new_key)
 { _key = new_key; }
 
+void	Channel::setKey(bool state, std::string value)
+{
+	if (!_key_mode)
+		_modestring += "k";
+	_setKeyMode(state);
+	_setKey(value);
+}
+
 void	Channel::setModeratedMode(bool state)
-{ _moderated_mode = state; }
+{
+	if (!_moderated_mode)
+		_modestring += "m";
+	_moderated_mode = state;
+}
 
 void	Channel::setSecretMode(bool state)
-{ _secret_mode = state; }
+{
+	if (!_secret_mode)
+		_modestring += "s";
+	_secret_mode = state;
+}
 
 void	Channel::setProtectedTopicMode(bool state)
-{ _protected_topic_mode = state; }
+{
+	if (!_protected_topic_mode)
+		_modestring += "t";
+	_protected_topic_mode = state;
+}
 
 void	Channel::setNoExternalMessagesMode(bool state)
-{ _no_external_messages_mode = state; }
+{
+	if (!_no_external_messages_mode)
+		_modestring += "n";
+	_no_external_messages_mode = state;
+}
 
 void	Channel::setTopic(std::string new_topic)
 { _topic = new_topic; }
@@ -154,6 +201,9 @@ bool	Channel::isInvited(User *user) const
 
 bool	Channel::isInviteExcept(User *user) const
 { return _find_mask(_invite_except, user) ; }
+
+bool	Channel::isVoiced(User *user) const
+{ return _find_mask(_voiced, user) ; }
 
 bool	Channel::isFull() const
 { return _members.size() == _capacity ; }
@@ -275,6 +325,10 @@ std::vector<std::string> Channel::namesVect(User *user) const
 			continue;
 		if (isOp(current))
 			current_name += '@';
+		else if (isVoiced(current))
+			current_name += '+';
+		else
+			current_name += ' ';
 		current_name += current->getNickname();
 		name_vect.push_back(current_name);
 	}
@@ -289,7 +343,7 @@ std::string Channel::namesStr(User *user) const
 	for (size_t i = 0; i < vect.size(); i++)
 	{
 		ret += vect[i];
-		if (i + 1 == vect.size())
+		if (i + 1 != vect.size())
 			ret += ' ';
 	}
 
