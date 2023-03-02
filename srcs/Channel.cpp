@@ -248,7 +248,8 @@ err_codes Channel::join(User *user, std::string s = "")
 
 	if (_members.empty())
 		addOperator(user);
-	addMember(user);
+	if (!isMember(user))
+		addMember(user);
 
 	return err_noerror;
 }
