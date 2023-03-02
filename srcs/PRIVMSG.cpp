@@ -5,6 +5,7 @@ static void	privmsg_channel(Server *srv, int &userfd, Command &cmd, std::string 
 	std::cout << "Target is a channel" << std::endl;
 
 	Channel	*channel = srv->getChannel(cmd.getParam(0));
+	User	*sender = srv->getUser(userfd);
 	if (channel == NULL) /* Channel doesn't exist */
 	{
 		srv->sendReply(userfd, ERR_NOSUCHNICK(client, cmd.getParam(0)));
@@ -14,12 +15,14 @@ static void	privmsg_channel(Server *srv, int &userfd, Command &cmd, std::string 
 	/* Also need to check if the channel is in moderated mode */
 	if (channel->noExternalMessagesMode())
 	{
-		if (!channel->isMember(srv->getUser(userfd)))
+		if (!channel->isMember(sender))
 		{
 			srv->sendReply(userfd, ERR_CANNOTSENDTOCHAN(client, cmd.getParam(0)));
 			return ;
 		}
 	}
+	if (channel->isBanned(sender) && !channel->isBanExcept(sender))
+		return ;
 	std::vector<User *> userlist = channel->getUsers();
 	for (std::vector<User *>::const_iterator it = userlist.begin(); it != userlist.end(); it++)
 	{
@@ -27,7 +30,7 @@ static void	privmsg_channel(Server *srv, int &userfd, Command &cmd, std::string 
 
 		targetfd = srv->getUserfd((*it)->getNickname());
 		if (targetfd != userfd)
-			srv->sendReply(targetfd, ":" + srv->getUser(userfd)->getMask() + " PRIVMSG " + cmd.getParam(0) + " :" + cmd.getLastParam());
+			srv->sendReply(targetfd, ":" + sender->getMask() + " PRIVMSG " + cmd.getParam(0) + " :" + cmd.getLastParam());
 	}
 }
 
