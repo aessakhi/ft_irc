@@ -23,6 +23,7 @@ SRC_NAMES +=	CAP.cpp \
 				PRIVMSG.cpp \
 				AWAY.cpp \
 				JOIN.cpp \
+				TIME.cpp \
 
 # OTHER FILES
 SRC_NAMES +=	main.cpp \

@@ -14,5 +14,6 @@ void	privmsg(Server *srv, int &userfd, Command &cmd);
 void	mode(Server *srv, int &userfd, Command &cmd);
 void	away(Server *srv, int &userfd, Command &cmd);
 void	join(Server *srv, int &userfd, Command &cmd);
+void	srv_time(Server *srv, int &userfd, Command &cmd);
 
 #endif
