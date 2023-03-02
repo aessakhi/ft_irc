@@ -23,6 +23,11 @@ static void	privmsg_channel(Server *srv, int &userfd, Command &cmd, std::string 
 	}
 	if (channel->isBanned(sender) && !channel->isBanExcept(sender))
 		return ;
+	if (channel->moderatedMode() && !channel->isOp(sender) && !channel->isVoiced(sender))
+	{
+		srv->sendReply(userfd, ":" + srv->getHostname() + " " + ERR_CANNOTSENDTOCHAN(client, cmd.getParam(0)));
+		return ;
+	}
 	std::vector<User *> userlist = channel->getUsers();
 	for (std::vector<User *>::const_iterator it = userlist.begin(); it != userlist.end(); it++)
 	{

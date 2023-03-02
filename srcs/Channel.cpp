@@ -68,7 +68,7 @@ std::vector<UserMask>	Channel::getVoiced() const
 
 /* ----------ADDING USERS TO LISTS---------- */
 
-void	Channel::addMember(User *user)
+void	Channel::addMember(User *user) /* Need to add a check if a user is already in the list */
 { _members.push_back(user); }
 
 void	Channel::addOperator(UserMask user)
