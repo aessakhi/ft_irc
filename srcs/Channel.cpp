@@ -48,6 +48,9 @@ bool	Channel::noExternalMessagesMode() const
 size_t	Channel::capacity() const
 { return _capacity ; }
 
+std::vector<User *>		Channel::getUsers() const
+{ return _members ; }
+
 std::vector<UserMask>	Channel::getOperators() const
 { return _operators ; }
 
@@ -161,7 +164,7 @@ void	Channel::unsetTopic()
 /* ----------ATTRIBUTE CHECKS---------- */
 
 bool	Channel::isMember(User *user) const
-{ return std::find(_members.begin(), _members.end(), user) == _members.end() ; }
+{ return std::find(_members.begin(), _members.end(), user) != _members.end() ; }
 
 bool	Channel::_find_mask(std::vector<User *> vect, User * user) const
 {

@@ -170,6 +170,8 @@ void	Server::_initCmdMap()
 	this->_cmdMap["PRIVMSG"] = &privmsg;
 	this->_cmdMap["MODE"] = &mode;
 	this->_cmdMap["AWAY"] = &away;
+	this->_cmdMap["JOIN"] = &join;
+	this->_cmdMap["TIME"] = &srv_time;
 }
 
 void	Server::init()
@@ -251,11 +253,17 @@ Channel * Server::getChannel(const std::string & channel_name)
 {
 	std::map<std::string, Channel *>::const_iterator it = _channelMap.begin();
 	std::map<std::string, Channel *>::const_iterator ite = _channelMap.end();
+
 	for (; it != ite; it++)
 	{
+
 		if (channel_name == it->first)
 			return it->second;
 	}
-
 	return NULL;
+}
+
+std::map<std::string, Channel *> *Server::getChannelMap()
+{
+	return &(this->_channelMap);
 }
