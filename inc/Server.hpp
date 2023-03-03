@@ -32,6 +32,9 @@ class Server
 
 		/* Single fd used by epoll to warn for incoming data on every fd */
 		int	_epollfd;
+
+		/* Variable that holds creation time */
+		time_t _creatime;
 	
 	/* ----------ATTRIBUTES LIST---------- */
 
@@ -112,6 +115,9 @@ class Server
 
 		/* Return the channel map, need to use it in JOIN since the channel map is private */
 		std::map<std::string, Channel *> *getChannelMap();
+
+		/* Return creatime of the server */
+		time_t getCreatime() const;
 };
 
 #endif

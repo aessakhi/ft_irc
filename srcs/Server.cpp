@@ -172,6 +172,7 @@ void	Server::_initCmdMap()
 	this->_cmdMap["AWAY"] = &away;
 	this->_cmdMap["JOIN"] = &join;
 	this->_cmdMap["TIME"] = &srv_time;
+	this->_cmdMap["INFO"] = &info;
 }
 
 void	Server::init()
@@ -184,6 +185,8 @@ void	Server::init()
 	this->_createsocket();
 
 	this->_create_epoll();
+
+	time(&this->_creatime);
 
 	while (1)
 	{
@@ -266,4 +269,9 @@ Channel * Server::getChannel(const std::string & channel_name)
 std::map<std::string, Channel *> *Server::getChannelMap()
 {
 	return &(this->_channelMap);
+}
+
+time_t Server::getCreatime() const
+{ 
+	return (this->_creatime);
 }
