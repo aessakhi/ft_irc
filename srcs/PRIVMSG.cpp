@@ -17,7 +17,7 @@ static void	privmsg_channel(Server *srv, int &userfd, Command &cmd, std::string 
 	{
 		if (!channel->isMember(sender))
 		{
-			srv->sendReply(userfd, ERR_CANNOTSENDTOCHAN(client, cmd.getParam(0)));
+			srv->sendReply(userfd, ":" + srv->getHostname() + " " + ERR_CANNOTSENDTOCHAN(client, cmd.getParam(0)));
 			return ;
 		}
 	}
@@ -25,7 +25,7 @@ static void	privmsg_channel(Server *srv, int &userfd, Command &cmd, std::string 
 		return ;
 	if (channel->moderatedMode() && !channel->isOp(sender) && !channel->isVoiced(sender))
 	{
-		srv->sendReply(userfd, ":" + srv->getHostname() + " " + ERR_CANNOTSENDTOCHAN(cmd.getParam(0), client));
+		srv->sendReply(userfd, ":" + srv->getHostname() + " " + ERR_CANNOTSENDTOCHAN(client, cmd.getParam(0)));
 		return ;
 	}
 	std::vector<User *> userlist = channel->getUsers();
