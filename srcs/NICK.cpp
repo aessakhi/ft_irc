@@ -15,7 +15,10 @@ void	nick(Server *srv, int &userfd, Command &cmd)
 	// Check if nick not in use
 	if (srv->getUserbyNickname(cmd.getParamList()[0]) != NULL)
 	{
-		srv->sendReply(userfd, ERR_NICKNAMEINUSE(user->getNickname(), cmd.getParamList()[0]));
+		if (user->getNickname().empty())
+			srv->sendReply(userfd, ERR_NICKNAMEINUSE(cmd.getParam(0), cmd.getParam(0)));
+		else
+			srv->sendReply(userfd, ERR_NICKNAMEINUSE(user->getNickname(), cmd.getParam(0)));
 		return;
 	}
 
