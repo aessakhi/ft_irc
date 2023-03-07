@@ -46,6 +46,11 @@ std::string	User::getRealname() const
 	return (this->_realname);
 }
 
+std::string	User::getOldNick() const
+{
+	return (this->_oldnick);
+}
+
 /* Set functions for the booleans */
 
 void	User::setAuth(bool state)
@@ -86,6 +91,11 @@ void	User::setUsername(std::string username)
 void	User::setRealname(std::string realname)
 {
 	this->_realname = realname;
+}
+
+void	User::setOldnick(std::string oldnick)
+{
+	this->_oldnick = oldnick;
 }
 
 const std::string User::getMask() const

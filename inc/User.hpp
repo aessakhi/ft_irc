@@ -39,6 +39,7 @@ class User
 		/* User's real name */
 		std::string	_realname;
 
+		std::string	_oldnick;
 	/* ----------MODES---------- */
 
 		/* If true, the user is invisible */
@@ -88,6 +89,9 @@ class User
 		/* Returns real name */
 		std::string	getRealname() const;
 
+		/* Returns old nickname, will be used by NICK in case of nickame change*/
+		std::string	getOldNick() const;
+
 		/* Returns if user is invisible */
 		bool	isInvisible() const;
 
@@ -132,6 +136,9 @@ class User
 
 		/* Sets user's realname */
 		void	setRealname(std::string realname);
+
+		/* Sets user's old nickname */
+		void	setOldnick(std::string oldnick);
 
 		/* Sets user's invisible state */
 		void	setInvisible(bool state);
