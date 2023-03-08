@@ -183,23 +183,23 @@ static bool _add_to_ban_list(std::string arg, Channel * channel)
 
 static bool _apply_ban(Mode mode, Channel * channel, Server *srv, int &userfd, Command &cmd)
 {
-	// Send ban list
+	// Send list
 	if (mode.getArg().empty())
 	{
 		_send_ban_list(channel->getBanned(), srv, userfd, cmd);
 		return false ;
 	}
 
-	// Add to ban list
+	// Add to list
 	if (mode.getAdd())
 	{
 		_add_to_ban_list(mode.getArg(), channel);
-		return false ;
+		return true ;
 	}
 
-	// Remove all corresponding masks from ban list
+	// Remove all corresponding masks from list
 	channel->unbanUser(mode.getArg());
-	return false ;
+	return true ;
 }
 
 /* ------------------------------- */
@@ -233,23 +233,23 @@ static bool _add_to_ban_except_list(std::string arg, Channel * channel)
 
 static bool _apply_ban_except(Mode mode, Channel * channel, Server *srv, int &userfd, Command &cmd)
 {
-	// Send ban list
+	// Send list
 	if (mode.getArg().empty())
 	{
 		_send_ban_except_list(channel->getBanned(), srv, userfd, cmd);
 		return false ;
 	}
 
-	// Add to ban list
+	// Add to list
 	if (mode.getAdd())
 	{
 		_add_to_ban_except_list(mode.getArg(), channel);
-		return false ;
+		return true ;
 	}
 
-	// Remove all corresponding masks from ban list
+	// Remove all corresponding masks from list
 	channel->removeBanExcept(mode.getArg());
-	return false ;
+	return true ;
 }
 
 /* ---------------------------------- */
@@ -283,26 +283,108 @@ static bool _add_to_invite_except_list(std::string arg, Channel * channel)
 
 static bool _apply_invite_except(Mode mode, Channel * channel, Server *srv, int &userfd, Command &cmd)
 {
-	// Send ban list
+	// Send list
 	if (mode.getArg().empty())
 	{
 		_send_invite_except_list(channel->getBanned(), srv, userfd, cmd);
 		return false ;
 	}
 
-	// Add to ban list
+	// Add to list
 	if (mode.getAdd())
 	{
 		_add_to_invite_except_list(mode.getArg(), channel);
-		return false ;
+		return true ;
 	}
 
-	// Remove all corresponding masks from ban list
+	// Remove all corresponding masks from list
 	channel->removeInviteExcept(mode.getArg());
+	return true ;
+}
+
+/* ----------------------------- */
+/* ----------OPERATORS---------- */
+/* ----------------------------- */
+
+static bool _add_to_operator_list(std::string arg, Channel * channel)
+{
+	UserMask usermask;
+	
+	if (isMask(arg))
+		usermask.initFromMask(arg);
+	else
+		usermask.initFromNick(arg);
+	channel->addOperator(usermask);
+
 	return false ;
 }
 
-static void _applyModeChanges(std::list<Mode> mode_list, Server *srv, int &userfd, Command &cmd)
+static bool _apply_operator(Mode mode, Channel * channel, Server *srv, int &userfd, Command &cmd)
+{
+	User * user = srv->getUser(userfd);
+
+	// DONT Send list
+	if (mode.getArg().empty())
+	{
+		srv->sendReply(userfd, ERR_INVALIDMODEPARAM(user->getNickname(), cmd.getParam(0), mode.getMode(), mode.getArg(), "Cannot get channel operator list"));
+		return false ;
+	}
+
+	// Add to list
+	if (mode.getAdd())
+	{
+		_add_to_operator_list(mode.getArg(), channel);
+		return true ;
+	}
+
+	// Remove all corresponding masks from list
+	channel->removeOperator(mode.getArg());
+	return true ;
+}
+
+/* -------------------------- */
+/* ----------VOICED---------- */
+/* -------------------------- */
+
+static bool _add_to_voiced_list(std::string arg, Channel * channel)
+{
+	UserMask usermask;
+	
+	if (isMask(arg))
+		usermask.initFromMask(arg);
+	else
+		usermask.initFromNick(arg);
+	channel->addVoiced(usermask);
+
+	return false ;
+}
+
+static bool _apply_voiced(Mode mode, Channel * channel, Server *srv, int &userfd, Command &cmd)
+{
+	User * user = srv->getUser(userfd);
+
+	// DONT Send list
+	if (mode.getArg().empty())
+	{
+		srv->sendReply(userfd, ERR_INVALIDMODEPARAM(user->getNickname(), cmd.getParam(0), mode.getMode(), mode.getArg(), "Cannot get channel voiced list"));
+		return false ;
+	}
+
+	// Add to list
+	if (mode.getAdd())
+	{
+		_add_to_voiced_list(mode.getArg(), channel);
+		return true ;
+	}
+
+	// Remove all corresponding masks from list
+	channel->removeVoiced(mode.getArg());
+	return true ;
+}
+
+
+
+static std::vector<Mode> _applyModeChanges(std::list<Mode> mode_list, Server *srv, int &userfd, Command &cmd)
 {
 	std::string target = cmd.getParam(0);
 	User * user = srv->getUser(userfd);
@@ -311,117 +393,51 @@ static void _applyModeChanges(std::list<Mode> mode_list, Server *srv, int &userf
 	std::list<Mode>::iterator it = mode_list.begin();
 	std::list<Mode>::iterator ite = mode_list.end();
 
-	UserMask usermask;
+	std::vector<Mode> applied_changes;
 
 	for (; it != ite; it++)
 	{
 		std::string arg = it->getArg();
-		std::vector<UserMask> mask_list;
-		std::vector<UserMask>::iterator mask_it;
-		std::vector<UserMask>::iterator mask_ite;
 		switch (it->getMode())
 		{
 		// Type A
 
 			case 'b':
 			{
-				_apply_ban(*it, channel, srv, userfd, cmd);
+				if (_apply_ban(*it, channel, srv, userfd, cmd))
+					applied_changes.push_back(*it);
 				break;
 			}
 
 			// BAN-EXCEPT
 			case 'e':
 			{
-				_apply_ban_except(*it, channel, srv, userfd, cmd);
+				if (_apply_ban_except(*it, channel, srv, userfd, cmd))
+					applied_changes.push_back(*it);
 				break;
 			}
 
 			// INVITE-EXCEPT
 			case 'I':
 			{
-				_apply_invite_except(*it, channel, srv, userfd, cmd);
+				if (_apply_invite_except(*it, channel, srv, userfd, cmd))
+					applied_changes.push_back(*it);
 				break;
 			}
 
 			// OPERATORS
 			case 'o':
 			{
-				mask_list = channel->getOperators();
-				mask_it = mask_list.begin();
-				mask_ite = mask_list.end();
-
-				// DONT Send operator list
-				if (it->getArg().empty())
-				{
-					srv->sendReply(userfd, ERR_INVALIDMODEPARAM(user->getNickname(), target, it->getMode(), arg, "Cannot get channel operator list"));
-					mode_list.erase(it);
-					it--;
-					ite--;
-					break;
-				}
-				// Add to operator list
-				if (it->getAdd())
-				{
-					if (isMask(arg))
-						usermask.initFromMask(arg);
-					else
-						usermask.initFromNick(arg);
-					channel->addOperator(usermask);
-				}
-				// Remove all corresponding masks from operator list
-				else
-				{
-					for (; mask_it != mask_ite; mask_it++)
-					{
-						if (sided_wildcompare(arg, mask_it->getMask()))
-						{
-							mask_list.erase(mask_it);
-							mask_it--;
-							mask_ite--;
-						}
-					}
-				}
+				if (_apply_operator(*it, channel, srv, userfd, cmd))
+					applied_changes.push_back(*it);
 				break;
 			}
 
 			// VOICED
 			case 'v':
 			{
-				mask_list = channel->getVoiced();
-				mask_it = mask_list.begin();
-				mask_ite = mask_list.end();
-
-				// DONT Send voiced list
-				if (it->getArg().empty())
-				{
-					srv->sendReply(userfd, ERR_INVALIDMODEPARAM(user->getNickname(), target, it->getMode(), arg, "Cannot get channel voiced list"));
-					mode_list.erase(it);
-					it--;
-					ite--;
-					break;
-				}
-				// Add to voiced list
-				if (it->getAdd())
-				{
-					if (isMask(arg))
-						usermask.initFromMask(arg);
-					else
-						usermask.initFromNick(arg);
-					channel->addVoiced(usermask);
-				}
-				// Remove all corresponding masks from voiced list
-				else
-				{
-					for (; mask_it != mask_ite; mask_it++)
-					{
-						if (sided_wildcompare(arg, mask_it->getMask()))
-						{
-							mask_list.erase(mask_it);
-							mask_it--;
-							mask_ite--;
-						}
-					}
-				}
+				if (_apply_voiced(*it, channel, srv, userfd, cmd))
+					applied_changes.push_back(*it);
 				break;
 			}
 
@@ -433,17 +449,16 @@ static void _applyModeChanges(std::list<Mode> mode_list, Server *srv, int &userf
 				if (it->getAdd())
 				{
 					channel->setKey(true, arg);
+					applied_changes.push_back(*it);
 				}
 				else if (channel->checkKey(arg))
 				{
 					channel->setKey(false);
+					applied_changes.push_back(*it);
 				}
 				else
 				{
 					srv->sendReply(userfd, ERR_INVALIDMODEPARAM(user->getNickname(), target, it->getMode(), arg, "Wrong key supplied"));
-					mode_list.erase(it);
-					it--;
-					ite--;
 				}
 				break;
 			}
@@ -458,9 +473,6 @@ static void _applyModeChanges(std::list<Mode> mode_list, Server *srv, int &userf
 					if (!_is_digits(arg))
 					{
 						srv->sendReply(userfd, ERR_INVALIDMODEPARAM(user->getNickname(), target, it->getMode(), arg, "Not a numeric limit"));
-						mode_list.erase(it);
-						it--;
-						ite--;
 						break;
 					}
 					size_t max = atoi(arg.data());
@@ -470,6 +482,7 @@ static void _applyModeChanges(std::list<Mode> mode_list, Server *srv, int &userf
 				{
 					channel->setLimit(false);
 				}
+				applied_changes.push_back(*it);
 				break;
 			}
 
@@ -479,6 +492,7 @@ static void _applyModeChanges(std::list<Mode> mode_list, Server *srv, int &userf
 			case 'i':
 			{
 				channel->setInviteMode(it->getAdd());
+				applied_changes.push_back(*it);
 				break;
 			}
 
@@ -486,6 +500,7 @@ static void _applyModeChanges(std::list<Mode> mode_list, Server *srv, int &userf
 			case 'm':
 			{
 				channel->setModeratedMode(it->getAdd());
+				applied_changes.push_back(*it);
 				break;
 			}
 
@@ -493,6 +508,7 @@ static void _applyModeChanges(std::list<Mode> mode_list, Server *srv, int &userf
 			case 's':
 			{
 				channel->setSecretMode(it->getAdd());
+				applied_changes.push_back(*it);
 				break;
 			}
 
@@ -500,6 +516,7 @@ static void _applyModeChanges(std::list<Mode> mode_list, Server *srv, int &userf
 			case 't':
 			{
 				channel->setProtectedTopicMode(it->getAdd());
+				applied_changes.push_back(*it);
 				break;
 			}
 
@@ -507,10 +524,13 @@ static void _applyModeChanges(std::list<Mode> mode_list, Server *srv, int &userf
 			case 'n':
 			{
 				channel->setNoExternalMessagesMode(it->getAdd());
+				applied_changes.push_back(*it);
 				break;
 			}
 		}
 	}
+
+	return applied_changes;
 }
 
 void	_channelmode(Server *srv, int &userfd, Command &cmd)
@@ -534,8 +554,9 @@ void	_channelmode(Server *srv, int &userfd, Command &cmd)
 
 	// Now mode_list is filled with the different recognized mode changes requested
 
-	_applyModeChanges(mode_list, srv, userfd, cmd);
+	std::vector<Mode> applied_changes = _applyModeChanges(mode_list, srv, userfd, cmd);
 
 	// --> Send message to all joined users to inform them of the changes
+	(void) applied_changes;
 
 }
