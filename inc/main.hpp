@@ -20,6 +20,9 @@
 #include <signal.h>
 #include <stdexcept>
 #include <algorithm>
+#include <sys/stat.h>
+#include <ctime>
+#include <cmath>
 
 /* CLASSES */
 class Channel;

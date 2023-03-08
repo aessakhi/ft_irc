@@ -21,9 +21,9 @@ void	join(Server *srv, int &userfd, Command &cmd)
 {
 	std::vector<std::string> channels;
 	err_codes	err;
+	User		*user;
 
-	std::cout << "JOIN func called" << std::endl;
-	(void)userfd;
+	user = srv->getUser(userfd);
 	if (cmd.getParamList().empty())
 		std::cout << "Need more params" << std::endl;
 	/* Like with PRIVMSG will need to split the targets to send it to each individual targets */
@@ -33,7 +33,7 @@ void	join(Server *srv, int &userfd, Command &cmd)
 	{
 		if (srv->getChannel(*it) == NULL)
 			srv->getChannelMap()->insert(std::make_pair(*it, new Channel(*it)));
-		err = srv->getChannel(*it)->join(srv->getUser(userfd), cmd.getLastParam());
+		err = srv->getChannel(*it)->join(user, cmd.getLastParam());
 		switch(err)
 		{
 			case err_badchannelkey:
@@ -49,8 +49,16 @@ void	join(Server *srv, int &userfd, Command &cmd)
 				std::cout << "Invite only Chan" << std::endl;
 				break;
 			default:
-				std::cout << "All good" << std::endl;
+			{
+				int targetfd;
+				std::vector<User *> userlist = srv->getChannel(*it)->getUsers();
+				for (std::vector<User *>::const_iterator user_it = userlist.begin(); user_it != userlist.end(); user_it++)
+				{
+					targetfd = srv->getUserfd((*user_it)->getNickname());
+					srv->sendReply(targetfd, ":" + user->getMask() + " JOIN " + cmd.getParam(0));
+				}
 				break;
+			}
 		}
 	}
 }

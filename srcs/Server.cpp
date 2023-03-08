@@ -105,9 +105,7 @@ void	Server::_execCmds(std::vector<Command> &cmds, int userfd)
 			this->_cmdMap[toupper(it->getCmd())](this, userfd, *it);
 		}
 		else
-		{
-			std::cout << YLW << "Ignore cmd" << RESET << std::endl;
-		}
+			this->sendReply(userfd, ERR_UNKNOWNCOMMAND(this->getUser(userfd)->getNickname(), it->getCmd()));
 	}
 }
 
@@ -173,6 +171,8 @@ void	Server::_initCmdMap()
 	this->_cmdMap["AWAY"] = &away;
 	this->_cmdMap["JOIN"] = &join;
 	this->_cmdMap["TIME"] = &srv_time;
+	this->_cmdMap["INFO"] = &info;
+	this->_cmdMap["VERSION"] = &version;
 	this->_cmdMap["TOPIC"] = &topic;
 }
 
@@ -186,6 +186,8 @@ void	Server::init()
 	this->_createsocket();
 
 	this->_create_epoll();
+
+	time(&this->_creatime);
 
 	while (1)
 	{
@@ -268,4 +270,9 @@ Channel * Server::getChannel(const std::string & channel_name)
 std::map<std::string, Channel *> *Server::getChannelMap()
 {
 	return &(this->_channelMap);
+}
+
+time_t Server::getCreatime() const
+{ 
+	return (this->_creatime);
 }

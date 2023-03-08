@@ -26,6 +26,8 @@ SRC_NAMES +=	CAP.cpp \
 				JOIN.cpp \
 				TIME.cpp \
 				TOPIC.cpp \
+				INFO.cpp \
+				VERSION.cpp \
 
 # OTHER FILES
 SRC_NAMES +=	main.cpp \
