@@ -1,7 +1,4 @@
 #include "main.hpp"
-#include <sys/stat.h>
-#include <ctime>
-#include <cmath>
 
 std::string		time_diff(time_t start)
 {

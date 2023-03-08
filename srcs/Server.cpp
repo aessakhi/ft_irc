@@ -105,9 +105,7 @@ void	Server::_execCmds(std::vector<Command> &cmds, int userfd)
 			this->_cmdMap[toupper(it->getCmd())](this, userfd, *it);
 		}
 		else
-		{
-			std::cout << YLW << "Ignore cmd" << RESET << std::endl;
-		}
+			this->sendReply(userfd, ERR_UNKNOWNCOMMAND(this->getUser(userfd)->getNickname(), it->getCmd()));
 	}
 }
 
