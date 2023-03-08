@@ -173,6 +173,7 @@ void	Server::_initCmdMap()
 	this->_cmdMap["AWAY"] = &away;
 	this->_cmdMap["JOIN"] = &join;
 	this->_cmdMap["TIME"] = &srv_time;
+	this->_cmdMap["TOPIC"] = &topic;
 }
 
 void	Server::init()
