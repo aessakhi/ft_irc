@@ -258,7 +258,8 @@ err_codes	Channel::part(User *user)
 	if (!isMember(user))
 		return err_notonchannel;
 	
-	std::remove(_members.begin(), _members.end(), user);
+	std::vector<User *>::iterator it = std::find(_members.begin(), _members.end(), user);
+	_members.erase(it);
 
 	return err_noerror;
 }
@@ -351,4 +352,17 @@ std::string Channel::namesStr(User *user) const
 	}
 
 	return ret;
+}
+
+void	Channel::sendToAllMembers(std::string msg) const
+{
+	std::vector<User *>::const_iterator it = _members.begin();
+	std::vector<User *>::const_iterator ite = _members.end();
+
+	msg += "\r\n";
+
+	for (; it != ite; it++)
+	{
+		send((*it)->getFd(), msg.data(), msg.size(), MSG_NOSIGNAL);
+	}
 }

@@ -18,6 +18,7 @@ SRC_NAMES +=	CAP.cpp \
 				MODE.cpp \
 				NICK.cpp \
 				PASS.cpp \
+				PART.cpp \
 				USER.cpp \
 				PING.cpp \
 				PRIVMSG.cpp \

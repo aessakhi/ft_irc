@@ -164,6 +164,7 @@ void	Server::_initCmdMap()
 {
 	this->_cmdMap["CAP"] = &cap;
 	this->_cmdMap["PASS"] = &pass;
+	this->_cmdMap["PART"] = &part;
 	this->_cmdMap["NICK"] = &nick;
 	this->_cmdMap["USER"] = &user;
 	this->_cmdMap["PING"] = &ping;

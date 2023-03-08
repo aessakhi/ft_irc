@@ -154,3 +154,6 @@ const std::string	User::getModeString() const
 	
 	return modes;
 }
+
+int	User::getFd() const
+{ return _fd ; }

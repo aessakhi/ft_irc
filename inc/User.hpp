@@ -148,6 +148,9 @@ class User
 	/* Returns the user's mode string */
 	const std::string	getModeString() const;
 
+	/* Returns the fd used to communicate with user */
+	int	getFd() const;
+
 };
 
 #endif
