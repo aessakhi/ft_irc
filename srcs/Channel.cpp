@@ -316,8 +316,6 @@ std::vector<std::string> Channel::namesVect(User *user) const
 	std::vector<User *>::const_iterator it;
 	std::vector<User *>::const_iterator ite;
 
-	bool see_invisible = isMember(user);
-
 	it = _members.begin();
 	ite = _members.end();
 
@@ -326,14 +324,14 @@ std::vector<std::string> Channel::namesVect(User *user) const
 		User * current = *it;
 		std::string current_name;
 
-		if (current->isInvisible() && !see_invisible)
+		if (current->isInvisible() && !isMember(user))
 			continue;
 		if (isOp(current))
-			current_name += '@';
+			current_name = "@";
 		else if (isVoiced(current))
-			current_name += '+';
+			current_name = "+";
 		else
-			current_name += ' ';
+			current_name = " ";
 		current_name += current->getNickname();
 		name_vect.push_back(current_name);
 	}

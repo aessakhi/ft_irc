@@ -174,6 +174,7 @@ void	Server::_initCmdMap()
 	this->_cmdMap["INFO"] = &info;
 	this->_cmdMap["VERSION"] = &version;
 	this->_cmdMap["TOPIC"] = &topic;
+	this->_cmdMap["NAMES"] = &names;
 }
 
 void	Server::init()

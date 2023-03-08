@@ -28,6 +28,7 @@ SRC_NAMES +=	CAP.cpp \
 				TOPIC.cpp \
 				INFO.cpp \
 				VERSION.cpp \
+				NAMES.cpp \
 
 # OTHER FILES
 SRC_NAMES +=	main.cpp \

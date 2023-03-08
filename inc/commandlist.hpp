@@ -19,5 +19,6 @@ void	srv_time(Server *srv, int &userfd, Command &cmd);
 void	topic(Server *srv, int &userfd, Command &cmd);
 void	info(Server *srv, int &userfd, Command &cmd);
 void	version(Server *srv, int &userfd, Command &cmd);
+void	names(Server *srv, int &userfd, Command &cmd);
 
 #endif

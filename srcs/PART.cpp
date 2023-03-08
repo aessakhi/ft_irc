@@ -1,6 +1,6 @@
 #include "main.hpp"
 
-std::vector<std::string> actual_split(std::string str, std::string delimiter)
+static std::vector<std::string> actual_split(std::string str, std::string delimiter)
 {
 	std::vector<std::string> result;
 
