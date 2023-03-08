@@ -123,7 +123,7 @@ static std::string _new_modes(std::list<Mode> mode_list)
 	return ret ;
 }
 
-void	_usermode(Server *srv, int &userfd, Command &cmd)
+void	usermode(Server *srv, int &userfd, Command &cmd)
 {
 
 	if (_nick_error(srv, userfd, cmd))

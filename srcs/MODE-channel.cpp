@@ -533,7 +533,7 @@ static std::vector<Mode> _applyModeChanges(std::list<Mode> mode_list, Server *sr
 	return applied_changes;
 }
 
-void	_channelmode(Server *srv, int &userfd, Command &cmd)
+void	channelmode(Server *srv, int &userfd, Command &cmd)
 {
 
 	if (_channel_mode_error(srv, userfd, cmd))

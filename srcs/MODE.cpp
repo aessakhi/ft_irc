@@ -9,7 +9,7 @@ void	mode(Server *srv, int &userfd, Command &cmd)
 	}
 
 	if (cmd.getParam(0)[0] == '#')
-		_channelmode(srv, userfd, cmd);
+		channelmode(srv, userfd, cmd);
 	else
-		_usermode(srv, userfd, cmd);
+		usermode(srv, userfd, cmd);
 }

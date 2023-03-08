@@ -122,7 +122,7 @@ void	printSep(std::vector<std::string> vect);
 
 /* ---------- MODE.cpp ---------- */
 
-void	_usermode(Server *srv, int &userfd, Command &cmd);
-void	_channelmode(Server *srv, int &userfd, Command &cmd);
+void	usermode(Server *srv, int &userfd, Command &cmd);
+void	channelmode(Server *srv, int &userfd, Command &cmd);
 
 #endif
