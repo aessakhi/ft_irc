@@ -49,8 +49,16 @@ void	join(Server *srv, int &userfd, Command &cmd)
 				std::cout << "Invite only Chan" << std::endl;
 				break;
 			default:
-				srv->sendReply(userfd, ":" + user->getMask() + " JOIN " + cmd.getParam(0));
+			{
+				int targetfd;
+				std::vector<User *> userlist = srv->getChannel(*it)->getUsers();
+				for (std::vector<User *>::const_iterator user_it = userlist.begin(); user_it != userlist.end(); user_it++)
+				{
+					targetfd = srv->getUserfd((*user_it)->getNickname());
+					srv->sendReply(targetfd, ":" + user->getMask() + " JOIN " + cmd.getParam(0));
+				}
 				break;
+			}
 		}
 	}
 }
