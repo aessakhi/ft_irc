@@ -171,6 +171,7 @@ void	Server::_initCmdMap()
 	this->_cmdMap["JOIN"] = &join;
 	this->_cmdMap["TIME"] = &srv_time;
 	this->_cmdMap["INFO"] = &info;
+	this->_cmdMap["VERSION"] = &version;
 }
 
 void	Server::init()
