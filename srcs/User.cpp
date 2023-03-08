@@ -162,6 +162,9 @@ const std::string	User::getModeString() const
 	if (this->isAway())
 		modes += 'a';
 	
+	if (modes == "+")
+		return "";
+	
 	return modes;
 }
 

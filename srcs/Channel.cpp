@@ -89,6 +89,93 @@ void	Channel::addInvite(User * user)
 void	Channel::addVoiced(UserMask user)
 { _voiced.push_back(user) ; }
 
+/* ----------REMOVING USERMASKS FROM LISTS---------- */
+
+void	Channel::removeOperator(std::string str)
+{
+	std::vector<UserMask>::iterator it = _operators.begin();
+	std::vector<UserMask>::iterator ite = _operators.end();
+	std::vector<UserMask>::iterator it_copy;
+	for (; it != ite; it++)
+	{
+		if (sided_wildcompare(str, it->getMask()))
+		{
+			it_copy = it;
+			it--;
+			_operators.erase(it_copy);
+			ite = _operators.end();
+		}
+	}
+}
+
+void	Channel::unbanUser(std::string str)
+{
+	std::vector<UserMask>::iterator it = _banned.begin();
+	std::vector<UserMask>::iterator ite = _banned.end();
+	std::vector<UserMask>::iterator it_copy;
+	for (; it != ite; it++)
+	{
+		if (sided_wildcompare(str, it->getMask()))
+		{
+			it_copy = it;
+			it--;
+			_banned.erase(it_copy);
+			ite = _banned.end();
+		}
+	}
+}
+
+void	Channel::removeBanExcept(std::string str)
+{
+	std::vector<UserMask>::iterator it = _ban_except.begin();
+	std::vector<UserMask>::iterator ite = _ban_except.end();
+	std::vector<UserMask>::iterator it_copy;
+	for (; it != ite; it++)
+	{
+		if (sided_wildcompare(str, it->getMask()))
+		{
+			it_copy = it;
+			it--;
+			_ban_except.erase(it_copy);
+			ite = _ban_except.end();
+		}
+	}
+}
+
+void	Channel::removeInviteExcept(std::string str)
+{
+	std::vector<UserMask>::iterator it = _invite_except.begin();
+	std::vector<UserMask>::iterator ite = _invite_except.end();
+	std::vector<UserMask>::iterator it_copy;
+	for (; it != ite; it++)
+	{
+		if (sided_wildcompare(str, it->getMask()))
+		{
+			it_copy = it;
+			it--;
+			_invite_except.erase(it_copy);
+			ite = _invite_except.end();
+		}
+	}
+}
+
+void	Channel::removeVoiced(std::string str)
+{
+	std::vector<UserMask>::iterator it = _voiced.begin();
+	std::vector<UserMask>::iterator ite = _voiced.end();
+	std::vector<UserMask>::iterator it_copy;
+	for (; it != ite; it++)
+	{
+		if (sided_wildcompare(str, it->getMask()))
+		{
+			it_copy = it;
+			it--;
+			_voiced.erase(it_copy);
+			ite = _voiced.end();
+		}
+	}
+}
+
 /* ----------ATTRIBUTE CHANGES---------- */
 
 void	Channel::_setLimitMode(bool state)

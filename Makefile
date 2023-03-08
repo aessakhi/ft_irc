@@ -16,6 +16,8 @@ SRC_NAMES +=	Channel.cpp \
 # COMMANDS
 SRC_NAMES +=	CAP.cpp \
 				MODE.cpp \
+				MODE-channel.cpp \
+				MODE-user.cpp \
 				NICK.cpp \
 				PASS.cpp \
 				PART.cpp \

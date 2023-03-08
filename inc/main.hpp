@@ -23,6 +23,7 @@
 #include <sys/stat.h>
 #include <ctime>
 #include <cmath>
+#include <list>
 
 /* CLASSES */
 class Channel;
@@ -55,8 +56,6 @@ class UserMask;
 
 /* ---------- utils.cpp ---------- */
 
-
-
 /*	Basic check for input arguments.
 	Returns 0 if arguments are formatted correctly, -1 otherwise. */
 int program_arguments_check(int argc, char **argv);
@@ -67,9 +66,6 @@ std::vector<std::string> split(std::string *str, std::string delimiter);
 
 /* Splits str on delimiter. */
 std::vector<std::string> split(std::string str, std::string delimiter);
-
-
-// void	splitCmds(std::vector<Command> *cmd_vector, std::string cmd);
 
 /* Returns a Command created from s.
 s should be of format "prefix command command-parameters\\r\\n".
@@ -123,5 +119,10 @@ void	printSep(Command cmd);
 
 /* Print vect on std::cout in green with elements visually separated. */
 void	printSep(std::vector<std::string> vect);
+
+/* ---------- MODE.cpp ---------- */
+
+void	_usermode(Server *srv, int &userfd, Command &cmd);
+void	_channelmode(Server *srv, int &userfd, Command &cmd);
 
 #endif

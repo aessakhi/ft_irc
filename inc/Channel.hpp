@@ -163,6 +163,23 @@ class Channel
 		/* Adds a user mask to the list of voice users */
 		void	addVoiced(UserMask user);
 
+	/* ----------REMOVING USERMASKS FROM LISTS---------- */
+
+		/* Removes an operator user mask. */
+		void	removeOperator(std::string str);
+
+		/* Removes an banned user mask. */
+		void	unbanUser(std::string str);
+
+		/* Removes an ban-exempt user mask. */
+		void	removeBanExcept(std::string str);
+
+		/* Removes an invited user mask. */
+		void	removeInviteExcept(std::string str);
+
+		/* Removes an operator user mask. */
+		void	removeVoiced(std::string str);
+
 	/* ----------ATTRIBUTE CHANGES---------- */
 
 		/* Set _limit_mode to state and _capacity (if given) to value */
