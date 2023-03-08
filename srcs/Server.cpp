@@ -145,13 +145,15 @@ void	Server::_receivemessage(struct epoll_event event)
 
 void	Server::_removeUserfromServer(int userfd)
 {
-	if (this->getUser(userfd) == 0)
+	User * user = this->getUser(userfd);
+	if (user == 0)
 		return printError("Invalid user");
 	this->_UserList.erase(userfd);
 	if (epoll_ctl(this->_epollfd, EPOLL_CTL_DEL, userfd, NULL) == -1)
 	{
 		throw EpollCtlException();
 	}
+	delete user;
 	if (close(userfd) == -1)
 	{
 		throw FdCloseException();
@@ -172,6 +174,7 @@ void	Server::_initCmdMap()
 	this->_cmdMap["TIME"] = &srv_time;
 	this->_cmdMap["INFO"] = &info;
 	this->_cmdMap["VERSION"] = &version;
+	this->_cmdMap["QUIT"] = &quit;
 }
 
 void	Server::init()

@@ -5,6 +5,8 @@ void	user(Server *srv, int &userfd, Command &cmd)
 	User	*user;
 
 	user = srv->getUser(userfd);
+	if (!user)
+		return ;
 	// Number of args check
 	std::string client = "";
 	if (!user->getNickname().empty())

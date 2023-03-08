@@ -26,6 +26,7 @@ SRC_NAMES +=	CAP.cpp \
 				TIME.cpp \
 				INFO.cpp \
 				VERSION.cpp \
+				QUIT.cpp \
 
 # OTHER FILES
 SRC_NAMES +=	main.cpp \

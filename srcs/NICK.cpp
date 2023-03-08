@@ -5,6 +5,8 @@ void	nick(Server *srv, int &userfd, Command &cmd)
 	User	*user;
 
 	user = srv->getUser(userfd);
+	if (!user)
+		return ;
 	// Number of args check
 	if (cmd.paramNumber() == 0)
 	{

@@ -72,7 +72,6 @@ class Server
 		/* Loops through cmds and calls the corresponding functions */
 		void	_execCmds(std::vector<Command> &cmds, int userfd);
 
-		void	_removeUserfromServer(int fd);
 
 	public:
 
@@ -82,6 +81,7 @@ class Server
 
 	/* ----------EXECUTION FUNCTIONS---------- */
 
+		void	_removeUserfromServer(int fd);
 		/* "Initializes" the server. For now also contains the epoll_wait loop. */
 		void	init();
 

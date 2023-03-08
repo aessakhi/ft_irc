@@ -23,8 +23,9 @@ void	pass(Server *srv, int &userfd, Command &cmd)
 	if (cmd.getParam(0).compare(srv->getpwd()) != 0)
 	{
 		srv->sendReply(userfd, ERR_PASSWDMISMATCH(client));
+		quit(srv, userfd, cmd);
 		/* Might need to kill connection to user here */
-		return;
+		return; //return but the user has been killed and deleted so it segfaults on nick
 	}
 
 	user->setPwd(true);

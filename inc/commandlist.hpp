@@ -17,5 +17,6 @@ void	join(Server *srv, int &userfd, Command &cmd);
 void	srv_time(Server *srv, int &userfd, Command &cmd);
 void	info(Server *srv, int &userfd, Command &cmd);
 void	version(Server *srv, int &userfd, Command &cmd);
+void	quit(Server *srv, int &userfd, Command &cmd);
 
 #endif
