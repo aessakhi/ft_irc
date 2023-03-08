@@ -62,7 +62,7 @@ std::vector<std::string> split(std::string str, std::string delimiter)
 	while (end != std::string::npos)
 	{
 		result.push_back(str.substr(start, end));
-		start = end + 2;
+		start = end + delimiter.length();
 		end = str.find(delimiter, start);
 	}
 	return (result);

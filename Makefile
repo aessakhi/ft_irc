@@ -18,14 +18,17 @@ SRC_NAMES +=	CAP.cpp \
 				MODE.cpp \
 				NICK.cpp \
 				PASS.cpp \
+				PART.cpp \
 				USER.cpp \
 				PING.cpp \
 				PRIVMSG.cpp \
 				AWAY.cpp \
 				JOIN.cpp \
 				TIME.cpp \
+				TOPIC.cpp \
 				INFO.cpp \
 				VERSION.cpp \
+				NAMES.cpp \
 				QUIT.cpp \
 
 # OTHER FILES

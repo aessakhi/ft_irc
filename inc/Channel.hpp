@@ -281,6 +281,9 @@ class Channel
 
 		/* Returns the list of names as a string of format "[prefix]<nick>{ [prefix]<nick>}" */
 		std::string namesStr(User *user) const;
+
+		/* Sends a string to all joined members, adding a \\r\\n at the end. */
+		void	sendToAllMembers(std::string msg) const;
 };
 
 #endif

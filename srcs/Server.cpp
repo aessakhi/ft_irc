@@ -164,6 +164,7 @@ void	Server::_initCmdMap()
 {
 	this->_cmdMap["CAP"] = &cap;
 	this->_cmdMap["PASS"] = &pass;
+	this->_cmdMap["PART"] = &part;
 	this->_cmdMap["NICK"] = &nick;
 	this->_cmdMap["USER"] = &user;
 	this->_cmdMap["PING"] = &ping;
@@ -174,6 +175,8 @@ void	Server::_initCmdMap()
 	this->_cmdMap["TIME"] = &srv_time;
 	this->_cmdMap["INFO"] = &info;
 	this->_cmdMap["VERSION"] = &version;
+	this->_cmdMap["TOPIC"] = &topic;
+	this->_cmdMap["NAMES"] = &names;
 	this->_cmdMap["QUIT"] = &quit;
 }
 

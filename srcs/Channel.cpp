@@ -259,7 +259,8 @@ err_codes	Channel::part(User *user)
 	if (!isMember(user))
 		return err_notonchannel;
 	
-	std::remove(_members.begin(), _members.end(), user);
+	std::vector<User *>::iterator it = std::find(_members.begin(), _members.end(), user);
+	_members.erase(it);
 
 	return err_noerror;
 }
@@ -315,8 +316,6 @@ std::vector<std::string> Channel::namesVect(User *user) const
 	std::vector<User *>::const_iterator it;
 	std::vector<User *>::const_iterator ite;
 
-	bool see_invisible = isMember(user);
-
 	it = _members.begin();
 	ite = _members.end();
 
@@ -325,14 +324,14 @@ std::vector<std::string> Channel::namesVect(User *user) const
 		User * current = *it;
 		std::string current_name;
 
-		if (current->isInvisible() && !see_invisible)
+		if (current->isInvisible() && !isMember(user))
 			continue;
 		if (isOp(current))
-			current_name += '@';
+			current_name = "@";
 		else if (isVoiced(current))
-			current_name += '+';
+			current_name = "+";
 		else
-			current_name += ' ';
+			current_name = " ";
 		current_name += current->getNickname();
 		name_vect.push_back(current_name);
 	}
@@ -352,4 +351,17 @@ std::string Channel::namesStr(User *user) const
 	}
 
 	return ret;
+}
+
+void	Channel::sendToAllMembers(std::string msg) const
+{
+	std::vector<User *>::const_iterator it = _members.begin();
+	std::vector<User *>::const_iterator ite = _members.end();
+
+	msg += "\r\n";
+
+	for (; it != ite; it++)
+	{
+		send((*it)->getFd(), msg.data(), msg.size(), MSG_NOSIGNAL);
+	}
 }
