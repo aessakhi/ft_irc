@@ -68,23 +68,29 @@ INC = $(addprefix $(INC_DIR)/, $(INC_NAMES))
 RM =	rm -rf
 
 $(NAME):	$(OBJS)
-			$(CXX) -o $(NAME) $(OBJS) $(CXXFLAGS)
+			@echo -n "[\033[31mx\033[0m] Compiling $(NAME)\r"
+			@$(CXX) -o $(NAME) $(OBJS) $(CXXFLAGS)
+			@echo "[\033[92m✓\033[0m] \033[94mCompiled $(NAME) !\033[0m"
 
 $(OBJ_DIR)/%.o :	$(SRC_DIR)/%.cpp $(INC) | $(OBJ_DIR)
-					$(CXX) $(CXXFLAGS) -c $< -o $@ -I./$(INC_DIR)/
+					@echo -n "[\033[31mx\033[0m] Compiling $<\r"
+					@$(CXX) $(CXXFLAGS) -c $< -o $@ -I./$(INC_DIR)/
+					@echo "[\033[32m✓\033[0m] Compiled $<  "
 
 $(OBJ_DIR) :
-				mkdir -p $(OBJ_DIR)
+				@mkdir -p $(OBJ_DIR)
 
 all: $(NAME)
 
 clean:
-	$(RM) $(OBJS)
-	$(RM) $(OBJ_DIR)
+	@echo "\033[31mDeleting .o files\033[0m"
+	@$(RM) $(OBJS)
+	@$(RM) $(OBJ_DIR)
 
 fclean:	clean
-	$(RM) $(NAME)
+	@echo "\033[31mDeleting $(NAME)\033[0m"
+	@$(RM) $(NAME)
 
-re: clean all
+re: fclean all
 
 .PHONY: all clean re fclean
