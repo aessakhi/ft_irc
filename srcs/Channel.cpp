@@ -296,7 +296,7 @@ bool	Channel::isVoiced(User *user) const
 { return _find_mask(_voiced, user) ; }
 
 bool	Channel::isFull() const
-{ return _members.size() == _capacity ; }
+{ return _members.size() >= _capacity ; }
 
 bool	Channel::checkKey(std::string s) const
 { return !(s.compare(_key)) ; }
