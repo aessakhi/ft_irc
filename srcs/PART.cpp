@@ -34,7 +34,7 @@ static void	part_one_chan(Server *srv, int &userfd, Command &cmd, std::string ch
 		return;
 	}
 
-	std::string reply_str = ":" + user->getNickname() + " PART " + channel_name;
+	std::string reply_str = ":" + user->getMask() + " PART " + channel_name;
 	if (cmd.paramNumber() > 1)
 		reply_str += " " + cmd.getParam(1);
 
