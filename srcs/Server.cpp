@@ -18,7 +18,16 @@ Server::~Server()
 	std::map<int, User *>::iterator ite_user = _UserList.end();
 	for (; it_user != ite_user; it_user++)
 	{
-		_removeUserfromServer(it_user->first);
+		delete it_user->second;
+
+		if (epoll_ctl(this->_epollfd, EPOLL_CTL_DEL, it_user->first, NULL) == -1)
+		{
+			throw EpollCtlException();
+		}
+		if (close(it_user->first) == -1)
+		{
+			throw FdCloseException();
+		}
 	}
 
 	// delete _listenfd and epollfd
