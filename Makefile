@@ -13,26 +13,26 @@ SRC_NAMES +=	Channel.cpp \
 				User.cpp \
 
 # COMMANDS
-SRC_NAMES +=	CAP.cpp \
-				MODE.cpp \
+SRC_NAMES +=	AWAY.cpp \
+				CAP.cpp \
+				INFO.cpp \
+				INVITE.cpp \
+				JOIN.cpp \
+				KICK.cpp \
 				MODE-channel.cpp \
 				MODE-user.cpp \
+				MODE.cpp \
+				NAMES.cpp \
 				NICK.cpp \
-				KICK.cpp \
-				PASS.cpp \
 				PART.cpp \
-				USER.cpp \
+				PASS.cpp \
 				PING.cpp \
 				PRIVMSG.cpp \
-				AWAY.cpp \
-				JOIN.cpp \
+				QUIT.cpp \
 				TIME.cpp \
 				TOPIC.cpp \
-				INFO.cpp \
+				USER.cpp \
 				VERSION.cpp \
-				NAMES.cpp \
-				QUIT.cpp \
-				INVITE.cpp \
 
 # OTHER FILES
 SRC_NAMES +=	main.cpp \
@@ -41,7 +41,7 @@ SRC_NAMES +=	main.cpp \
 
 SRCS =	$(addprefix $(SRC_DIR)/, $(SRC_NAMES))
 
-OBJ_DIR =	objs
+OBJ_DIR =	./objs
 OBJ_NAMES	= $(SRC_NAMES:.cpp=.o)
 OBJS		= $(addprefix $(OBJ_DIR)/, $(OBJ_NAMES))
 
@@ -73,6 +73,7 @@ $(NAME):	$(OBJS)
 			@echo "[\033[92m✓\033[0m] \033[94mCompiled $(NAME) !\033[0m"
 
 $(OBJ_DIR)/%.o :	$(SRC_DIR)/%.cpp $(INC) | $(OBJ_DIR)
+					@mkdir -p $(dir $@)
 					@echo -n "[\033[31mx\033[0m] Compiling $<\r"
 					@$(CXX) $(CXXFLAGS) -c $< -o $@ -I./$(INC_DIR)/
 					@echo "[\033[32m✓\033[0m] Compiled $<  "
@@ -84,7 +85,6 @@ all: $(NAME)
 
 clean:
 	@echo "\033[31mDeleting .o files\033[0m"
-	@$(RM) $(OBJS)
 	@$(RM) $(OBJ_DIR)
 
 fclean:	clean

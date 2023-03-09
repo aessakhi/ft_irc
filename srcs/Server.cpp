@@ -201,24 +201,24 @@ void	Server::_removeUserfromServer(int userfd)
 
 void	Server::_initCmdMap()
 {
+	this->_cmdMap["AWAY"] = &away;
 	this->_cmdMap["CAP"] = &cap;
-	this->_cmdMap["PASS"] = &pass;
-	this->_cmdMap["PART"] = &part;
+	this->_cmdMap["INFO"] = &info;
+	this->_cmdMap["INVITE"] = &invite;
+	this->_cmdMap["JOIN"] = &join;
+	this->_cmdMap["KICK"] = &kick;
+	this->_cmdMap["MODE"] = &mode;
+	this->_cmdMap["NAMES"] = &names;
 	this->_cmdMap["NICK"] = &nick;
-	this->_cmdMap["USER"] = &user;
+	this->_cmdMap["PART"] = &part;
+	this->_cmdMap["PASS"] = &pass;
 	this->_cmdMap["PING"] = &ping;
 	this->_cmdMap["PRIVMSG"] = &privmsg;
-	this->_cmdMap["MODE"] = &mode;
-	this->_cmdMap["AWAY"] = &away;
-	this->_cmdMap["JOIN"] = &join;
-	this->_cmdMap["TIME"] = &srv_time;
-	this->_cmdMap["INFO"] = &info;
-	this->_cmdMap["VERSION"] = &version;
-	this->_cmdMap["TOPIC"] = &topic;
-	this->_cmdMap["NAMES"] = &names;
 	this->_cmdMap["QUIT"] = &quit;
-	this->_cmdMap["INVITE"] = &invite;
-	this->_cmdMap["KICK"] = &kick;
+	this->_cmdMap["TIME"] = &srv_time;
+	this->_cmdMap["TOPIC"] = &topic;
+	this->_cmdMap["USER"] = &user;
+	this->_cmdMap["VERSION"] = &version;
 }
 
 void	Server::epoll_loop()
