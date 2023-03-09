@@ -31,6 +31,7 @@ SRC_NAMES +=	CAP.cpp \
 				VERSION.cpp \
 				NAMES.cpp \
 				QUIT.cpp \
+				INVITE.cpp \
 
 # OTHER FILES
 SRC_NAMES +=	main.cpp \

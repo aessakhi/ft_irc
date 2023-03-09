@@ -178,6 +178,7 @@ void	Server::_initCmdMap()
 	this->_cmdMap["TOPIC"] = &topic;
 	this->_cmdMap["NAMES"] = &names;
 	this->_cmdMap["QUIT"] = &quit;
+	this->_cmdMap["INVITE"] = &invite;
 }
 
 void	Server::init()

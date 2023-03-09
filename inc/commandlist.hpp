@@ -21,5 +21,6 @@ void	info(Server *srv, int &userfd, Command &cmd);
 void	version(Server *srv, int &userfd, Command &cmd);
 void	names(Server *srv, int &userfd, Command &cmd);
 void	quit(Server *srv, int &userfd, Command &cmd);
+void	invite(Server *srv, int &userfd, Command &cmd);
 
 #endif
