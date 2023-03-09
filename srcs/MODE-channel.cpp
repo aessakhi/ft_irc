@@ -14,144 +14,6 @@ static bool _is_digits(std::string s)
 	return (s[0] != 0);
 }
 
-static bool _channel_mode_error(Server *srv, int &userfd, Command &cmd)
-{
-	std::string target = cmd.getParam(0);
-	User * user = srv->getUser(userfd);
-	Channel * channel = srv->getChannel(target);
-
-	// Error if target is a channel that doesnt exist
-	if (channel == NULL)
-	{
-		srv->sendReply(userfd, ERR_NOSUCHCHANNEL(user->getNickname(), target));
-		return true;
-	}
-
-	// If no modestring is given, reply with the modes of the channel.
-	if (cmd.paramNumber() == 1)
-	{
-		srv->sendReply(userfd, RPL_CHANNELMODEIS(user->getNickname(), target, channel->getModes()));
-		return true;
-	}
-
-	// If modestring is given, check user privileges
-
-	if (!channel->isOp(user))
-	{
-		srv->sendReply(userfd, ERR_CHANOPRIVSNEEDED(user->getNickname(), target));
-		return true;
-	}
-
-	return false;
-}
-
-static std::list<Mode> _modestring_parsing(std::string modestring, Server *srv, int &userfd, Command &cmd)
-{
-	User * user = srv->getUser(userfd);
-
-	// Might have a parameter
-	// If no parameter, reply with the list
-	std::string typeA("beIov");
-	// ALWAYS a parameter
-	std::string typeB("k");
-	// Parameter when being set, no parameter when unset
-	std::string typeC("l");
-	// NEVER a parameter
-	std::string typeD("imstn");
-
-	// arguments points to the arglist after the modestring
-	std::vector<std::string> param_list = cmd.getParamList();
-	std::vector<std::string>::const_iterator arguments = param_list.begin();
-	arguments += 2;
-	std::vector<std::string>::const_iterator arguments_end = param_list.end();
-	
-	// whether or not the current mode should be added 
-	bool add = (modestring[0] == '+');
-	size_t npos = std::string::npos;
-
-	std::list<Mode> mode_list;
-
-	for (size_t i = 0; i < modestring.size(); i++)
-	{
-		char c = modestring[i];
-		if (c == '+' || c == '-')
-		{
-			add = (c == '+');
-			if (i + 1 == modestring.size())
-				srv->sendReply(userfd, ERR_UMODEUNKNOWNFLAG(user->getNickname()));
-			continue;
-		}
-
-		if (typeA.find(c) != npos)
-		{
-			// request list
-			if (arguments == arguments_end)
-			{
-				mode_list.push_back(Mode(add, c));
-				continue;
-			}
-			// mode adds a mask to a list
-			else
-			{
-				mode_list.push_back(Mode(add, c, *arguments));
-				arguments++;
-				continue;
-			}
-		}
-
-		if (typeB.find(c) != npos)
-		{
-			// error
-			if (arguments == arguments_end)
-			{
-				srv->sendReply(userfd, ERR_UMODEUNKNOWNFLAG(user->getNickname()));
-				continue;
-			}
-
-			// mode change
-			mode_list.push_back(Mode(add, c, *arguments));
-			arguments++;
-			continue;
-		}
-
-		if (typeC.find(c) != npos)
-		{
-			// error
-			if (arguments == arguments_end && add)
-			{
-				srv->sendReply(userfd, ERR_UMODEUNKNOWNFLAG(user->getNickname()));
-				continue;
-			}
-
-			// mode is being set
-			if (add)
-			{
-				mode_list.push_back(Mode(add, c, *arguments));
-				arguments++;
-				continue;
-			}
-			// mode is being unset
-			else
-			{
-				mode_list.push_back(Mode(add, c));
-				continue;
-			}
-		}
-
-		if (typeD.find(c) != npos)
-		{
-			// mode change
-			mode_list.push_back(Mode(add, c));
-			continue;
-		}
-
-		// If letter is unrecognized, send error
-		srv->sendReply(userfd, ERR_UMODEUNKNOWNFLAG(user->getNickname()));
-	}
-
-	return mode_list;
-}
-
 /* ------------------------ */
 /* ----------BANS---------- */
 /* ------------------------ */
@@ -382,9 +244,149 @@ static bool _apply_voiced(Mode mode, Channel * channel, Server *srv, int &userfd
 	return true ;
 }
 
+/* ----------------------------------- */
+/* ----------OTHER FUNCTIONS---------- */
+/* ----------------------------------- */
 
+static bool _channel_mode_error(Server *srv, int &userfd, Command &cmd)
+{
+	std::string target = cmd.getParam(0);
+	User * user = srv->getUser(userfd);
+	Channel * channel = srv->getChannel(target);
 
-static std::vector<Mode> _applyModeChanges(std::list<Mode> mode_list, Server *srv, int &userfd, Command &cmd)
+	// Error if target is a channel that doesnt exist
+	if (channel == NULL)
+	{
+		srv->sendReply(userfd, ERR_NOSUCHCHANNEL(user->getNickname(), target));
+		return true;
+	}
+
+	// If no modestring is given, reply with the modes of the channel.
+	if (cmd.paramNumber() == 1)
+	{
+		srv->sendReply(userfd, RPL_CHANNELMODEIS(user->getNickname(), target, channel->getModes()));
+		return true;
+	}
+
+	// If modestring is given, check user privileges
+
+	if (!channel->isOp(user))
+	{
+		srv->sendReply(userfd, ERR_CHANOPRIVSNEEDED(user->getNickname(), target));
+		return true;
+	}
+
+	return false;
+}
+
+static std::list<Mode> _modestring_parsing(std::string modestring, Server *srv, int &userfd, Command &cmd)
+{
+	User * user = srv->getUser(userfd);
+
+	// Might have a parameter
+	// If no parameter, reply with the list
+	std::string typeA("beIov");
+	// ALWAYS a parameter
+	std::string typeB("k");
+	// Parameter when being set, no parameter when unset
+	std::string typeC("l");
+	// NEVER a parameter
+	std::string typeD("imstn");
+
+	// arguments points to the arglist after the modestring
+	std::vector<std::string> param_list = cmd.getParamList();
+	std::vector<std::string>::const_iterator arguments = param_list.begin();
+	arguments += 2;
+	std::vector<std::string>::const_iterator arguments_end = param_list.end();
+	
+	// whether or not the current mode should be added 
+	bool add = (modestring[0] == '+');
+	size_t npos = std::string::npos;
+
+	std::list<Mode> mode_list;
+
+	for (size_t i = 0; i < modestring.size(); i++)
+	{
+		char c = modestring[i];
+		if (c == '+' || c == '-')
+		{
+			add = (c == '+');
+			if (i + 1 == modestring.size())
+				srv->sendReply(userfd, ERR_UMODEUNKNOWNFLAG(user->getNickname()));
+			continue;
+		}
+
+		if (typeA.find(c) != npos)
+		{
+			// request list
+			if (arguments == arguments_end)
+			{
+				mode_list.push_back(Mode(add, c));
+				continue;
+			}
+			// mode adds a mask to a list
+			else
+			{
+				mode_list.push_back(Mode(add, c, *arguments));
+				arguments++;
+				continue;
+			}
+		}
+
+		if (typeB.find(c) != npos)
+		{
+			// error
+			if (arguments == arguments_end)
+			{
+				srv->sendReply(userfd, ERR_UMODEUNKNOWNFLAG(user->getNickname()));
+				continue;
+			}
+
+			// mode change
+			mode_list.push_back(Mode(add, c, *arguments));
+			arguments++;
+			continue;
+		}
+
+		if (typeC.find(c) != npos)
+		{
+			// error
+			if (arguments == arguments_end && add)
+			{
+				srv->sendReply(userfd, ERR_UMODEUNKNOWNFLAG(user->getNickname()));
+				continue;
+			}
+
+			// mode is being set
+			if (add)
+			{
+				mode_list.push_back(Mode(add, c, *arguments));
+				arguments++;
+				continue;
+			}
+			// mode is being unset
+			else
+			{
+				mode_list.push_back(Mode(add, c));
+				continue;
+			}
+		}
+
+		if (typeD.find(c) != npos)
+		{
+			// mode change
+			mode_list.push_back(Mode(add, c));
+			continue;
+		}
+
+		// If letter is unrecognized, send error
+		srv->sendReply(userfd, ERR_UMODEUNKNOWNFLAG(user->getNickname()));
+	}
+
+	return mode_list;
+}
+
+static std::vector<Mode> _apply_mode_changes(std::list<Mode> mode_list, Server *srv, int &userfd, Command &cmd)
 {
 	std::string target = cmd.getParam(0);
 	User * user = srv->getUser(userfd);
@@ -533,14 +535,46 @@ static std::vector<Mode> _applyModeChanges(std::list<Mode> mode_list, Server *sr
 	return applied_changes;
 }
 
+static std::string	_get_changed_str(std::vector<Mode> changes)
+{
+	std::string modes;
+	bool last_add;
+	std::string args;
+
+	std::vector<Mode>::const_iterator it = changes.begin();
+	std::vector<Mode>::const_iterator ite = changes.end();
+	if (it != ite)
+		last_add = !(it->getAdd());
+	for (; it != ite; it++)
+	{
+		if (it->getAdd() && !last_add)
+			modes += '+';
+		if (!it->getAdd() && last_add)
+			modes += '-';
+		last_add = it->getAdd();
+		modes += it->getMode();
+		if (!it->getArg().empty())
+			args += it->getArg() + " ";
+	}
+
+	if (!args.empty())
+	{
+		args.erase(args.end() - 1);
+		modes += " " + args;
+	}
+	
+	return modes;
+}
+
 void	channelmode(Server *srv, int &userfd, Command &cmd)
 {
 
 	if (_channel_mode_error(srv, userfd, cmd))
 		return;
 
+	std::string target = cmd.getParam(0);
 	User * user = srv->getUser(userfd);
-
+	Channel * channel = srv->getChannel(target);
 	std::string modestring = cmd.getParam(1);
 
 	// If first char isnt + or -, handle error however we want
@@ -552,11 +586,9 @@ void	channelmode(Server *srv, int &userfd, Command &cmd)
 
 	std::list<Mode> mode_list = _modestring_parsing(modestring, srv, userfd, cmd);
 
-	// Now mode_list is filled with the different recognized mode changes requested
+	std::vector<Mode> applied_changes = _apply_mode_changes(mode_list, srv, userfd, cmd);
 
-	std::vector<Mode> applied_changes = _applyModeChanges(mode_list, srv, userfd, cmd);
+	std::string changed_str = _get_changed_str(applied_changes);
 
-	// --> Send message to all joined users to inform them of the changes
-	(void) applied_changes;
-
+	channel->sendToAllMembers(":" + user->getMask() + " MODE " + target + " " + changed_str);
 }

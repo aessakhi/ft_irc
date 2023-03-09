@@ -37,3 +37,16 @@ std::string Mode::getArg() const
 {
 	return _arg;
 }
+
+std::string Mode::str() const
+{
+	std::string str;
+	if (_add)
+		str += '+';
+	else
+		str += '-';
+	str += _mode;
+	if (!_arg.empty())
+		str += " " + _arg;
+	return str;
+}

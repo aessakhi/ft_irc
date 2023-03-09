@@ -26,6 +26,7 @@ class Mode
 		bool getAdd() const;
 		char getMode() const;
 		std::string getArg() const;
+		std::string str() const;
 };
 
 #endif
