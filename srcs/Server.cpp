@@ -3,7 +3,24 @@
 Server::Server(const std::string & name, const std::string & port, const std::string & password, const std::string hostname): _name(name), _port(port), _pwd(password),_hostname(hostname), _listenfd(0), _epollfd(0)
 {}
 
-Server::~Server(){}
+Server::~Server()
+{
+	// delete channels
+	std::map<std::string, Channel *>::iterator it_chan = _channelMap.begin();
+	std::map<std::string, Channel *>::iterator ite_chan = _channelMap.end();
+	for (; it_chan != ite_chan; it_chan++)
+	{
+		delete it_chan->second;
+	}
+
+	// delete users
+	std::map<int, User *>::iterator it_user = _UserList.begin();
+	std::map<int, User *>::iterator ite_user = _UserList.end();
+	for (; it_user != ite_user; it_user++)
+	{
+		delete it_user->second;
+	}
+}
 
 void	Server::_createsocket()
 {
