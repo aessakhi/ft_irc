@@ -12,7 +12,7 @@ void	printReply(std::string s)
 
 void	printRecv(char * s, size_t n)
 {
-	std::cout << BBLU << "<< \"";
+	std::cout << std::endl << BLU << "<< \"";
 	if (n >= 2)
 	{
 		if (s[n - 2] == '\r' && s[n - 1] == '\n')
