@@ -590,5 +590,6 @@ void	channelmode(Server *srv, int &userfd, Command &cmd)
 
 	std::string changed_str = _get_changed_str(applied_changes);
 
-	channel->sendToAllMembers(":" + user->getMask() + " MODE " + target + " " + changed_str);
+	if (!changed_str.empty())
+		channel->sendToAllMembers(":" + user->getMask() + " MODE " + target + " " + changed_str);
 }
