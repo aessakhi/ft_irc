@@ -53,6 +53,11 @@ void	join(Server *srv, int &userfd, Command &cmd)
 			{
 				std::string msg = ":" + user->getMask() + " JOIN " + cmd.getParam(0);
 				channel->sendToAllMembers(msg);
+				if (channel->isTopicSet())
+					srv->sendReply(userfd, RPL_TOPIC(user->getNickname(), *it, channel->getTopic()));
+				char symbol = (channel->secretMode() ? '@' : '=');
+				srv->sendReply(userfd, RPL_NAMREPLY(user->getNickname(), symbol, *it, channel->namesStr(user)));
+				srv->sendReply(userfd, RPL_ENDOFNAMES(user->getNickname(), *it));
 				break;
 			}
 		}
