@@ -18,6 +18,7 @@ SRC_NAMES +=	CAP.cpp \
 				MODE-channel.cpp \
 				MODE-user.cpp \
 				NICK.cpp \
+				KICK.cpp \
 				PASS.cpp \
 				PART.cpp \
 				USER.cpp \

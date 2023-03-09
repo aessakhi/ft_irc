@@ -179,6 +179,7 @@ void	Server::_initCmdMap()
 	this->_cmdMap["NAMES"] = &names;
 	this->_cmdMap["QUIT"] = &quit;
 	this->_cmdMap["INVITE"] = &invite;
+	this->_cmdMap["KICK"] = &kick;
 }
 
 void	Server::init()

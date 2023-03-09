@@ -381,20 +381,9 @@ err_codes Channel::invite(User *from, User *to)
 	return err_noerror;
 }
 
-err_codes Channel::kick(User *from, User *to)
+void Channel::kick(User *to)
 {
-	if (!isMember(from))
-		return err_notonchannel;
-	
-	if (!isOp(from))
-		return err_chanoprivsneeded;
-
-	if (!isMember(to))
-		return err_usernotinchannel;
-	
 	std::remove(_members.begin(), _members.end(), to);
-
-	return err_noerror;
 }
 
 std::vector<std::string> Channel::namesVect(User *user) const

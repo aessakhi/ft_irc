@@ -284,15 +284,8 @@ class Channel
 		*/
 		err_codes invite(User *from, User *to);
 
-		/*
-		Tries to kick user from the channel
-		Can return :
-		- err_notonchannel
-		- err_chanoprivsneeded
-		- err_useronchannel
-		- err_noerror on success
-		*/
-		err_codes kick(User *from, User *to);
+		/* Kicks user from the channel */
+		void kick(User *to);
 
 		/* Returns the list of names of the users on this channel, with prefixes.
 		If a user is invisible, the requesting user has to be in the channel to view them.
