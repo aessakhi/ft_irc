@@ -128,22 +128,30 @@ bool	wildcompare(const char * s1, const char * s2)
 		if ( (s1[i] != s2[i]) && (s1[i] == '*') )
 		{
 			// skip 0, 1, 2... characters in s2
-			for (int test = 0; s2[test]; test++)
+			int test = 0;
+			while (true)
 			{
 				if (wildcompare(s1 + i + 1, s2 + i + test))
 					return true;
-			}
+				if (!s2[test])
+					break;
+				test++;
+			};
 		}
 
 		// * wildcard on s2
 		if ( (s1[i] != s2[i]) && (s2[i] == '*') )
 		{
 			// skip 0, 1, 2... characters in s1
-			for (int test = 0; s1[test]; test++)
+			int test = 0;
+			while (true)
 			{
 				if (wildcompare(s1 + i + test, s2 + i + 1))
 					return true;
-			}
+				if (!s1[test])
+					break;
+				test++;
+			};
 		}
 		
 		return false;
