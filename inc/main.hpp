@@ -31,7 +31,6 @@ class Command;
 class Mode;
 class Server;
 class User;
-class UserMask;
 
 /* OTHER FILES */
 #include "codes.hpp"
@@ -45,7 +44,6 @@ class UserMask;
 #include "Mode.hpp"
 #include "Server.hpp"
 #include "User.hpp"
-#include "UserMask.hpp"
 
 
 #define RECV_BUFFER_SIZE 512

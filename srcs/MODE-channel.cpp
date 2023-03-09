@@ -18,28 +18,15 @@ static bool _is_digits(std::string s)
 /* ----------BANS---------- */
 /* ------------------------ */
 
-static bool _send_ban_list(std::vector<UserMask> mask_list, Server *srv, int &userfd, Command &cmd)
+static bool _send_ban_list(std::vector<std::string> mask_list, Server *srv, int &userfd, Command &cmd)
 {
 	std::string target = cmd.getParam(0);
 	User * user = srv->getUser(userfd);
-	std::vector<UserMask>::const_iterator mask_it = mask_list.begin();
-	std::vector<UserMask>::const_iterator mask_ite = mask_list.end();
+	std::vector<std::string>::const_iterator mask_it = mask_list.begin();
+	std::vector<std::string>::const_iterator mask_ite = mask_list.end();
 	for (; mask_it != mask_ite; mask_it++)
-		srv->sendReply(userfd, RPL_BANLIST(user->getNickname(), target, mask_it->getMask()));
+		srv->sendReply(userfd, RPL_BANLIST(user->getNickname(), target, *mask_it));
 	srv->sendReply(userfd, RPL_ENDOFBANLIST(user->getNickname(), target));
-	return false;
-}
-
-static bool _add_to_ban_list(std::string arg, Channel * channel)
-{
-	UserMask usermask;
-	
-	if (isMask(arg))
-		usermask.initFromMask(arg);
-	else
-		usermask.initFromNick(arg);
-	channel->banUser(usermask);
-
 	return false;
 }
 
@@ -55,7 +42,7 @@ static bool _apply_ban(Mode mode, Channel * channel, Server *srv, int &userfd, C
 	// Add to list
 	if (mode.getAdd())
 	{
-		_add_to_ban_list(mode.getArg(), channel);
+		channel->banUser(mode.getArg());
 		return true ;
 	}
 
@@ -68,29 +55,16 @@ static bool _apply_ban(Mode mode, Channel * channel, Server *srv, int &userfd, C
 /* ----------BAN-EXCEPTS---------- */
 /* ------------------------------- */
 
-static bool _send_ban_except_list(std::vector<UserMask> mask_list, Server *srv, int &userfd, Command &cmd)
+static bool _send_ban_except_list(std::vector<std::string> mask_list, Server *srv, int &userfd, Command &cmd)
 {
 	std::string target = cmd.getParam(0);
 	User * user = srv->getUser(userfd);
-	std::vector<UserMask>::const_iterator mask_it = mask_list.begin();
-	std::vector<UserMask>::const_iterator mask_ite = mask_list.end();
+	std::vector<std::string>::const_iterator mask_it = mask_list.begin();
+	std::vector<std::string>::const_iterator mask_ite = mask_list.end();
 	for (; mask_it != mask_ite; mask_it++)
-		srv->sendReply(userfd, RPL_EXCEPTLIST(user->getNickname(), target, mask_it->getMask()));
+		srv->sendReply(userfd, RPL_EXCEPTLIST(user->getNickname(), target, *mask_it));
 	srv->sendReply(userfd, RPL_ENDOFEXCEPTLIST(user->getNickname(), target));
 	return false;
-}
-
-static bool _add_to_ban_except_list(std::string arg, Channel * channel)
-{
-	UserMask usermask;
-	
-	if (isMask(arg))
-		usermask.initFromMask(arg);
-	else
-		usermask.initFromNick(arg);
-	channel->addBanExcept(usermask);
-
-	return false ;
 }
 
 static bool _apply_ban_except(Mode mode, Channel * channel, Server *srv, int &userfd, Command &cmd)
@@ -105,7 +79,7 @@ static bool _apply_ban_except(Mode mode, Channel * channel, Server *srv, int &us
 	// Add to list
 	if (mode.getAdd())
 	{
-		_add_to_ban_except_list(mode.getArg(), channel);
+		channel->addBanExcept(mode.getArg());
 		return true ;
 	}
 
@@ -118,29 +92,16 @@ static bool _apply_ban_except(Mode mode, Channel * channel, Server *srv, int &us
 /* ----------INVITE-EXCEPTS---------- */
 /* ---------------------------------- */
 
-static bool _send_invite_except_list(std::vector<UserMask> mask_list, Server *srv, int &userfd, Command &cmd)
+static bool _send_invite_except_list(std::vector<std::string> mask_list, Server *srv, int &userfd, Command &cmd)
 {
 	std::string target = cmd.getParam(0);
 	User * user = srv->getUser(userfd);
-	std::vector<UserMask>::const_iterator mask_it = mask_list.begin();
-	std::vector<UserMask>::const_iterator mask_ite = mask_list.end();
+	std::vector<std::string>::const_iterator mask_it = mask_list.begin();
+	std::vector<std::string>::const_iterator mask_ite = mask_list.end();
 	for (; mask_it != mask_ite; mask_it++)
-		srv->sendReply(userfd, RPL_INVEXLIST(user->getNickname(), target, mask_it->getMask()));
+		srv->sendReply(userfd, RPL_INVEXLIST(user->getNickname(), target, *mask_it));
 	srv->sendReply(userfd, RPL_ENDOFINVEXLIST(user->getNickname(), target));
 	return false;
-}
-
-static bool _add_to_invite_except_list(std::string arg, Channel * channel)
-{
-	UserMask usermask;
-	
-	if (isMask(arg))
-		usermask.initFromMask(arg);
-	else
-		usermask.initFromNick(arg);
-	channel->addInviteExcept(usermask);
-
-	return false ;
 }
 
 static bool _apply_invite_except(Mode mode, Channel * channel, Server *srv, int &userfd, Command &cmd)
@@ -155,7 +116,7 @@ static bool _apply_invite_except(Mode mode, Channel * channel, Server *srv, int 
 	// Add to list
 	if (mode.getAdd())
 	{
-		_add_to_invite_except_list(mode.getArg(), channel);
+		channel->addInviteExcept(mode.getArg());
 		return true ;
 	}
 
@@ -167,19 +128,6 @@ static bool _apply_invite_except(Mode mode, Channel * channel, Server *srv, int 
 /* ----------------------------- */
 /* ----------OPERATORS---------- */
 /* ----------------------------- */
-
-static bool _add_to_operator_list(std::string arg, Channel * channel)
-{
-	UserMask usermask;
-	
-	if (isMask(arg))
-		usermask.initFromMask(arg);
-	else
-		usermask.initFromNick(arg);
-	channel->addOperator(usermask);
-
-	return false ;
-}
 
 static bool _apply_operator(Mode mode, Channel * channel, Server *srv, int &userfd, Command &cmd)
 {
@@ -195,7 +143,7 @@ static bool _apply_operator(Mode mode, Channel * channel, Server *srv, int &user
 	// Add to list
 	if (mode.getAdd())
 	{
-		_add_to_operator_list(mode.getArg(), channel);
+		channel->addOperator(mode.getArg());
 		return true ;
 	}
 
@@ -207,19 +155,6 @@ static bool _apply_operator(Mode mode, Channel * channel, Server *srv, int &user
 /* -------------------------- */
 /* ----------VOICED---------- */
 /* -------------------------- */
-
-static bool _add_to_voiced_list(std::string arg, Channel * channel)
-{
-	UserMask usermask;
-	
-	if (isMask(arg))
-		usermask.initFromMask(arg);
-	else
-		usermask.initFromNick(arg);
-	channel->addVoiced(usermask);
-
-	return false ;
-}
 
 static bool _apply_voiced(Mode mode, Channel * channel, Server *srv, int &userfd, Command &cmd)
 {
@@ -235,7 +170,7 @@ static bool _apply_voiced(Mode mode, Channel * channel, Server *srv, int &userfd
 	// Add to list
 	if (mode.getAdd())
 	{
-		_add_to_voiced_list(mode.getArg(), channel);
+		channel->addVoiced(mode.getArg());
 		return true ;
 	}
 

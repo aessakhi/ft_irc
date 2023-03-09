@@ -17,16 +17,16 @@ class Channel
 		std::string	_modestring;
 
 		/* List of all operator masks for this channel */
-		std::vector<UserMask> _operators;
+		std::vector<std::string> _operators;
 
 		/* Topic of the channel */
 		std::string	_topic;
 
 		/* List of all user masks that are banned from this channel */
-		std::vector<UserMask> _banned;
+		std::vector<std::string> _banned;
 
 		/* List of user masks that are exempt from being banned */
-		std::vector<UserMask> _ban_except;
+		std::vector<std::string> _ban_except;
 
 		/* If _limit_mode, max number of clients that can join the channel. */
 		size_t	_capacity;
@@ -41,7 +41,7 @@ class Channel
 		bool	_invite_mode;
 
 		/* If _invite_except_mode, list of user masks that are exempt from needing an invite to join */
-		std::vector<UserMask> _invite_except;
+		std::vector<std::string> _invite_except;
 
 		/* If _key_mode, key required to join the channel */
 		std::string	_key;
@@ -50,7 +50,7 @@ class Channel
 		bool	_key_mode;
 
 		/* If _moderated_mode, list of user masks still able to talk */
-		std::vector<UserMask> _voiced;
+		std::vector<std::string> _voiced;
 
 		/* If true, users need privileges to send messages on the channel */
 		bool	_moderated_mode;
@@ -68,7 +68,7 @@ class Channel
 		bool	_find_mask(std::vector<User *> vect, User * user) const;
 
 		/*  */
-		bool	_find_mask(std::vector<UserMask> vect, User * user) const;
+		bool	_find_mask(std::vector<std::string> vect, User * user) const;
 
 		/* Set _limit_mode value to state */
 		void	_setLimitMode(bool state);
@@ -126,19 +126,19 @@ class Channel
 		std::vector<User *>		getUsers() const;
 
 		/* Returns list of operator masks */
-		std::vector<UserMask>	getOperators() const;
+		std::vector<std::string>	getOperators() const;
 
 		/* Returns list of banned masks */
-		std::vector<UserMask>	getBanned() const;
+		std::vector<std::string>	getBanned() const;
 
 		/* Returns list of ban-exempt masks */
-		std::vector<UserMask>	getBanExcept() const;
+		std::vector<std::string>	getBanExcept() const;
 
 		/* Returns list of invite-exempt masks */
-		std::vector<UserMask>	getInviteExcept() const;
+		std::vector<std::string>	getInviteExcept() const;
 
 		/* Returns list of voiced masks */
-		std::vector<UserMask>	getVoiced() const;
+		std::vector<std::string>	getVoiced() const;
 
 	/* ----------ADDING USERS TO LISTS---------- */
 
@@ -146,22 +146,22 @@ class Channel
 		void	addMember(User *user);
 		
 		/* Adds a user mask to the operators without checking for permissions. */
-		void	addOperator(UserMask user);
+		void	addOperator(std::string user);
 
 		/* Adds a user mask to the list of banned users. */
-		void	banUser(UserMask user);
+		void	banUser(std::string user);
 
 		/* Adds a user mask to the list of banned-exempt users. */
-		void	addBanExcept(UserMask user);
+		void	addBanExcept(std::string user);
 
 		/* Adds a user mask to the list of invite-exempt users. */
-		void	addInviteExcept(UserMask user);
+		void	addInviteExcept(std::string user);
 
 		/* Adds a user to the list of invited users */
 		void	addInvite(User *user);
 
 		/* Adds a user mask to the list of voice users */
-		void	addVoiced(UserMask user);
+		void	addVoiced(std::string user);
 
 	/* ----------REMOVING USERMASKS FROM LISTS---------- */
 

@@ -51,19 +51,19 @@ size_t	Channel::capacity() const
 std::vector<User *>		Channel::getUsers() const
 { return _members ; }
 
-std::vector<UserMask>	Channel::getOperators() const
+std::vector<std::string>	Channel::getOperators() const
 { return _operators ; }
 
-std::vector<UserMask>	Channel::getBanned() const
+std::vector<std::string>	Channel::getBanned() const
 { return _banned ; }
 
-std::vector<UserMask>	Channel::getBanExcept() const
+std::vector<std::string>	Channel::getBanExcept() const
 { return _ban_except ; }
 
-std::vector<UserMask>	Channel::getInviteExcept() const
+std::vector<std::string>	Channel::getInviteExcept() const
 { return _invite_except ; }
 
-std::vector<UserMask>	Channel::getVoiced() const
+std::vector<std::string>	Channel::getVoiced() const
 { return _voiced ; }
 
 /* ----------ADDING USERS TO LISTS---------- */
@@ -71,34 +71,34 @@ std::vector<UserMask>	Channel::getVoiced() const
 void	Channel::addMember(User *user) /* Need to add a check if a user is already in the list */
 { _members.push_back(user); }
 
-void	Channel::addOperator(UserMask user)
+void	Channel::addOperator(std::string user)
 { _operators.push_back(user); }
 
-void	Channel::banUser(UserMask user)
+void	Channel::banUser(std::string user)
 { _banned.push_back(user); }
 
-void	Channel::addBanExcept(UserMask user)
+void	Channel::addBanExcept(std::string user)
 { _ban_except.push_back(user); }
 
-void	Channel::addInviteExcept(UserMask user)
+void	Channel::addInviteExcept(std::string user)
 { _invite_except.push_back(user); }
 
 void	Channel::addInvite(User * user)
 { _invited.push_back(user) ; }
 
-void	Channel::addVoiced(UserMask user)
+void	Channel::addVoiced(std::string user)
 { _voiced.push_back(user) ; }
 
 /* ----------REMOVING USERMASKS FROM LISTS---------- */
 
 void	Channel::removeOperator(std::string str)
 {
-	std::vector<UserMask>::iterator it = _operators.begin();
-	std::vector<UserMask>::iterator ite = _operators.end();
-	std::vector<UserMask>::iterator it_copy;
+	std::vector<std::string>::iterator it = _operators.begin();
+	std::vector<std::string>::iterator ite = _operators.end();
+	std::vector<std::string>::iterator it_copy;
 	for (; it != ite; it++)
 	{
-		if (sided_wildcompare(str, it->getMask()))
+		if (sided_wildcompare(str, *it))
 		{
 			it_copy = it;
 			it--;
@@ -110,12 +110,12 @@ void	Channel::removeOperator(std::string str)
 
 void	Channel::unbanUser(std::string str)
 {
-	std::vector<UserMask>::iterator it = _banned.begin();
-	std::vector<UserMask>::iterator ite = _banned.end();
-	std::vector<UserMask>::iterator it_copy;
+	std::vector<std::string>::iterator it = _banned.begin();
+	std::vector<std::string>::iterator ite = _banned.end();
+	std::vector<std::string>::iterator it_copy;
 	for (; it != ite; it++)
 	{
-		if (sided_wildcompare(str, it->getMask()))
+		if (sided_wildcompare(str, *it))
 		{
 			it_copy = it;
 			it--;
@@ -127,12 +127,12 @@ void	Channel::unbanUser(std::string str)
 
 void	Channel::removeBanExcept(std::string str)
 {
-	std::vector<UserMask>::iterator it = _ban_except.begin();
-	std::vector<UserMask>::iterator ite = _ban_except.end();
-	std::vector<UserMask>::iterator it_copy;
+	std::vector<std::string>::iterator it = _ban_except.begin();
+	std::vector<std::string>::iterator ite = _ban_except.end();
+	std::vector<std::string>::iterator it_copy;
 	for (; it != ite; it++)
 	{
-		if (sided_wildcompare(str, it->getMask()))
+		if (sided_wildcompare(str, *it))
 		{
 			it_copy = it;
 			it--;
@@ -144,12 +144,12 @@ void	Channel::removeBanExcept(std::string str)
 
 void	Channel::removeInviteExcept(std::string str)
 {
-	std::vector<UserMask>::iterator it = _invite_except.begin();
-	std::vector<UserMask>::iterator ite = _invite_except.end();
-	std::vector<UserMask>::iterator it_copy;
+	std::vector<std::string>::iterator it = _invite_except.begin();
+	std::vector<std::string>::iterator ite = _invite_except.end();
+	std::vector<std::string>::iterator it_copy;
 	for (; it != ite; it++)
 	{
-		if (sided_wildcompare(str, it->getMask()))
+		if (sided_wildcompare(str, *it))
 		{
 			it_copy = it;
 			it--;
@@ -161,12 +161,12 @@ void	Channel::removeInviteExcept(std::string str)
 
 void	Channel::removeVoiced(std::string str)
 {
-	std::vector<UserMask>::iterator it = _voiced.begin();
-	std::vector<UserMask>::iterator ite = _voiced.end();
-	std::vector<UserMask>::iterator it_copy;
+	std::vector<std::string>::iterator it = _voiced.begin();
+	std::vector<std::string>::iterator ite = _voiced.end();
+	std::vector<std::string>::iterator it_copy;
 	for (; it != ite; it++)
 	{
-		if (sided_wildcompare(str, it->getMask()))
+		if (sided_wildcompare(str, *it))
 		{
 			it_copy = it;
 			it--;
@@ -265,13 +265,13 @@ bool	Channel::_find_mask(std::vector<User *> vect, User * user) const
 	return false;
 }
 
-bool	Channel::_find_mask(std::vector<UserMask> vect, User * user) const
+bool	Channel::_find_mask(std::vector<std::string> vect, User * user) const
 {
-	std::vector<UserMask>::const_iterator it = vect.begin();
-	std::vector<UserMask>::const_iterator ite = vect.end();
+	std::vector<std::string>::const_iterator it = vect.begin();
+	std::vector<std::string>::const_iterator ite = vect.end();
 	for (; it != ite; it++)
 	{
-		if (wildcompare(it->getMask(), user->getMask()))
+		if (wildcompare(*it, user->getMask()) || wildcompare(*it, user->getNickname()))
 			return true;
 	}
 	return false;
@@ -334,7 +334,7 @@ err_codes Channel::join(User *user, std::string s = "")
 	// Adding user
 
 	if (_members.empty())
-		addOperator(user);
+		addOperator(user->getMask());
 	if (!isMember(user))
 		addMember(user);
 
