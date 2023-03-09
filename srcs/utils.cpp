@@ -177,6 +177,7 @@ std::string	no_crlf(std::string s)
 
 bool	sided_wildcompare(const char * s1, const char * s2)
 {
+	std::cout << "Comparing '" << MGT << s1 << RESET << "' with '" << MGT << s2 << RESET << "'" << std::endl;
 	for (int i = 0; s1[i] || s2[i]; i++)
 	{
 		// case-insensitive basic comparison
@@ -184,18 +185,22 @@ bool	sided_wildcompare(const char * s1, const char * s2)
 			continue;
 		
 		// single char wildcard
-		if ( (s1[i] != s2[i]) && (s1[i] == '?' || s2[i] == '?') )
+		if ( (s1[i] != s2[i]) && (s1[i] == '?') )
 			continue;
 		
 		// * wildcard on s1
 		if ( (s1[i] != s2[i]) && (s1[i] == '*') )
 		{
 			// skip 0, 1, 2... characters in s2
-			for (int test = 0; s2[test]; test++)
+			int test = 0;
+			while (true)
 			{
 				if (sided_wildcompare(s1 + i + 1, s2 + i + test))
 					return true;
-			}
+				if (!s2[test])
+					break;
+				test++;
+			};
 		}
 
 		return false;
