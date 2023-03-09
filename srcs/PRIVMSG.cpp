@@ -2,13 +2,11 @@
 
 static void	privmsg_channel(Server *srv, int &userfd, Command &cmd, std::string &client)
 {
-	std::cout << "Target is a channel" << std::endl;
-
 	Channel	*channel = srv->getChannel(cmd.getParam(0));
 	User	*sender = srv->getUser(userfd);
 	if (channel == NULL) /* Channel doesn't exist */
 	{
-		srv->sendReply(userfd, ERR_NOSUCHNICK(client, cmd.getParam(0)));
+		srv->sendReply(userfd, ERR_NOSUCHCHANNEL(client, cmd.getParam(0)));
 		return ;
 	}
 	/* Need to check if the sender is banned AND NOT covered by a ban exception + WILL SILENTLY FAIL */
