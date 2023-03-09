@@ -1,5 +1,8 @@
 #include "main.hpp"
 
+void	usermode(Server *srv, int &userfd, Command &cmd);
+void	channelmode(Server *srv, int &userfd, Command &cmd);
+
 void	mode(Server *srv, int &userfd, Command &cmd)
 {
 	if (cmd.paramNumber() == 0)

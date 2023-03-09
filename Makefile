@@ -60,6 +60,8 @@ INC_NAMES =	main.hpp \
 			colors.hpp \
 			commandlist.hpp \
 			exceptions.hpp \
+			print.hpp \
+			utils.hpp \
 
 INC = $(addprefix $(INC_DIR)/, $(INC_NAMES))
 

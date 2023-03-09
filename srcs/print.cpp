@@ -1,4 +1,4 @@
-#include "main.hpp"
+#include "print.hpp"
 
 void	printVect(std::ostream & out, std::vector<std::string> vect)
 {
