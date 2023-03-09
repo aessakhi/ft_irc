@@ -116,6 +116,17 @@ void	Server::sendReply(int fd, std::string s)
 	send(fd, s.data(), s.size(), MSG_NOSIGNAL);
 }
 
+std::vector<Command>	Server::_parseBuffers(struct epoll_event event)
+{
+	std::vector<std::string>	cmds = split(&_buffers[event.data.fd], "\r\n");
+	std::vector<Command>	cmd_vector;
+
+	for (std::vector<std::string>::const_iterator it = cmds.begin(); it != cmds.end(); it++)
+		cmd_vector.push_back(splitCmd(*it));
+	
+	return cmd_vector;
+}
+
 void	Server::_receivemessage(struct epoll_event event)
 {
 	char buf[RECV_BUFFER_SIZE];
@@ -129,18 +140,6 @@ void	Server::_receivemessage(struct epoll_event event)
 	printRecv(buf, ret);
 
 	this->_buffers[event.data.fd].append(buf, ret);
-
-	std::vector<std::string>	cmds = split(&this->_buffers[event.data.fd], "\r\n");
-	std::vector<Command>	cmd_vector;
-
-	for (std::vector<std::string>::const_iterator it = cmds.begin(); it != cmds.end(); it++)
-		cmd_vector.push_back(splitCmd(*it));
-	
-	for (size_t i = 0; i < cmd_vector.size(); i++)
-		printSep(cmd_vector[i]);
-		
-	this->_execCmds(cmd_vector, event.data.fd);
-	/* _removeUserfromServer(event.data.fd); */
 }
 
 void	Server::_removeUserfromServer(int userfd)
@@ -182,11 +181,34 @@ void	Server::_initCmdMap()
 	this->_cmdMap["KICK"] = &kick;
 }
 
-void	Server::init()
+void	Server::epoll_loop()
 {
 	struct	epoll_event ep_event[50];
-	int		nfds;
+	int nfds;
+	std::vector<Command> cmd_vector;
 
+	nfds = epoll_wait(this->_epollfd, ep_event, 50, 3000);
+	if (nfds == -1)
+	{
+		throw EpollWaitException();
+	}
+	for (int i = 0; i < nfds; i++)
+	{
+		if (ep_event[i].data.fd == this->_listenfd)
+		{
+			_acceptnewUser();
+		}
+		else
+		{
+			_receivemessage(ep_event[i]);
+			cmd_vector = _parseBuffers(ep_event[i]);
+			_execCmds(cmd_vector, ep_event[i].data.fd);
+		}
+	}
+}
+
+void	Server::init()
+{
 	this->_initCmdMap();
 
 	this->_createsocket();
@@ -194,22 +216,6 @@ void	Server::init()
 	this->_create_epoll();
 
 	time(&this->_creatime);
-
-	while (1)
-	{
-		nfds = epoll_wait(this->_epollfd, ep_event, 50, 3000);
-		if (nfds == -1)
-		{
-			throw EpollWaitException();
-		}
-		for (int i = 0; i < nfds; i++)
-		{
-			if (ep_event[i].data.fd == this->_listenfd)
-				this->_acceptnewUser();
-			else
-				this->_receivemessage(ep_event[i]);
-		}
-	}
 }
 
 const std::string &	Server::getName() const

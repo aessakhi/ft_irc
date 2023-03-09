@@ -14,4 +14,9 @@ int main(int argc, char **argv)
 	Server ircserv("ircserv", argv[1], argv[2], HOSTNAME);
 
 	ircserv.init();
+
+	while (1)
+	{
+		ircserv.epoll_loop();
+	}
 }

@@ -82,10 +82,14 @@ class Server
 	/* ----------EXECUTION FUNCTIONS---------- */
 
 		void	_removeUserfromServer(int fd);
-		/* "Initializes" the server. For now also contains the epoll_wait loop. */
+
 		void	init();
 
-		/* Easier send() */
+		void	epoll_loop();
+
+		std::vector<Command>	_parseBuffers(struct epoll_event event);
+
+		/* Send s to fd, with \\r\\n appended. Prints the message sent on cout. */
 		void	sendReply(int fd, std::string s);
 
 	/* ----------MEMBER ACCESSORS---------- */
