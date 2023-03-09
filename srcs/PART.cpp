@@ -41,6 +41,12 @@ static void	part_one_chan(Server *srv, int &userfd, Command &cmd, std::string ch
 	channel->sendToAllMembers(reply_str);
 
 	channel->part(user);
+
+	if (channel->getUsers().empty())
+	{
+		srv->getChannelMap()->erase(channel_name);
+		delete channel;
+	}
 }
 
 void	part(Server *srv, int &userfd, Command &cmd)
