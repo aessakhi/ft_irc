@@ -10,6 +10,9 @@ class Channel
 		/* Channel name */
 		const std::string & _name;
 
+		/* Founder of the channel */
+		User * _founder;
+
 		/* List of all users currently in the channel */
 		std::vector<User *> _members;
 

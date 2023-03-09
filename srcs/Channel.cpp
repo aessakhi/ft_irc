@@ -278,7 +278,7 @@ bool	Channel::_find_mask(std::vector<std::string> vect, User * user) const
 }
 
 bool	Channel::isOp(User *user) const
-{ return _find_mask(_operators, user) ; }
+{ return _founder == user || _find_mask(_operators, user) ; }
 
 bool	Channel::isBanned(User *user) const
 { return _find_mask(_banned, user) ; }
@@ -334,7 +334,7 @@ err_codes Channel::join(User *user, std::string s = "")
 	// Adding user
 
 	if (_members.empty())
-		addOperator(user->getMask());
+		_founder = user;
 	if (!isMember(user))
 		addMember(user);
 
