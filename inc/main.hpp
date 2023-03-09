@@ -89,9 +89,6 @@ std::string	no_crlf(std::string s);
 /* Returns the uppercase version of s. */
 std::string toupper(std::string s);
 
-/* Returns true if s is of format *!*\@* where * is at least one char. */
-bool isMask(std::string s);
-
 /* ---------- print.cpp ---------- */
 
 /* Prints a std::vector\<std::string> element by element. */
