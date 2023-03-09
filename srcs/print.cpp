@@ -1,15 +1,5 @@
 #include "print.hpp"
 
-void	printVect(std::ostream & out, std::vector<std::string> vect)
-{
-	for (size_t i = 0; i < vect.size(); i++)
-	{
-		out << vect[i];
-		if (i + 1 != vect.size())
-			out << " ";
-	}
-}
-
 void	printError(std::string s)
 {
 	std::cerr << RED << s << RESET << std::endl;
@@ -18,11 +8,6 @@ void	printError(std::string s)
 void	printReply(std::string s)
 {
 	std::cout << BBLU << ">> \"" << s << "\"" << RESET << std::endl;
-}
-
-void	printFcall(std::string s)
-{
-	std::cout << YLW << "Calling " << toupper(s) << " function" << RESET << std::endl;
 }
 
 void	printRecv(char * s, size_t n)

@@ -118,7 +118,6 @@ void	Server::_execCmds(std::vector<Command> &cmds, int userfd)
 		it_map = this->_cmdMap.find(it->getCmd());
 		if (it_map != this->_cmdMap.end())
 		{
-			printFcall(it->getCmd());
 			this->_cmdMap[toupper(it->getCmd())](this, userfd, *it);
 		}
 		else

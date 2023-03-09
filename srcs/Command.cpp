@@ -69,13 +69,3 @@ std::string Command::getStr() const
 	}
 	return ret;
 }
-
-std::ostream & operator<<(std::ostream & out, const Command & cmd)
-{
-	std::vector<std::string> params = cmd.getParamList();
-	if (cmd.hasPrefix())
-		out << cmd.getPrefix() << " ";
-	out << cmd.getCmd() << " ";
-	printVect(out, params);
-	return out;
-}

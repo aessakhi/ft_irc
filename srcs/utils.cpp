@@ -185,7 +185,6 @@ std::string	no_crlf(std::string s)
 
 bool	sided_wildcompare(const char * s1, const char * s2)
 {
-	std::cout << "Comparing '" << MGT << s1 << RESET << "' with '" << MGT << s2 << RESET << "'" << std::endl;
 	for (int i = 0; s1[i] || s2[i]; i++)
 	{
 		// case-insensitive basic comparison
