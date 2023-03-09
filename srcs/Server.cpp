@@ -18,8 +18,23 @@ Server::~Server()
 	std::map<int, User *>::iterator ite_user = _UserList.end();
 	for (; it_user != ite_user; it_user++)
 	{
-		delete it_user->second;
+		_removeUserfromServer(it_user->first);
 	}
+
+	// delete _listenfd and epollfd
+	if (epoll_ctl(_epollfd, EPOLL_CTL_DEL, _listenfd, NULL) == -1)
+	{
+		throw EpollCtlException();
+	}
+	if (close(_listenfd) == -1)
+	{
+		throw FdCloseException();
+	}
+	if (close(_epollfd) == -1)
+	{
+		throw FdCloseException();
+	}
+
 }
 
 void	Server::_createsocket()
