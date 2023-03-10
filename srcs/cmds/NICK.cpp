@@ -1,5 +1,37 @@
 #include "main.hpp"
 
+/*
+https://dev.to/nichartley/how-do-you-use-irc-311f
+
+It can be at most nine-characters long, and can contain :
+letters (uppercase or lowercase)
+numbers
+hyphens (-)
+underscores (_)
+square brackets ([])
+curly braces ({})
+backslash (\)
+backticks (`)
+pipes (|)
+*/
+
+static bool _is_allowed_char(char c)
+{
+	return (isalnum(c) || (std::string("-_[]{}\\`|").find(c) != std::string::npos));
+}
+
+static bool _is_allowed_nick(std::string s)
+{
+	if (s.size() > 9)
+		return false;
+	for (size_t i = 0; i < s.size(); i++)
+	{
+		if (!_is_allowed_char(s[i]))
+			return false;
+	}
+	return true;
+}
+
 void	nick(Server *srv, int &userfd, Command &cmd)
 {
 	User	*user;
@@ -7,27 +39,38 @@ void	nick(Server *srv, int &userfd, Command &cmd)
 	user = srv->getUser(userfd);
 	if (!user)
 		return ;
+
 	// Number of args check
 	if (cmd.paramNumber() == 0)
 	{
-		srv->sendReply(userfd, ERR_NONICKNAMEGIVEN(cmd.getParam(0)));
+		srv->sendReply(userfd, ERR_NONICKNAMEGIVEN(user->getNickname()));
+		return;
+	}
+
+	std::string requested_nick = cmd.getParam(0);
+
+	// Check if nick has proper format
+	if (!_is_allowed_nick(requested_nick))
+	{
+		if (user->getNickname().empty())
+			srv->sendReply(userfd, ERR_ERRONEUSNICKNAME(requested_nick, requested_nick));
+		else
+			srv->sendReply(userfd, ERR_ERRONEUSNICKNAME(user->getNickname(), requested_nick));
 		return;
 	}
 
 	// Check if nick not in use
-	if (srv->getUserbyNickname(cmd.getParamList()[0]) != NULL)
+	if (srv->getUserbyNickname(requested_nick) != NULL)
 	{
 		if (user->getNickname().empty())
-			srv->sendReply(userfd, ERR_NICKNAMEINUSE(cmd.getParam(0), cmd.getParam(0)));
+			srv->sendReply(userfd, ERR_NICKNAMEINUSE(requested_nick, requested_nick));
 		else
-			srv->sendReply(userfd, ERR_NICKNAMEINUSE(user->getNickname(), cmd.getParam(0)));
+			srv->sendReply(userfd, ERR_NICKNAMEINUSE(user->getNickname(), requested_nick));
 		return;
 	}
 
-	/* Need to check here if there are disallowed characters */
-
 	user->setOldnick(user->getNickname());
-	user->setNickname(cmd.getParam(0));
+	user->setNickname(requested_nick);
 	user->setNick(true);
 	if (user->checkAuth() && !user->getAuth())
 	{
