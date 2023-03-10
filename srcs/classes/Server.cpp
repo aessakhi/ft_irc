@@ -219,6 +219,7 @@ void	Server::_initCmdMap()
 	this->_cmdMap["TOPIC"] = &topic;
 	this->_cmdMap["USER"] = &user;
 	this->_cmdMap["VERSION"] = &version;
+	this->_cmdMap["WHO"] = &who;
 }
 
 void	Server::epoll_loop()

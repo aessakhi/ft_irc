@@ -35,6 +35,7 @@ CMD_NAMES	+=	AWAY.cpp \
 				TOPIC.cpp \
 				USER.cpp \
 				VERSION.cpp \
+				WHO.cpp \
 
 # OTHER FILES
 SRC_NAMES	+=	main.cpp \

@@ -32,7 +32,7 @@
 #define RPL_UNAWAY(client) ("305 " + client + " :You are no longer marked as being away")
 #define RPL_NOWAWAY(client) ("306 " + client + " :You have been marked as being away")
 
-#define RPL_WHOREPLY(client, channel, username, host, servername, nick, flags, realname) ("352 " + client + ' ' + channel + ' ' + username + ' ' + host + " " + servername + " " + nick + ' ' + flags + " :0 " + realname)
+#define RPL_WHOREPLY(client, channel, username, host, servername, nick, flags, hopcount, realname) ("352 " + client + ' ' + channel + ' ' + username + ' ' + host + " " + servername + " " + nick + ' ' + flags + " :" + hopcount + " " + realname)
 #define RPL_ENDOFWHO(client, mask) ("315 " + client + " " + mask + " :End of WHO list")
 #define RPL_WHOISREGNICK(client, nick) ("307 " + client + " " + nick + " :has identified for this nick")
 #define RPL_WHOISUSER(client, nick, username, host, realname) ("311 " + client + " " + nick + " " + username + " " + host + " * :" + realname)
