@@ -36,7 +36,7 @@ int main(int argc, char **argv)
 		{}
 	}
 
-	std::cout << std::endl << BRED << "Shutting down..." << RESET << std::endl;
+	std::cout << "\r      " << std::endl << BRED << "Shutting down..." << RESET << std::endl;
 
 	return 0;
 }
