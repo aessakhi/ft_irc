@@ -120,6 +120,9 @@ class Server
 		/* Return the channel map, need to use it in JOIN since the channel map is private */
 		std::map<std::string, Channel *> *getChannelMap();
 
+		/* Return the user map */
+		std::map<int, User *> getUserMap() const;
+
 		/* Return creatime of the server */
 		time_t getCreatime() const;
 };

@@ -69,6 +69,21 @@ void	nick(Server *srv, int &userfd, Command &cmd)
 		return;
 	}
 
+	// If the nickname was changed (i.e. if user had a nickname before), message all server users to inform them of the change
+	if (user->getNick())
+	{
+		std::map<int, User *> user_map = srv->getUserMap();
+		std::map<int, User *>::const_iterator it = user_map.begin();
+		std::map<int, User *>::const_iterator ite = user_map.end();
+		for (; it != ite; it++)
+		{
+			srv->sendReply(it->first, ":" + user->getMask() + " NICK " + requested_nick);
+		}
+		user->setOldnick(user->getNickname());
+		user->setNickname(requested_nick);
+		return ;
+	}
+
 	user->setOldnick(user->getNickname());
 	user->setNickname(requested_nick);
 	user->setNick(true);

@@ -324,6 +324,11 @@ std::map<std::string, Channel *> *Server::getChannelMap()
 	return &(this->_channelMap);
 }
 
+std::map<int, User *> Server::getUserMap() const
+{
+	return _UserList;
+}
+
 time_t Server::getCreatime() const
 { 
 	return (this->_creatime);
