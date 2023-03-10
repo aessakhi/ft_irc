@@ -3,17 +3,19 @@ NAME = ircserv
 CXX = c++
 CXXFLAGS = -Wall -Wextra -Werror -std=c++98
 
-SRC_DIR =		srcs
+SRC_DIR 	= srcs
+CMD_DIR		= cmds
+CLASS_DIR	= classes
 
 # CLASSES
-SRC_NAMES +=	Channel.cpp \
+CLASS_NAMES	+=	Channel.cpp \
 				Command.cpp \
 				Mode.cpp \
 				Server.cpp \
 				User.cpp \
 
 # COMMANDS
-SRC_NAMES +=	AWAY.cpp \
+CMD_NAMES	+=	AWAY.cpp \
 				CAP.cpp \
 				INFO.cpp \
 				INVITE.cpp \
@@ -35,13 +37,20 @@ SRC_NAMES +=	AWAY.cpp \
 				VERSION.cpp \
 
 # OTHER FILES
-SRC_NAMES +=	main.cpp \
+SRC_NAMES	+=	main.cpp \
 				utils.cpp \
 				print.cpp \
 
-SRCS =	$(addprefix $(SRC_DIR)/, $(SRC_NAMES))
+CLASSES		= $(addprefix $(CLASS_DIR)/, $(CLASS_NAMES))
 
-OBJ_DIR =	./objs
+CMDS		= $(addprefix $(CMD_DIR)/, $(CMD_NAMES))
+
+SRC_NAMES	+= $(CMDS)
+SRC_NAMES	+= $(CLASSES)
+
+SRCS		= $(addprefix $(SRC_DIR)/, $(SRC_NAMES))
+
+OBJ_DIR 	= objs
 OBJ_NAMES	= $(SRC_NAMES:.cpp=.o)
 OBJS		= $(addprefix $(OBJ_DIR)/, $(OBJ_NAMES))
 
@@ -67,21 +76,18 @@ INC = $(addprefix $(INC_DIR)/, $(INC_NAMES))
 
 RM =	rm -rf
 
+all:	$(NAME)
+
 $(NAME):	$(OBJS)
 			@echo -n "[\033[31mx\033[0m] Compiling $(NAME)\r"
 			@$(CXX) -o $(NAME) $(OBJS) $(CXXFLAGS)
 			@echo "[\033[92m✓\033[0m] \033[94mCompiled $(NAME) !\033[0m"
 
-$(OBJ_DIR)/%.o :	$(SRC_DIR)/%.cpp $(INC) | $(OBJ_DIR)
-					@mkdir -p $(dir $@)
+$(OBJ_DIR)/%.o :	$(SRC_DIR)/%.cpp $(INC)
+					@mkdir -p $(@D)
 					@echo -n "[\033[31mx\033[0m] Compiling $<\r"
-					@$(CXX) $(CXXFLAGS) -c $< -o $@ -I./$(INC_DIR)/
+					@$(CXX) $(CXXFLAGS) -c $< -o $@ -I$(INC_DIR)
 					@echo "[\033[32m✓\033[0m] Compiled $<  "
-
-$(OBJ_DIR) :
-				@mkdir -p $(OBJ_DIR)
-
-all: $(NAME)
 
 clean:
 	@echo "\033[31mDeleting .o files\033[0m"
@@ -91,6 +97,6 @@ fclean:	clean
 	@echo "\033[31mDeleting $(NAME)\033[0m"
 	@$(RM) $(NAME)
 
-re: fclean all
+re:	fclean all
 
 .PHONY: all clean re fclean
