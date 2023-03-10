@@ -381,9 +381,9 @@ err_codes Channel::invite(User *from, User *to)
 	return err_noerror;
 }
 
-void Channel::kick(User *to)
+void Channel::kick(User *user)
 {
-	std::remove(_members.begin(), _members.end(), to);
+	part(user);
 }
 
 std::vector<std::string> Channel::namesVect(User *user) const
