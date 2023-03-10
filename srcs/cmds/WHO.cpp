@@ -1,5 +1,25 @@
 #include "main.hpp"
 
+static std::string _get_user_flags(User * user, Channel * channel)
+{
+	std::string flags;
+
+	if (user->isAway())
+		flags = "G";
+	else
+		flags = "H";
+	if (user->isOperator())
+		flags += "*";
+	if (channel->isFounder(user))
+		flags += "~";
+	else if (channel->isOp(user))
+		flags += "@";
+	else if (channel->isVoiced(user))
+		flags += "+";
+
+	return flags ;
+}
+
 void	who(Server * srv, int & userfd, Command & cmd)
 {
 	User * user = srv->getUser(userfd);
@@ -22,14 +42,12 @@ void	who(Server * srv, int & userfd, Command & cmd)
 			std::vector<User *>::const_iterator it = user_list.begin();
 			std::vector<User *>::const_iterator ite = user_list.end();
 			User * current;
-			std::string flags;
 			for (; it != ite; it++)
 			{
 				current = *it;
 				if (!current->isInvisible())
 				{
-					// set flags here
-					srv->sendReply(userfd, RPL_WHOREPLY(user->getNickname(), target, current->getUsername(), current->getHostname(), srv->getName(), current->getNickname(), flags, "0", current->getRealname()));
+					srv->sendReply(userfd, RPL_WHOREPLY(user->getNickname(), target, current->getUsername(), current->getHostname(), srv->getName(), current->getNickname(), _get_user_flags(current, channel), "0", current->getRealname()));
 				}
 			}
 		}
