@@ -11,5 +11,8 @@ void	srv_time(Server *srv, int &userfd, Command &cmd)
 	time(&rawtime);
 	timeinfo = localtime(&rawtime);
 
-	srv->sendReply(userfd, RPL_TIME(user->getNickname(), srv->getName(), asctime(timeinfo)));
+	std::string time_str = asctime(timeinfo);
+	time_str.erase(time_str.end() - 1);
+
+	srv->sendReply(userfd, RPL_TIME(user->getNickname(), srv->getName(), time_str));
 }
