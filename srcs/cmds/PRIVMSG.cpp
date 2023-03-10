@@ -39,9 +39,7 @@ static void	privmsg_channel(Server *srv, int &userfd, Command &cmd, std::string 
 
 static void	privmsg_user(Server *srv, int &userfd, Command &cmd, std::string &client)
 {
-	std::cout << "Target is a user" << std::endl;
 	int targetfd = srv->getUserfd(cmd.getParam(0));
-	std::cout << targetfd << std::endl;
 	if (targetfd == -1)
 	{
 		srv->sendReply(userfd, ERR_NOSUCHNICK(client, cmd.getParam(0)));
