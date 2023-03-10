@@ -63,7 +63,7 @@
 #define RPL_EXCEPTLIST(client, channel, mask) ("348 " + client + " " + channel + " " + mask)
 #define RPL_ENDOFEXCEPTLIST(client, channel) ("349 " + client + " " + channel + " :End of Channel exception List")
 
-#define RPL_VERSION(client, servername) ("351 " + client + " 1.0 " + servername)
+#define RPL_VERSION(client, version, servername, comments) ("351 " + client + " " + version + " " + servername + " :" + comments)
 #define RPL_NAMREPLY(client, symbol, channel, users) ("353 " + client + " " + symbol + " " + channel + " :" + users)
 #define RPL_ENDOFNAMES(client, channel) ("366 " + client + " " + channel + " :End of /NAMES list")
 #define RPL_LINKS(client, servername) ("364 " + client + " * " + servername + " :0 this server")
