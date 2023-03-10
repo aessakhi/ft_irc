@@ -277,8 +277,11 @@ bool	Channel::_find_mask(std::vector<std::string> vect, User * user) const
 	return false;
 }
 
+bool	Channel::isFounder(User * user) const
+{ return _founder == user ; }
+
 bool	Channel::isOp(User *user) const
-{ return _founder == user || _find_mask(_operators, user) ; }
+{ return isFounder(user) || _find_mask(_operators, user) ; }
 
 bool	Channel::isBanned(User *user) const
 { return _find_mask(_banned, user) ; }

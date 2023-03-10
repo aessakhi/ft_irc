@@ -214,6 +214,9 @@ class Channel
 
 	/* ----------ATTRIBUTE CHECKS---------- */
 
+		/* Checks if user is the founder */
+		bool	isFounder(User *user) const ;
+
 		/* Checks if user is a member */
 		bool	isMember(User *user) const ;
 
