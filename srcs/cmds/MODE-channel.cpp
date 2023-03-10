@@ -72,7 +72,7 @@ static bool _apply_ban_except(Mode mode, Channel * channel, Server *srv, int &us
 	// Send list
 	if (mode.getArg().empty())
 	{
-		_send_ban_except_list(channel->getBanned(), srv, userfd, cmd);
+		_send_ban_except_list(channel->getBanExcept(), srv, userfd, cmd);
 		return false ;
 	}
 
@@ -109,7 +109,7 @@ static bool _apply_invite_except(Mode mode, Channel * channel, Server *srv, int 
 	// Send list
 	if (mode.getArg().empty())
 	{
-		_send_invite_except_list(channel->getBanned(), srv, userfd, cmd);
+		_send_invite_except_list(channel->getInviteExcept(), srv, userfd, cmd);
 		return false ;
 	}
 
