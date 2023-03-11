@@ -20,19 +20,27 @@ static std::vector<std::string>	splitTargets(std::string str, std::string delimi
 void	join(Server *srv, int &userfd, Command &cmd)
 {
 	std::vector<std::string> channels;
+	std::vector<std::string> keys;
 	err_codes	err;
 	User		*user;
 
 	user = srv->getUser(userfd);
 	if (cmd.getParamList().empty())
-		std::cout << "Need more params" << std::endl;
+	{
+		srv->sendReply(userfd, ERR_NEEDMOREPARAMS(user->getNickname(), "JOIN"));
+		return ;
+	}
 	channels = splitTargets(cmd.getParam(0), ",");
+	if (cmd.getParamList().size() > 1)
+		keys = splitTargets(cmd.getParam(1), ",");
+	while (keys.size() < channels.size())
+		keys.push_back("");
 	for (std::vector<std::string>::const_iterator it = channels.begin(); it != channels.end(); it++)
 	{
 		if (srv->getChannel(*it) == NULL)
 			srv->getChannelMap()->insert(std::make_pair(*it, new Channel(*it)));
 		Channel * channel = srv->getChannel(*it);
-		err = channel->join(user, cmd.getLastParam());
+		err = channel->join(user, keys[it - channels.begin()]);
 		switch (err)
 		{
 			case err_badchannelkey:
@@ -51,7 +59,7 @@ void	join(Server *srv, int &userfd, Command &cmd)
 			}
 			default:
 			{
-				std::string msg = ":" + user->getMask() + " JOIN " + cmd.getParam(0);
+				std::string msg = ":" + user->getMask() + " JOIN " + *it;
 				channel->sendToAllMembers(msg);
 				if (channel->isTopicSet())
 					srv->sendReply(userfd, RPL_TOPIC(user->getNickname(), *it, channel->getTopic()));
