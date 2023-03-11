@@ -1,0 +1,21 @@
+Obligatoire:
+	Server operators, OPER, RESTART, KILL
+	Vérifier les segfaults avec /quote
+
+"bonus":
+	WALLOPS
+	MODE pour récupérer les ban lists (irssi le fait automatiquement et affiche une erreur)
+	irssi affiche une erreur lors des changements de TOPIC
+	JOIN 0
+	JOIN avec plusieurs keys
+	LIST
+	MODE +o <mask> est mal géré par irssi
+
+Très facultatif:
+	NOTICE (en utilisant PING vers un autre client irssi attend une NOTICE)
+	"join to #test was synced in 400 secs" à vérifier
+	(peut etre ?) retirer les invites après un JOIN
+
+Bonus du sujet:
+	Bots
+	(?) File Transfer si y a le temps et la motiv
