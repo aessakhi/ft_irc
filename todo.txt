@@ -7,7 +7,8 @@ Obligatoire:
 	MODE pour récupérer les ban lists (irssi le fait automatiquement et affiche une erreur)
 	irssi affiche une erreur lors des changements de TOPIC
 	JOIN 0
-	JOIN avec plusieurs keys
+	JOIN avec plusieurs keys (DONE)
+	JOIN avec nom invalide
 	LIST
 	MODE +o <mask> est mal géré par irssi
 
