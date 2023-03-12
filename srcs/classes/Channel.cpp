@@ -215,29 +215,37 @@ void	Channel::setKey(bool state, std::string value)
 
 void	Channel::setModeratedMode(bool state)
 {
-	if (!_moderated_mode)
+	if (!_moderated_mode && state)
 		_modestring += "m";
+	if (_moderated_mode && !state)
+		_modestring.erase(_modestring.find('m'));
 	_moderated_mode = state;
 }
 
 void	Channel::setSecretMode(bool state)
 {
-	if (!_secret_mode)
+	if (!_secret_mode && state)
 		_modestring += "s";
+	if (_secret_mode && !state)
+		_modestring.erase(_modestring.find('s'));
 	_secret_mode = state;
 }
 
 void	Channel::setProtectedTopicMode(bool state)
 {
-	if (!_protected_topic_mode)
+	if (!_protected_topic_mode && state)
 		_modestring += "t";
+	if (_protected_topic_mode && !state)
+		_modestring.erase(_modestring.find('t'));
 	_protected_topic_mode = state;
 }
 
 void	Channel::setNoExternalMessagesMode(bool state)
 {
-	if (!_no_external_messages_mode)
+	if (!_no_external_messages_mode && state)
 		_modestring += "n";
+	if (_no_external_messages_mode && !state)
+		_modestring.erase(_modestring.find('n'));
 	_no_external_messages_mode = state;
 }
 
