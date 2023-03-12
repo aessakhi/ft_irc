@@ -1,6 +1,6 @@
 #include "Channel.hpp"
 
-Channel::Channel(const std::string & name) : _name(name), _modestring(""), _limit_mode(false), _invite_mode(false), _key_mode(false), _moderated_mode(false), _secret_mode(false), _protected_topic_mode(false), _no_external_messages_mode(true) 
+Channel::Channel(const std::string & name) : _name(name), _modestring("n"), _limit_mode(false), _invite_mode(false), _key_mode(false), _moderated_mode(false), _secret_mode(false), _protected_topic_mode(false), _no_external_messages_mode(true) 
 {}
 
 Channel::~Channel() {}
