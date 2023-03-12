@@ -39,7 +39,11 @@ void	nick(Server *srv, int &userfd, Command &cmd)
 	user = srv->getUser(userfd);
 	if (!user)
 		return ;
-
+	if (!user->getPwd())
+	{
+		quit(srv, userfd, cmd);
+		return ;
+	}
 	// Number of args check
 	if (cmd.paramNumber() == 0)
 	{
