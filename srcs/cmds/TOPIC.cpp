@@ -46,6 +46,5 @@ void	topic(Server *srv, int &userfd, Command &cmd)
 		new_topic = cmd.getParam(1);
 	
 	channel->setTopic(new_topic);
-
-	channel->sendToAllMembers(":" + client_name + " " + cmd.getStr());
+	channel->sendToAllMembers(":" + user->getMask() + " " + cmd.getStr());
 }
