@@ -1,7 +1,10 @@
 #include "User.hpp"
 
 User::User(int fd, std::string hostname): _fd(fd), _user(0),_pwd(0), _nick(0), _authenticated(0),_hostname(hostname), _is_invisible(false), _is_operator(false), _is_wallops(false), _is_away(false)
-{}
+{
+	time(&this->_creatime);
+	time(&this->_idletime);
+}
 
 User::~User()
 {}
@@ -170,3 +173,18 @@ const std::string	User::getModeString() const
 
 int	User::getFd() const
 { return _fd ; }
+
+time_t User::getCreatime() const
+{ 
+	return (this->_creatime);
+}
+
+void	User::updateIdletime()
+{
+	time(&this->_idletime);
+}
+
+time_t	User::getIdletime() const
+{
+	return (this->_idletime);
+}

@@ -142,6 +142,8 @@ void	Server::_execCmds(std::vector<Command> &cmds, int userfd)
 		it_map = this->_cmdMap.find(it->getCmd());
 		if (it_map != this->_cmdMap.end())
 		{
+			if (it->getCmd() != "PING")
+				getUser(userfd)->updateIdletime();
 			this->_cmdMap[toupper(it->getCmd())](this, userfd, *it);
 		}
 		else
@@ -220,6 +222,8 @@ void	Server::_initCmdMap()
 	this->_cmdMap["USER"] = &user;
 	this->_cmdMap["VERSION"] = &version;
 	this->_cmdMap["WHO"] = &who;
+	this->_cmdMap["WHOIS"] = &whois;
+	this->_cmdMap["WHOWAS"] = &whowas;
 }
 
 void	Server::epoll_loop()

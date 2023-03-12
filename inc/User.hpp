@@ -57,6 +57,12 @@ class User
 		/* If user is away, this is the away message */
 		std::string _away_msg;
 
+		/* Variable that holds creation time */
+		time_t _creatime;
+
+		/* Variable that holds last active time */
+		time_t _idletime;
+
 	public:
 
 		User(int fd, std::string hostname);
@@ -113,6 +119,10 @@ class User
 		/* Returns "nickname!username\@hostname" */
 		const std::string getMask() const;
 
+		/* Return creatime of the user */
+		time_t getCreatime() const;
+
+		time_t getIdletime() const;
 
 	/* ----------SETTERS---------- */
 
@@ -151,6 +161,9 @@ class User
 
 		/* Sets user's away state */
 		void	setAway(bool state, std::string msg);
+
+		/* Sets user's last action time */
+		void	updateIdletime();
 
 	/* Returns the user's mode string */
 	const std::string	getModeString() const;

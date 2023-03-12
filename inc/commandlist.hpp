@@ -24,5 +24,7 @@ void	topic(Server *srv, int &userfd, Command &cmd);
 void	user(Server *srv, int &userfd, Command &cmd);
 void	version(Server *srv, int &userfd, Command &cmd);
 void	who(Server *srv, int &userfd, Command &cmd);
+void	whois(Server *srv, int &userfd, Command &cmd);
+void	whowas(Server *srv, int &userfd, Command &cmd);
 
 #endif

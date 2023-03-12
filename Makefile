@@ -36,6 +36,8 @@ CMD_NAMES	+=	AWAY.cpp \
 				USER.cpp \
 				VERSION.cpp \
 				WHO.cpp \
+				WHOIS.cpp \
+				WHOWAS.cpp \
 
 # OTHER FILES
 SRC_NAMES	+=	main.cpp \
@@ -99,5 +101,10 @@ fclean:	clean
 	@$(RM) $(NAME)
 
 re:	fclean all
+
+#TO DEL
+go: all
+	./ircserv 9000 test
+#TO DEL
 
 .PHONY: all clean re fclean
