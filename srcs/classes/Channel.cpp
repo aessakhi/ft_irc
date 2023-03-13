@@ -17,7 +17,13 @@ std::string Channel::getModes() const
 		ret += '+';
 	ret += _modestring;
 	if (_limit_mode)
-		ret += ' ' + _capacity;
+	{
+		std::string s;
+		std::stringstream out;
+		out << _capacity;
+		s = out.str();
+		ret += ' ' + s;
+	}
 	return ret ;
 }
 
@@ -186,16 +192,20 @@ void	Channel::_setLimit(size_t limit)
 
 void	Channel::setLimit(bool state, size_t value)
 {
-	if (!_limit_mode)
+	if (!_limit_mode && state)
 		_modestring += "l";
+	if (_limit_mode && !state)
+		_modestring.erase(_modestring.find('l'));
 	_setLimitMode(state);
 	_setLimit(value);
 }
 
 void	Channel::setInviteMode(bool state)
 {
-	if (!_invite_mode)
+	if (!_invite_mode && state)
 		_modestring += "i";
+	if (_invite_mode && !state)
+		_modestring.erase(_modestring.find('i'));
 	_invite_mode = state;
 }
 
