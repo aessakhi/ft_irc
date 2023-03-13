@@ -207,10 +207,16 @@ void	Channel::_setKey(std::string new_key)
 
 void	Channel::setKey(bool state, std::string value)
 {
-	if (!_key_mode)
+	if (!_key_mode && state)
 		_modestring += "k";
+	if (_key_mode && !state)
+	{
+		_modestring.erase(_modestring.find('k'));
+		_setKey("");
+	}
+	if (state)
+		_setKey(value);
 	_setKeyMode(state);
-	_setKey(value);
 }
 
 void	Channel::setModeratedMode(bool state)
