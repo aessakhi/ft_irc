@@ -9,6 +9,11 @@ void	user(Server *srv, int &userfd, Command &cmd)
 		return ;
 	// Number of args check
 	std::string client = "";
+	if (!user->getPwd())
+	{
+		quit(srv, userfd, cmd);
+		return ;
+	}
 	if (!user->getNickname().empty())
 		client = user->getNickname();
 	if (user->getAuth())

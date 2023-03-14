@@ -1,7 +1,7 @@
 Obligatoire:
 	Server operators, OPER, RESTART, KILL
 	Vérifier les segfaults avec /quote
-	Segfaults quand le pwd est incorrect à la connect
+	Segfaults quand le pwd est incorrect à la connect (DONE)
 
 "bonus":
 	WALLOPS
