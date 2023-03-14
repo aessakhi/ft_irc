@@ -39,6 +39,7 @@ CMD_NAMES	+=	AWAY.cpp \
 				TOPIC.cpp \
 				USER.cpp \
 				VERSION.cpp \
+				WALLOPS.cpp \
 				WHO.cpp \
 				WHOIS.cpp \
 				WHOWAS.cpp \

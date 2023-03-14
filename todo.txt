@@ -1,16 +1,12 @@
 Obligatoire:
 	(FIXED, a verifier en detail puisque c'est dans la correction) nc + ^C bloque le serveur
-	Server operators, OPER, KILL
 	Vérifier les segfaults avec /quote
 
 "bonus":
-	WALLOPS
 	(IN PROGRESS) LIST
-	(a voir) RESTART
 
 Très facultatif:
 	JOIN 0
-	(a voir) retirer les invites après un JOIN
 
 Bonus du sujet:
 	Bots

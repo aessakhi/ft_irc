@@ -227,6 +227,7 @@ void	Server::_initCmdMap()
 	this->_cmdMap["TOPIC"] = &topic;
 	this->_cmdMap["USER"] = &user;
 	this->_cmdMap["VERSION"] = &version;
+	this->_cmdMap["WALLOPS"] = &wallops;
 	this->_cmdMap["WHO"] = &who;
 	this->_cmdMap["WHOIS"] = &whois;
 	this->_cmdMap["WHOWAS"] = &whowas;
