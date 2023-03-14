@@ -1,21 +1,4 @@
 #include "main.hpp"
-#include <utility>
-
-static std::vector<std::string>	splitTargets(std::string str, std::string delimiter)
-{
-	std::vector<std::string> result;
-
-	size_t	end = str.find(delimiter);
-
-	while (end != std::string::npos)
-	{
-		result.push_back(str.substr(0, end));
-		str.erase(0, end + delimiter.length());
-		end = str.find(delimiter);
-	}
-	result.push_back(str);
-	return (result);
-}
 
 void	join(Server *srv, int &userfd, Command &cmd)
 {
@@ -30,9 +13,9 @@ void	join(Server *srv, int &userfd, Command &cmd)
 		srv->sendReply(userfd, ERR_NEEDMOREPARAMS(user->getNickname(), "JOIN"));
 		return ;
 	}
-	channels = splitTargets(cmd.getParam(0), ",");
+	channels = actual_split(cmd.getParam(0), ",");
 	if (cmd.getParamList().size() > 1)
-		keys = splitTargets(cmd.getParam(1), ",");
+		keys = actual_split(cmd.getParam(1), ",");
 	while (keys.size() < channels.size())
 		keys.push_back("");
 	for (std::vector<std::string>::const_iterator it = channels.begin(); it != channels.end(); it++)

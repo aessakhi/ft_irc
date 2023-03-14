@@ -220,3 +220,20 @@ bool	sided_wildcompare(std::string s1, std::string s2)
 {
 	return sided_wildcompare(s1.data(), s2.data());
 }
+
+std::vector<std::string> actual_split(std::string str, std::string delimiter)
+{
+	std::vector<std::string> result;
+
+	size_t	start = 0;
+	size_t	end = str.find(delimiter);
+
+	while (end != std::string::npos)
+	{
+		result.push_back(str.substr(start, end));
+		start = end + delimiter.length();
+		end = str.find(delimiter, start);
+	}
+	result.push_back(str.substr(start, end));
+	return (result);
+}

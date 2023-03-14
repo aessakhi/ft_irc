@@ -38,4 +38,7 @@ std::string	no_crlf(std::string s);
 /* Returns the uppercase version of s. */
 std::string toupper(std::string s);
 
+/* Basic split function. */
+std::vector<std::string> actual_split(std::string str, std::string delimiter);
+
 #endif
