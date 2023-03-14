@@ -1,19 +1,17 @@
 Obligatoire:
-	~~ nc + ^C bloque le serveur ~~ FIXED 
-	Server operators, OPER, RESTART, KILL
+	(FIXED, a verifier en detail puisque c'est dans la correction) nc + ^C bloque le serveur
+	Server operators, OPER, KILL
 	Vérifier les segfaults avec /quote
 
 "bonus":
 	WALLOPS
-	JOIN 0
-	JOIN avec nom invalide
-	LIST
-	MODE +o <mask> est mal géré par irssi
+	(IN PROGRESS) LIST
+	(a voir) RESTART
 
 Très facultatif:
-	NOTICE (en utilisant PING vers un autre client irssi attend une NOTICE)
-	(peut etre ?) retirer les invites après un JOIN
+	JOIN 0
+	(a voir) retirer les invites après un JOIN
 
 Bonus du sujet:
 	Bots
-	(?) File Transfer si y a le temps et la motiv
+	(a voir) File Transfer si y a le temps et la motiv
