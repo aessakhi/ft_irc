@@ -21,11 +21,13 @@ CMD_NAMES	+=	AWAY.cpp \
 				INVITE.cpp \
 				JOIN.cpp \
 				KICK.cpp \
+				LIST.cpp \
 				MODE-channel.cpp \
 				MODE-user.cpp \
 				MODE.cpp \
 				NAMES.cpp \
 				NICK.cpp \
+				NOTICE.cpp \
 				PART.cpp \
 				PASS.cpp \
 				PING.cpp \
@@ -38,7 +40,6 @@ CMD_NAMES	+=	AWAY.cpp \
 				WHO.cpp \
 				WHOIS.cpp \
 				WHOWAS.cpp \
-				LIST.cpp \
 
 # OTHER FILES
 SRC_NAMES	+=	main.cpp \

@@ -211,9 +211,11 @@ void	Server::_initCmdMap()
 	this->_cmdMap["INVITE"] = &invite;
 	this->_cmdMap["JOIN"] = &join;
 	this->_cmdMap["KICK"] = &kick;
+	this->_cmdMap["LIST"] = &list;
 	this->_cmdMap["MODE"] = &mode;
 	this->_cmdMap["NAMES"] = &names;
 	this->_cmdMap["NICK"] = &nick;
+	this->_cmdMap["NOTICE"] = &notice;
 	this->_cmdMap["PART"] = &part;
 	this->_cmdMap["PASS"] = &pass;
 	this->_cmdMap["PING"] = &ping;
@@ -226,7 +228,6 @@ void	Server::_initCmdMap()
 	this->_cmdMap["WHO"] = &who;
 	this->_cmdMap["WHOIS"] = &whois;
 	this->_cmdMap["WHOWAS"] = &whowas;
-	this->_cmdMap["LIST"] = &list;
 }
 
 void	Server::epoll_loop()

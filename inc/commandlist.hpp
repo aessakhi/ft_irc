@@ -11,9 +11,11 @@ void	info(Server *srv, int &userfd, Command &cmd);
 void	invite(Server *srv, int &userfd, Command &cmd);
 void	join(Server *srv, int &userfd, Command &cmd);
 void	kick(Server *srv, int &userfd, Command &cmd);
+void	list(Server *srv, int &userfd, Command &cmd);
 void	mode(Server *srv, int &userfd, Command &cmd);
 void	names(Server *srv, int &userfd, Command &cmd);
 void	nick(Server *srv, int &userfd, Command &cmd);
+void	notice(Server *srv, int &userfd, Command &cmd);
 void	part(Server *srv, int &userfd, Command &cmd);
 void	pass(Server *srv, int &userfd, Command &cmd);
 void	ping(Server *srv, int &userfd, Command &cmd);
@@ -26,6 +28,5 @@ void	version(Server *srv, int &userfd, Command &cmd);
 void	who(Server *srv, int &userfd, Command &cmd);
 void	whois(Server *srv, int &userfd, Command &cmd);
 void	whowas(Server *srv, int &userfd, Command &cmd);
-void	list(Server *srv, int &userfd, Command &cmd);
 
 #endif
