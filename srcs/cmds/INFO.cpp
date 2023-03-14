@@ -44,8 +44,6 @@ void	info(Server *srv, int &userfd, Command &cmd)
 
 	info_msg += " compiled on: ";
 	info_msg += asctime(file_timeinfo);
-	info_msg += "\n";
-
 
 	time_t crea_time = srv->getCreatime();
 	struct tm *timeinfo = localtime(&crea_time);

@@ -26,5 +26,6 @@ void	version(Server *srv, int &userfd, Command &cmd);
 void	who(Server *srv, int &userfd, Command &cmd);
 void	whois(Server *srv, int &userfd, Command &cmd);
 void	whowas(Server *srv, int &userfd, Command &cmd);
+void	list(Server *srv, int &userfd, Command &cmd);
 
 #endif
