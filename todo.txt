@@ -1,5 +1,6 @@
 Obligatoire:
-	~~ Server operators, OPER, RESTART, KILL ~~
+	~~ nc + ^C bloque le serveur ~~
+	Server operators, OPER, RESTART, KILL
 	Vérifier les segfaults avec /quote
 
 "bonus":
