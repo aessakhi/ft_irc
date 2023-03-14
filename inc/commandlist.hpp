@@ -11,6 +11,7 @@ void	info(Server *srv, int &userfd, Command &cmd);
 void	invite(Server *srv, int &userfd, Command &cmd);
 void	join(Server *srv, int &userfd, Command &cmd);
 void	kick(Server *srv, int &userfd, Command &cmd);
+void	kill(Server *srv, int &userfd, Command &cmd);
 void	list(Server *srv, int &userfd, Command &cmd);
 void	mode(Server *srv, int &userfd, Command &cmd);
 void	names(Server *srv, int &userfd, Command &cmd);

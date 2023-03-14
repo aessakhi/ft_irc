@@ -21,6 +21,7 @@ CMD_NAMES	+=	AWAY.cpp \
 				INVITE.cpp \
 				JOIN.cpp \
 				KICK.cpp \
+				KILL.cpp \
 				LIST.cpp \
 				MODE-channel.cpp \
 				MODE-user.cpp \

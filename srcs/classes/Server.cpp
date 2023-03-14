@@ -211,6 +211,7 @@ void	Server::_initCmdMap()
 	this->_cmdMap["INVITE"] = &invite;
 	this->_cmdMap["JOIN"] = &join;
 	this->_cmdMap["KICK"] = &kick;
+	this->_cmdMap["KILL"] = &kill;
 	this->_cmdMap["LIST"] = &list;
 	this->_cmdMap["MODE"] = &mode;
 	this->_cmdMap["NAMES"] = &names;
