@@ -151,9 +151,6 @@ static bool _apply_invite_except(Mode mode, Channel * channel, Server *srv, int 
 
 static bool _apply_operator(Mode mode, Channel * channel, Server *srv, int &userfd, Command &cmd)
 {
-	if (!_op_check(channel, srv, userfd, cmd))
-		return false;
-
 	User * user = srv->getUser(userfd);
 
 	// DONT Send list
@@ -162,6 +159,9 @@ static bool _apply_operator(Mode mode, Channel * channel, Server *srv, int &user
 		srv->sendReply(userfd, ERR_INVALIDMODEPARAM(user->getNickname(), cmd.getParam(0), mode.getMode(), mode.getArg(), "Cannot get channel operator list"));
 		return false ;
 	}
+
+	if (!_op_check(channel, srv, userfd, cmd))
+		return false;
 
 	// Add to list
 	if (mode.getAdd())
@@ -181,9 +181,6 @@ static bool _apply_operator(Mode mode, Channel * channel, Server *srv, int &user
 
 static bool _apply_voiced(Mode mode, Channel * channel, Server *srv, int &userfd, Command &cmd)
 {
-	if (!_op_check(channel, srv, userfd, cmd))
-		return false;
-
 	User * user = srv->getUser(userfd);
 
 	// DONT Send list
@@ -192,6 +189,9 @@ static bool _apply_voiced(Mode mode, Channel * channel, Server *srv, int &userfd
 		srv->sendReply(userfd, ERR_INVALIDMODEPARAM(user->getNickname(), cmd.getParam(0), mode.getMode(), mode.getArg(), "Cannot get channel voiced list"));
 		return false ;
 	}
+
+	if (!_op_check(channel, srv, userfd, cmd))
+		return false;
 
 	// Add to list
 	if (mode.getAdd())
