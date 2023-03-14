@@ -1,21 +1,16 @@
 Obligatoire:
-	Server operators, OPER, RESTART, KILL
+	~~ Server operators, OPER, RESTART, KILL ~~
 	Vérifier les segfaults avec /quote
-	Segfaults quand le pwd est incorrect à la connect (DONE)
 
 "bonus":
 	WALLOPS
-	MODE pour récupérer les ban lists (irssi le fait automatiquement et affiche une erreur)
-	irssi affiche une erreur lors des changements de TOPIC (DONE)
 	JOIN 0
-	JOIN avec plusieurs keys (DONE)
 	JOIN avec nom invalide
 	LIST
 	MODE +o <mask> est mal géré par irssi
 
 Très facultatif:
 	NOTICE (en utilisant PING vers un autre client irssi attend une NOTICE)
-	"join to #test was synced in 400 secs" à vérifier
 	(peut etre ?) retirer les invites après un JOIN
 
 Bonus du sujet:
