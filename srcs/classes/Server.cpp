@@ -179,6 +179,8 @@ void	Server::_receivemessage(struct epoll_event event)
 	{
 		return printError("recv error");
 	}
+	if (ret == 0)
+		return ;
 	printRecv(buf, ret);
 
 	this->_buffers[event.data.fd].append(buf, ret);
