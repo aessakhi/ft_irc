@@ -409,15 +409,16 @@ static std::vector<Mode> _apply_mode_changes(std::list<Mode> mode_list, Server *
 			// KEY CHANGE
 			case 'k':
 			{
+				Mode _copy(it->getAdd(), it->getMode());
 				if (it->getAdd())
 				{
 					channel->setKey(true, arg);
-					applied_changes.push_back(*it);
+					applied_changes.push_back(_copy);
 				}
 				else if (channel->checkKey(arg))
 				{
 					channel->setKey(false);
-					applied_changes.push_back(*it);
+					applied_changes.push_back(_copy);
 				}
 				else
 				{
