@@ -1,5 +1,5 @@
 Obligatoire:
-	~~ nc + ^C bloque le serveur ~~
+	~~ nc + ^C bloque le serveur ~~ FIXED 
 	Server operators, OPER, RESTART, KILL
 	Vérifier les segfaults avec /quote
 
