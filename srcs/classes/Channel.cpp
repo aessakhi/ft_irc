@@ -18,11 +18,9 @@ std::string Channel::getModes() const
 	ret += _modestring;
 	if (_limit_mode)
 	{
-		std::string s;
 		std::stringstream out;
-		out << _capacity;
-		s = out.str();
-		ret += ' ' + s;
+		out << ' ' << _capacity;
+		ret += out.str();
 	}
 	return ret ;
 }
@@ -195,7 +193,7 @@ void	Channel::setLimit(bool state, size_t value)
 	if (!_limit_mode && state)
 		_modestring += "l";
 	if (_limit_mode && !state)
-		_modestring.erase(_modestring.find('l'));
+		_modestring.erase(_modestring.find('l'), 1);
 	_setLimitMode(state);
 	_setLimit(value);
 }
@@ -205,7 +203,7 @@ void	Channel::setInviteMode(bool state)
 	if (!_invite_mode && state)
 		_modestring += "i";
 	if (_invite_mode && !state)
-		_modestring.erase(_modestring.find('i'));
+		_modestring.erase(_modestring.find('i'), 1);
 	_invite_mode = state;
 }
 
@@ -220,10 +218,7 @@ void	Channel::setKey(bool state, std::string value)
 	if (!_key_mode && state)
 		_modestring += "k";
 	if (_key_mode && !state)
-	{
-		_modestring.erase(_modestring.find('k'));
-		_setKey("");
-	}
+		_modestring.erase(_modestring.find('k'), 1);
 	if (state)
 		_setKey(value);
 	_setKeyMode(state);
@@ -234,7 +229,7 @@ void	Channel::setModeratedMode(bool state)
 	if (!_moderated_mode && state)
 		_modestring += "m";
 	if (_moderated_mode && !state)
-		_modestring.erase(_modestring.find('m'));
+		_modestring.erase(_modestring.find('m'), 1);
 	_moderated_mode = state;
 }
 
@@ -243,7 +238,7 @@ void	Channel::setSecretMode(bool state)
 	if (!_secret_mode && state)
 		_modestring += "s";
 	if (_secret_mode && !state)
-		_modestring.erase(_modestring.find('s'));
+		_modestring.erase(_modestring.find('s'), 1);
 	_secret_mode = state;
 }
 
@@ -252,7 +247,7 @@ void	Channel::setProtectedTopicMode(bool state)
 	if (!_protected_topic_mode && state)
 		_modestring += "t";
 	if (_protected_topic_mode && !state)
-		_modestring.erase(_modestring.find('t'));
+		_modestring.erase(_modestring.find('t'), 1);
 	_protected_topic_mode = state;
 }
 
@@ -261,7 +256,7 @@ void	Channel::setNoExternalMessagesMode(bool state)
 	if (!_no_external_messages_mode && state)
 		_modestring += "n";
 	if (_no_external_messages_mode && !state)
-		_modestring.erase(_modestring.find('n'));
+		_modestring.erase(_modestring.find('n'), 1);
 	_no_external_messages_mode = state;
 }
 
