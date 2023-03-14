@@ -35,6 +35,9 @@ class Server
 
 		/* Variable that holds creation time */
 		time_t _creatime;
+
+		/* Very secure operator password */
+		const std::string & _op_pwd;
 	
 	/* ----------ATTRIBUTES LIST---------- */
 
@@ -75,7 +78,7 @@ class Server
 
 	public:
 
-		Server(const std::string & name, const std::string & port, const std::string & password, const std::string hostname);
+		Server(const std::string & name, const std::string & port, const std::string & password, const std::string hostname, const std::string & op_pwd);
 
 		~Server();
 
@@ -125,6 +128,9 @@ class Server
 
 		/* Return creatime of the server */
 		time_t getCreatime() const;
+
+		/* Compares str with the operator password */
+		bool check_oper_password(std::string str) const;
 };
 
 #endif

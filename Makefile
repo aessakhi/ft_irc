@@ -28,6 +28,7 @@ CMD_NAMES	+=	AWAY.cpp \
 				NAMES.cpp \
 				NICK.cpp \
 				NOTICE.cpp \
+				OPER.cpp \
 				PART.cpp \
 				PASS.cpp \
 				PING.cpp \

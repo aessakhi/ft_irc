@@ -1,6 +1,6 @@
 #include "Server.hpp"
 
-Server::Server(const std::string & name, const std::string & port, const std::string & password, const std::string hostname): _name(name), _port(port), _pwd(password),_hostname(hostname), _listenfd(0), _epollfd(0)
+Server::Server(const std::string & name, const std::string & port, const std::string & password, const std::string hostname, const std::string & op_pwd): _name(name), _port(port), _pwd(password),_hostname(hostname), _listenfd(0), _epollfd(0), _op_pwd(op_pwd)
 {}
 
 Server::~Server()
@@ -216,6 +216,7 @@ void	Server::_initCmdMap()
 	this->_cmdMap["NAMES"] = &names;
 	this->_cmdMap["NICK"] = &nick;
 	this->_cmdMap["NOTICE"] = &notice;
+	this->_cmdMap["OPER"] = &oper;
 	this->_cmdMap["PART"] = &part;
 	this->_cmdMap["PASS"] = &pass;
 	this->_cmdMap["PING"] = &ping;
@@ -341,4 +342,9 @@ std::map<int, User *> Server::getUserMap() const
 time_t Server::getCreatime() const
 { 
 	return (this->_creatime);
+}
+
+bool Server::check_oper_password(std::string str) const
+{
+	return !(_op_pwd.compare(str));
 }

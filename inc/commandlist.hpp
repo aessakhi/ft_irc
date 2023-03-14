@@ -16,6 +16,7 @@ void	mode(Server *srv, int &userfd, Command &cmd);
 void	names(Server *srv, int &userfd, Command &cmd);
 void	nick(Server *srv, int &userfd, Command &cmd);
 void	notice(Server *srv, int &userfd, Command &cmd);
+void	oper(Server *srv, int &userfd, Command &cmd);
 void	part(Server *srv, int &userfd, Command &cmd);
 void	pass(Server *srv, int &userfd, Command &cmd);
 void	ping(Server *srv, int &userfd, Command &cmd);

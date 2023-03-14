@@ -22,7 +22,7 @@ int main(int argc, char **argv)
 
 	std::cout << BRED << "Starting up..." << RESET << std::endl;
 
-	Server ircserv("ircserv", argv[1], argv[2], HOSTNAME);
+	Server ircserv("ircserv", argv[1], argv[2], HOSTNAME, "password");
 
 	ircserv.init();
 
