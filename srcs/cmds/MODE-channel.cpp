@@ -14,6 +14,17 @@ static bool _is_digits(std::string s)
 	return (s[0] != 0);
 }
 
+static bool _op_check(Channel * channel, Server *srv, int &userfd, Command &cmd)
+{
+	User * user = srv->getUser(userfd);
+	if (!channel->isOp(user))
+	{
+		srv->sendReply(userfd, ERR_CHANOPRIVSNEEDED(user->getNickname(), cmd.getParam(0)));
+		return false;
+	}
+	return true;
+}
+
 /* ------------------------ */
 /* ----------BANS---------- */
 /* ------------------------ */
@@ -38,6 +49,9 @@ static bool _apply_ban(Mode mode, Channel * channel, Server *srv, int &userfd, C
 		_send_ban_list(channel->getBanned(), srv, userfd, cmd);
 		return false ;
 	}
+
+	if (!_op_check(channel, srv, userfd, cmd))
+		return false;
 
 	// Add to list
 	if (mode.getAdd())
@@ -76,6 +90,9 @@ static bool _apply_ban_except(Mode mode, Channel * channel, Server *srv, int &us
 		return false ;
 	}
 
+	if (!_op_check(channel, srv, userfd, cmd))
+		return false;
+
 	// Add to list
 	if (mode.getAdd())
 	{
@@ -113,6 +130,9 @@ static bool _apply_invite_except(Mode mode, Channel * channel, Server *srv, int 
 		return false ;
 	}
 
+	if (!_op_check(channel, srv, userfd, cmd))
+		return false;
+
 	// Add to list
 	if (mode.getAdd())
 	{
@@ -131,6 +151,9 @@ static bool _apply_invite_except(Mode mode, Channel * channel, Server *srv, int 
 
 static bool _apply_operator(Mode mode, Channel * channel, Server *srv, int &userfd, Command &cmd)
 {
+	if (!_op_check(channel, srv, userfd, cmd))
+		return false;
+
 	User * user = srv->getUser(userfd);
 
 	// DONT Send list
@@ -158,6 +181,9 @@ static bool _apply_operator(Mode mode, Channel * channel, Server *srv, int &user
 
 static bool _apply_voiced(Mode mode, Channel * channel, Server *srv, int &userfd, Command &cmd)
 {
+	if (!_op_check(channel, srv, userfd, cmd))
+		return false;
+
 	User * user = srv->getUser(userfd);
 
 	// DONT Send list
@@ -202,7 +228,7 @@ static bool _channel_mode_error(Server *srv, int &userfd, Command &cmd)
 		srv->sendReply(userfd, RPL_CHANNELMODEIS(user->getNickname(), target, channel->getModes()));
 		return true;
 	}
-
+/*
 	// If modestring is given, check user privileges
 
 	if (!channel->isOp(user))
@@ -210,7 +236,7 @@ static bool _channel_mode_error(Server *srv, int &userfd, Command &cmd)
 		srv->sendReply(userfd, ERR_CHANOPRIVSNEEDED(user->getNickname(), target));
 		return true;
 	}
-
+*/
 	return false;
 }
 
@@ -235,7 +261,7 @@ static std::list<Mode> _modestring_parsing(std::string modestring, Server *srv, 
 	std::vector<std::string>::const_iterator arguments_end = param_list.end();
 	
 	// whether or not the current mode should be added 
-	bool add = (modestring[0] == '+');
+	bool add = (modestring[0] != '-');
 	size_t npos = std::string::npos;
 
 	std::list<Mode> mode_list;
@@ -511,13 +537,6 @@ void	channelmode(Server *srv, int &userfd, Command &cmd)
 	User * user = srv->getUser(userfd);
 	Channel * channel = srv->getChannel(target);
 	std::string modestring = cmd.getParam(1);
-
-	// If first char isnt + or -, handle error however we want
-	if (modestring[0] != '+' && modestring[0] != '-')
-	{
-		srv->sendReply(userfd, ERR_UMODEUNKNOWNFLAG(user->getNickname()));
-		return;
-	}
 
 	std::list<Mode> mode_list = _modestring_parsing(modestring, srv, userfd, cmd);
 
