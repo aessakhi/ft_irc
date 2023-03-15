@@ -188,3 +188,8 @@ time_t	User::getIdletime() const
 {
 	return (this->_idletime);
 }
+
+std::string	&User::getUserbuffer()
+{
+	return (this->_userbuf);
+}
