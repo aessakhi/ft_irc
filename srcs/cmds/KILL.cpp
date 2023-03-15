@@ -1,5 +1,22 @@
 #include "main.hpp"
 
+static void _destroy_chans(Server * srv, std::vector<std::string> to_delete)
+{
+	std::map<std::string, Channel *> *channels = srv->getChannelMap();
+	std::map<std::string, Channel *>::iterator pair;
+	std::vector<std::string>::const_iterator it = to_delete.begin();
+	std::vector<std::string>::const_iterator ite = to_delete.end();
+	for (; it != ite; it ++)
+	{
+		if (channels->find(*it) != channels->end())
+		{
+			pair = channels->find(*it);
+			delete pair->second;
+			channels->erase(*it);
+		}
+	}
+}
+
 static bool _error_check(Server * srv, int & userfd, Command & cmd)
 {
 	User * user = srv->getUser(userfd);
@@ -42,6 +59,8 @@ void	kill(Server * srv, int & userfd, Command & cmd)
 
 	srv->sendReply(target_fd, ":" + killer->getNickname() + " KILL " + target_nick + " " + reason);
 
+	std::vector<std::string> empty_chans;
+
 	std::map<std::string, Channel *> channels = *(srv->getChannelMap());
 	std::map<std::string, Channel *>::iterator it = channels.begin();
 	std::map<std::string, Channel *>::iterator ite = channels.end();
@@ -49,9 +68,13 @@ void	kill(Server * srv, int & userfd, Command & cmd)
 	{
 		if (!it->second->part(target_user))
 			it->second->sendToAllMembers(":" + target_user->getMask() + " QUIT :" + _killed_str(killer, reason));
+		if (it->second->getUsers().empty())
+			empty_chans.push_back(it->first);
 	}
 
 	srv->sendReply(target_fd, ":" + srv->getName() + " ERROR :Closing Link: " + srv->getName() + "(" + _killed_str(killer, reason));
 
 	srv->_removeUserfromServer(target_fd);
+
+	_destroy_chans(srv, empty_chans);
 }
