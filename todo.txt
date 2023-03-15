@@ -1,6 +1,5 @@
 Obligatoire:
 	(FIXED, a verifier en detail puisque c'est dans la correction) nc + ^C bloque le serveur
-	Vérifier les segfaults avec /quote
 	Il faut 5 command d'operators
 
 "bonus":

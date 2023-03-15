@@ -1,12 +1,12 @@
 #include "main.hpp"
 
-static void	privmsg_channel(Server *srv, int &userfd, Command &cmd, std::string &client)
+static void	_privmsg_channel(Server *srv, int &userfd, Command &cmd, std::string &client, std::string target)
 {
-	Channel	*channel = srv->getChannel(cmd.getParam(0));
+	Channel	*channel = srv->getChannel(target);
 	User	*sender = srv->getUser(userfd);
 	if (channel == NULL) /* Channel doesn't exist */
 	{
-		srv->sendReply(userfd, ERR_NOSUCHCHANNEL(client, cmd.getParam(0)));
+		srv->sendReply(userfd, ERR_NOSUCHCHANNEL(client, target));
 		return ;
 	}
 	/* Need to check if the sender is banned AND NOT covered by a ban exception + WILL SILENTLY FAIL */
@@ -15,7 +15,7 @@ static void	privmsg_channel(Server *srv, int &userfd, Command &cmd, std::string 
 	{
 		if (!channel->isMember(sender))
 		{
-			srv->sendReply(userfd, ":" + srv->getHostname() + " " + ERR_CANNOTSENDTOCHAN(client, cmd.getParam(0)));
+			srv->sendReply(userfd, ":" + srv->getHostname() + " " + ERR_CANNOTSENDTOCHAN(client, target));
 			return ;
 		}
 	}
@@ -23,31 +23,23 @@ static void	privmsg_channel(Server *srv, int &userfd, Command &cmd, std::string 
 		return ;
 	if (channel->moderatedMode() && !channel->isOp(sender) && !channel->isVoiced(sender))
 	{
-		srv->sendReply(userfd, ":" + srv->getHostname() + " " + ERR_CANNOTSENDTOCHAN(client, cmd.getParam(0)));
+		srv->sendReply(userfd, ":" + srv->getHostname() + " " + ERR_CANNOTSENDTOCHAN(client, target));
 		return ;
 	}
-	std::vector<User *> userlist = channel->getUsers();
-	for (std::vector<User *>::const_iterator it = userlist.begin(); it != userlist.end(); it++)
-	{
-		int	targetfd;
-
-		targetfd = srv->getUserfd((*it)->getNickname());
-		if (targetfd != userfd)
-			srv->sendReply(targetfd, ":" + sender->getMask() + " PRIVMSG " + cmd.getParam(0) + " :" + cmd.getLastParam());
-	}
+	channel->sendToAllMembers(":" + sender->getMask() + " PRIVMSG " + target + " :" + cmd.getLastParam());
 }
 
-static void	privmsg_user(Server *srv, int &userfd, Command &cmd, std::string &client)
+static void	_privmsg_user(Server *srv, int &userfd, Command &cmd, std::string &client, std::string target)
 {
-	int targetfd = srv->getUserfd(cmd.getParam(0));
+	int targetfd = srv->getUserfd(target);
 	if (targetfd == -1)
 	{
-		srv->sendReply(userfd, ERR_NOSUCHNICK(client, cmd.getParam(0)));
+		srv->sendReply(userfd, ERR_NOSUCHNICK(client, target));
 		return ;
 	}
 	if (srv->getUser(targetfd)->isAway())
 		srv->sendReply(userfd, ":" + srv->getHostname() + " " + RPL_AWAY(client, srv->getUser(targetfd)->getNickname(), srv->getUser(targetfd)->getAwayMessage()));
-	srv->sendReply(targetfd, ":" + srv->getUser(userfd)->getMask() + " PRIVMSG " + cmd.getParam(0) + " :" + cmd.getLastParam());
+	srv->sendReply(targetfd, ":" + srv->getUser(userfd)->getMask() + " PRIVMSG " + target + " :" + cmd.getLastParam());
 }
 
 void	privmsg(Server *srv, int &userfd, Command &cmd)
@@ -65,21 +57,16 @@ void	privmsg(Server *srv, int &userfd, Command &cmd)
 		srv->sendReply(userfd, ERR_NOTEXTTOSEND(client));
 		return ;
 	}
-	/* WILL need to change it to send msg to multiple users (split with ',')*/
-	if (cmd.paramNumber() > 2)
+	
+	std::vector<std::string> targets = actual_split(cmd.getParam(0), ",");
+	std::vector<std::string>::const_iterator it = targets.begin();
+	std::vector<std::string>::const_iterator ite = targets.end();
+	for (; it != ite; it++)
 	{
-		srv->sendReply(userfd, ERR_TOOMANYTARGETS(client, cmd.getParam(0)));
-		return ;
-	}
-	if (cmd.getParam(0).find("#") != std::string::npos)
-	{
-		privmsg_channel(srv, userfd, cmd, client);
-		return ;
-	}
-	else
-	{
-		privmsg_user(srv, userfd, cmd, client);
-		return ;
+		if (it->at(0) == '#')
+			_privmsg_channel(srv, userfd, cmd, client, *it);
+		else
+			_privmsg_user(srv, userfd, cmd, client, *it);
 	}
 }
 
