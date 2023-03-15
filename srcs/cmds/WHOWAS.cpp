@@ -10,6 +10,16 @@ void	whowas(Server *srv, int &userfd, Command &cmd)
 		return;
 	}
 
-	srv->sendReply(userfd, ERR_NOSUCHNICK(user->getNickname(), cmd.getParam(0)));
-	srv->sendReply(userfd, RPL_ENDOFWHOWAS(user->getNickname(), cmd.getParam(0)));
+	std::string target = cmd.getParam(0);
+	User * target_user = srv->getUserbyNickname(target);
+	if (target_user == NULL)
+	{
+		srv->sendReply(userfd, ERR_NOSUCHNICK(user->getNickname(), target));
+	}
+	else
+	{
+		srv->sendReply(userfd, RPL_WHOWASUSER(user->getNickname(), target, target_user->getUsername(), target_user->getHostname(), target_user->getRealname()));
+	}
+	
+	srv->sendReply(userfd, RPL_ENDOFWHOWAS(user->getNickname(), target));
 }

@@ -2,8 +2,6 @@ Obligatoire:
 
 "bonus":
 	(IN PROGRESS) LIST
-	TOPIC reply quand on join un channel
-	WHOWAS pour repondre si qqun a le nick
 
 Bonus du sujet:
 	Bots
