@@ -269,6 +269,10 @@ void	Server::epoll_loop()
 					this->getUser(ep_event[i].data.fd)->getUserbuffer().clear();
 				}
 		}
+		if (ep_event[i].events & EPOLLRDHUP)
+		{
+			_removeUserfromServer(ep_event[i].data.fd);
+		}
 	}
 }
 
