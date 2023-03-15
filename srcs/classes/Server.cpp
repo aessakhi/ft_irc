@@ -261,12 +261,13 @@ void	Server::epoll_loop()
 		}
 		if (ep_event[i].events & EPOLLOUT)
 		{
-			if (!this->getUser(ep_event[i].data.fd)->getUserbuffer().empty())
-			{
-				std::string s = this->getUser(ep_event[i].data.fd)->getUserbuffer();
-				send(ep_event[i].data.fd, s.data(), s.size(), MSG_NOSIGNAL);
-				this->getUser(ep_event[i].data.fd)->getUserbuffer().clear();
-			}
+			if (this->getUser(ep_event[i].data.fd))
+				if (!this->getUser(ep_event[i].data.fd)->getUserbuffer().empty())
+				{
+					std::string s = this->getUser(ep_event[i].data.fd)->getUserbuffer();
+					send(ep_event[i].data.fd, s.data(), s.size(), MSG_NOSIGNAL);
+					this->getUser(ep_event[i].data.fd)->getUserbuffer().clear();
+				}
 		}
 	}
 }
