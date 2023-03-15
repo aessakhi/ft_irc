@@ -246,7 +246,7 @@ void	Server::epoll_loop()
 	}
 	for (int i = 0; i < nfds; i++)
 	{
-		if (ep_event[i].events &  EPOLLIN)
+		if (ep_event[i].events & EPOLLIN)
 		{
 			if (ep_event[i].data.fd == this->_listenfd)
 			{
