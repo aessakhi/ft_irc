@@ -324,7 +324,7 @@ bool	Channel::checkKey(std::string s) const
 { return !(s.compare(_key)) ; }
 
 bool	Channel::isTopicSet() const
-{ return !(_topic.compare("")) ; }
+{ return _topic.compare("") ; }
 
 /* ----------COMMANDS---------- */
 
