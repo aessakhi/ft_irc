@@ -463,3 +463,17 @@ void	Channel::sendToAllMembers(std::string msg) const
 		send((*it)->getFd(), msg.data(), msg.size(), MSG_NOSIGNAL);
 	}
 }
+
+void	Channel::sendToAllMembers(std::string msg, int	&userfd) const
+{
+	std::vector<User *>::const_iterator it = _members.begin();
+	std::vector<User *>::const_iterator ite = _members.end();
+
+	msg += "\r\n";
+
+	for (; it != ite; it++)
+	{
+		if ((*it)->getFd() != userfd)
+			send((*it)->getFd(), msg.data(), msg.size(), MSG_NOSIGNAL);
+	}
+}

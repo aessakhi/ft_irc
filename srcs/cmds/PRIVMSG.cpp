@@ -26,7 +26,7 @@ static void	_privmsg_channel(Server *srv, int &userfd, Command &cmd, std::string
 		srv->sendReply(userfd, ":" + srv->getHostname() + " " + ERR_CANNOTSENDTOCHAN(client, target));
 		return ;
 	}
-	channel->sendToAllMembers(":" + sender->getMask() + " PRIVMSG " + target + " :" + cmd.getLastParam());
+	channel->sendToAllMembers(":" + sender->getMask() + " PRIVMSG " + target + " :" + cmd.getLastParam(), userfd);
 }
 
 static void	_privmsg_user(Server *srv, int &userfd, Command &cmd, std::string &client, std::string target)
