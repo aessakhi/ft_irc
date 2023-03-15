@@ -1,12 +1,9 @@
 Obligatoire:
-	(FIXED, a verifier en detail puisque c'est dans la correction) nc + ^C bloque le serveur
-	Il faut 5 command d'operators
 
 "bonus":
 	(IN PROGRESS) LIST
-
-Très facultatif:
-	JOIN 0
+	TOPIC reply quand on join un channel
+	WHOWAS pour repondre si qqun a le nick
 
 Bonus du sujet:
 	Bots
