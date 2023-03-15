@@ -300,6 +300,9 @@ class Channel
 
 		/* Sends a string to all joined members, adding a \\r\\n at the end. */
 		void	sendToAllMembers(std::string msg) const;
+
+		/* Overload to send a msg to all members except the sender */
+		void	sendToAllMembers(std::string msg, int &userfd) const;
 };
 
 #endif
