@@ -230,7 +230,8 @@ std::vector<std::string> actual_split(std::string str, std::string delimiter)
 
 	while (end != std::string::npos)
 	{
-		result.push_back(str.substr(start, end));
+		//changed the value from (start, end) to (start, end - start);
+		result.push_back(str.substr(start, end - start));
 		start = end + delimiter.length();
 		end = str.find(delimiter, start);
 	}
