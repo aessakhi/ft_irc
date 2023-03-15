@@ -21,7 +21,7 @@ void	whois(Server *srv, int &userfd, Command &cmd)
 
 	if (cmd.paramNumber() == 0)
 	{
-		srv->sendReply(userfd, ERR_NONICKNAMEGIVEN(user->getNickname()));
+		srv->sendReply(userfd, ERR_NEEDMOREPARAMS(user->getNickname(), cmd.getCmd()));
 		return;
 	}
 
