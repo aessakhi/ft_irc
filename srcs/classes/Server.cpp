@@ -126,7 +126,7 @@ void	Server::_acceptnewUser()
 	this->_UserList[new_fd] = new User(new_fd, inet_ntoa(client_addr.sin_addr));
 	memset(&ev, 0, sizeof(struct epoll_event));
 	/* Need to recheck the flags to use, EPOLLIN is alright, but other flags might be useful */
-	ev.events = EPOLLIN | EPOLLRDHUP;
+	ev.events = EPOLLIN | EPOLLOUT | EPOLLRDHUP;
 	ev.data.fd = new_fd;
 	if (epoll_ctl(this->_epollfd, EPOLL_CTL_ADD, new_fd, &ev) == -1)
 	{
@@ -155,7 +155,7 @@ void	Server::sendReply(int fd, std::string s)
 {
 	printReply(s);
 	s += "\r\n";
-	send(fd, s.data(), s.size(), MSG_NOSIGNAL);
+	this->getUser(fd)->getUserbuffer().append(s);
 }
 
 std::vector<Command>	Server::_parseBuffers(struct epoll_event event)
@@ -239,22 +239,39 @@ void	Server::epoll_loop()
 	int nfds;
 	std::vector<Command> cmd_vector;
 
-	nfds = epoll_wait(this->_epollfd, ep_event, 50, 3000);
+	nfds = epoll_wait(this->_epollfd, ep_event, 50, 0);
 	if (nfds == -1)
 	{
 		throw EpollWaitException();
 	}
 	for (int i = 0; i < nfds; i++)
 	{
-		if (ep_event[i].data.fd == this->_listenfd)
+		if (ep_event[i].events & EPOLLIN)
 		{
-			_acceptnewUser();
+			if (ep_event[i].data.fd == this->_listenfd)
+			{
+				_acceptnewUser();
+			}
+			else
+			{
+				_receivemessage(ep_event[i]);
+				cmd_vector = _parseBuffers(ep_event[i]);
+				_execCmds(cmd_vector, ep_event[i].data.fd);
+			}
 		}
-		else
+		if (ep_event[i].events & EPOLLOUT)
 		{
-			_receivemessage(ep_event[i]);
-			cmd_vector = _parseBuffers(ep_event[i]);
-			_execCmds(cmd_vector, ep_event[i].data.fd);
+			if (this->getUser(ep_event[i].data.fd))
+				if (!this->getUser(ep_event[i].data.fd)->getUserbuffer().empty())
+				{
+					std::string s = this->getUser(ep_event[i].data.fd)->getUserbuffer();
+					send(ep_event[i].data.fd, s.data(), s.size(), MSG_NOSIGNAL);
+					this->getUser(ep_event[i].data.fd)->getUserbuffer().clear();
+				}
+		}
+		if (ep_event[i].events & EPOLLRDHUP)
+		{
+			_removeUserfromServer(ep_event[i].data.fd);
 		}
 	}
 }

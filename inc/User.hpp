@@ -63,6 +63,8 @@ class User
 		/* Variable that holds last active time */
 		time_t _idletime;
 
+		std::string	_userbuf;
+
 	public:
 
 		User(int fd, std::string hostname);
@@ -118,6 +120,8 @@ class User
 
 		/* Returns "nickname!username\@hostname" */
 		const std::string getMask() const;
+
+		std::string	&getUserbuffer();
 
 		/* Return creatime of the user */
 		time_t getCreatime() const;
