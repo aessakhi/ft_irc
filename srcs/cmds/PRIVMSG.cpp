@@ -55,18 +55,18 @@ void	privmsg(Server *srv, int &userfd, Command &cmd)
 	std::string client;
 
 	client = srv->getUser(userfd)->getNickname();
-	if (cmd.getParam(0).empty())
+	if (cmd.paramNumber() == 0 || cmd.getParam(0).empty())
 	{
 		srv->sendReply(userfd, ERR_NORECIPIENT(client));
 		return ;
 	}
-	if (cmd.getParamList().size() == 1)
+	if (cmd.paramNumber() == 1 || cmd.getParam(1).empty())
 	{
 		srv->sendReply(userfd, ERR_NOTEXTTOSEND(client));
 		return ;
 	}
 	/* WILL need to change it to send msg to multiple users (split with ',')*/
-	if (cmd.getParamList().size() > 2)
+	if (cmd.paramNumber() > 2)
 	{
 		srv->sendReply(userfd, ERR_TOOMANYTARGETS(client, cmd.getParam(0)));
 		return ;
