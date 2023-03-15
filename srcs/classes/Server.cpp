@@ -239,7 +239,7 @@ void	Server::epoll_loop()
 	int nfds;
 	std::vector<Command> cmd_vector;
 
-	nfds = epoll_wait(this->_epollfd, ep_event, 50, 3000);
+	nfds = epoll_wait(this->_epollfd, ep_event, 50, 0);
 	if (nfds == -1)
 	{
 		throw EpollWaitException();
