@@ -2,7 +2,7 @@
 
 static bool _error_check(Command &cmd)
 {
-	return (cmd.getParam(0).empty() || cmd.paramNumber() == 1);
+	return (cmd.paramNumber() <= 1 || cmd.getParam(0).empty());
 }
 
 void	_notice_to_channel(Server *srv, User * user, std::string target, std::string msg)
