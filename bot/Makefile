@@ -7,6 +7,7 @@ SRC_DIR 	= srcs
 
 SRC_NAMES	+=	Bot.cpp \
 				bot_main.cpp \
+				utils.cpp \
 
 SRCS		= $(addprefix $(SRC_DIR)/, $(SRC_NAMES))
 
@@ -18,6 +19,7 @@ INC_DIR =	inc
 
 INC_NAMES +=	Bot.hpp \
 				colors.hpp \
+				main.hpp \
 
 RM =	rm -rf
 
