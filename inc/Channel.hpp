@@ -85,6 +85,12 @@ class Channel
 		/* Set _key value to new_key */
 		void	_setKey(std::string new_key);
 
+		/* Set _creatime to creation time*/
+		time_t	_creatime;
+
+		/* Set _topictime to topic update time */
+		time_t	_topictime;
+
 	public:
 		
 		Channel(const std::string & name);
@@ -142,6 +148,12 @@ class Channel
 
 		/* Returns list of voiced masks */
 		std::vector<std::string>	getVoiced() const;
+
+		/* Returns creation time of Channel */
+		time_t getCreatime() const;
+
+		/* Return topic edit time */
+		time_t getTopictime() const;
 
 	/* ----------ADDING USERS TO LISTS---------- */
 
@@ -303,6 +315,10 @@ class Channel
 
 		/* Overload to exclude a fd from receiving the msg */
 		void	sendToAllMembers(std::string msg, int	&userfd) const;
+
+		void	up_creatime();
+
+		void	up_topictime();
 };
 
 #endif

@@ -31,19 +31,24 @@ Server::~Server()
 	}
 
 	// delete _listenfd and epollfd
-	if (epoll_ctl(_epollfd, EPOLL_CTL_DEL, _listenfd, NULL) == -1)
+	if (_epollfd)
 	{
-		throw EpollCtlException();
+		if (epoll_ctl(_epollfd, EPOLL_CTL_DEL, _listenfd, NULL) == -1)
+		{
+			throw EpollCtlException();
+		}
+		if (close(_epollfd) == -1)
+		{
+			throw FdCloseException();
+		}
 	}
-	if (close(_listenfd) == -1)
+	if (_listenfd)
 	{
-		throw FdCloseException();
+		if (close(_listenfd) == -1)
+		{
+			throw FdCloseException();
+		}
 	}
-	if (close(_epollfd) == -1)
-	{
-		throw FdCloseException();
-	}
-
 }
 
 void	Server::_createsocket()
@@ -62,6 +67,7 @@ void	Server::_createsocket()
 
 	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &yes, sizeof yes) == -1)
 	{
+		close(sockfd);
 		throw SocketCreationException();
 	}
 
@@ -138,16 +144,19 @@ void	Server::_execCmds(std::vector<Command> &cmds, int userfd)
 {
 	for (std::vector<Command>::iterator it = cmds.begin(); it != cmds.end(); it++)
 	{
-		std::map<std::string, void(*)(Server *, int &, Command &)>::const_iterator it_map;
-		it_map = this->_cmdMap.find(it->getCmd());
-		if (it_map != this->_cmdMap.end())
+		if (isAuthcmd((*it).getCmd()) || getUser(userfd)->getAuth())
 		{
-			if (it->getCmd() != "PING" && getUser(userfd) != NULL)
-				getUser(userfd)->updateIdletime();
-			this->_cmdMap[toupper(it->getCmd())](this, userfd, *it);
+			std::map<std::string, void(*)(Server *, int &, Command &)>::const_iterator it_map;
+			it_map = this->_cmdMap.find(it->getCmd());
+			if (it_map != this->_cmdMap.end())
+			{
+				if (it->getCmd() != "PING" && getUser(userfd) != NULL)
+					getUser(userfd)->updateIdletime();
+				this->_cmdMap[toupper(it->getCmd())](this, userfd, *it);
+			}
+			else
+				this->sendReply(userfd, ERR_UNKNOWNCOMMAND(this->getUser(userfd)->getNickname(), it->getCmd()));
 		}
-		else
-			this->sendReply(userfd, ERR_UNKNOWNCOMMAND(this->getUser(userfd)->getNickname(), it->getCmd()));
 	}
 }
 
