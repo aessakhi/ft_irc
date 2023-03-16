@@ -72,13 +72,13 @@ INC_NAMES +=	Channel.hpp \
 				User.hpp \
 
 # OTHER FILES
-INC_NAMES =	main.hpp \
-			codes.hpp \
-			colors.hpp \
-			commandlist.hpp \
-			exceptions.hpp \
-			print.hpp \
-			utils.hpp \
+INC_NAMES +=	main.hpp \
+				codes.hpp \
+				colors.hpp \
+				commandlist.hpp \
+				exceptions.hpp \
+				print.hpp \
+				utils.hpp \
 
 INC = $(addprefix $(INC_DIR)/, $(INC_NAMES))
 

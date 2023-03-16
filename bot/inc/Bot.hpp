@@ -65,8 +65,6 @@ class RecvException : public std::exception
 		}
 };
 
-class Command;
-
 class Bot
 {
 	public:
