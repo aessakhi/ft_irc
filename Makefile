@@ -108,12 +108,12 @@ fclean:	clean botfclean
 re:	fclean all
 
 bot:
-	@make -C bot
+	@make -s -C bot
 
 botclean:
-	@make -C bot clean
+	@make -s -C bot clean
 
 botfclean:
-	@make -C bot fclean
+	@make -s -C bot fclean
 
 .PHONY: all clean re fclean bot

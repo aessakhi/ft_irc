@@ -1,7 +1,7 @@
 CXX			=	c++
 CXXFLAGS	=	-Wall -Wextra -Werror -std=c++98
 
-NAME		=	ircbot
+NAME		=	../ircbot
 
 SRC_DIR 	= srcs
 
@@ -27,7 +27,7 @@ all:	$(NAME)
 
 $(NAME):	$(OBJS)
 			@echo -n "[\033[31mx\033[0m] Compiling $(NAME)\r"
-			@$(CXX) -o ../$(NAME) $(OBJS) $(CXXFLAGS)
+			@$(CXX) -o $(NAME) $(OBJS) $(CXXFLAGS)
 			@echo "[\033[92m✓\033[0m] \033[94mCompiled $(NAME) !\033[0m"
 
 $(OBJ_DIR)/%.o :	$(SRC_DIR)/%.cpp $(INC)
@@ -42,4 +42,4 @@ clean:
 
 fclean:	clean
 		@echo "\033[31mDeleting $(NAME)\033[0m"
-		@$(RM) ../$(NAME)
+		@$(RM) $(NAME)
