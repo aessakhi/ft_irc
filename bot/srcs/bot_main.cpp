@@ -35,11 +35,7 @@ int main(int ac, char *av[])
 		bot.authentication(av[3], "ircbot", "ircbot", "Beep BOOP");
 		while (loop)
 		{
-			if (bot.receive_message())
-			{
-				bot.parse_buffer();
-				bot.print_parsed_buffer();
-			}
+			bot.loop();
 		}
 	}
 	catch (const std::exception& e)

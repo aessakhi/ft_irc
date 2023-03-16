@@ -20,6 +20,8 @@
 
 #define RECV_BUFFER_SIZE 512
 
+class Bot;
+
 /* -------------------- utils.cpp -------------------- */
 
 void			printError(std::string s);

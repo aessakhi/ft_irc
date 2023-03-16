@@ -67,6 +67,8 @@ class Bot
 		void	print_buffer();
 	/* Prints parsed elements of the buffer. */
 		void	print_parsed_buffer();
+	/* Read and reply if necessary. */
+		void	loop();
 
 		int		_fd;
 

@@ -148,6 +148,7 @@ void	Bot::print_buffer()
 {
 	std::cout << bot_buffer << std::endl;
 }
+
 void	Bot::print_parsed_buffer()
 {
 	std::cout << "Prefix: \'" << prefix << "\'" << std::endl;
@@ -161,5 +162,14 @@ void	Bot::print_parsed_buffer()
 			std::cout << std::endl;
 		else
 			std::cout << ", ";
+	}
+}
+
+void	Bot::loop()
+{
+	if (receive_message())
+	{
+		parse_buffer();
+		print_parsed_buffer();
 	}
 }
