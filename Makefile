@@ -84,7 +84,7 @@ INC = $(addprefix $(INC_DIR)/, $(INC_NAMES))
 
 RM =	rm -rf
 
-all:	$(NAME)
+all:	$(NAME) bot
 
 $(NAME):	$(OBJS)
 			@echo -n "[\033[31mx\033[0m] Compiling $(NAME)\r"
@@ -97,19 +97,23 @@ $(OBJ_DIR)/%.o :	$(SRC_DIR)/%.cpp $(INC)
 					@$(CXX) $(CXXFLAGS) -c $< -o $@ -I$(INC_DIR)
 					@echo "[\033[32m✓\033[0m] Compiled $<  "
 
-clean:
+clean: botclean
 	@echo "\033[31mDeleting .o files\033[0m"
 	@$(RM) $(OBJ_DIR)
 
-fclean:	clean
+fclean:	clean botfclean
 	@echo "\033[31mDeleting $(NAME)\033[0m"
 	@$(RM) $(NAME)
 
 re:	fclean all
 
-#TO DEL
-go: all
-	./ircserv 9000 test
-#TO DEL
+bot:
+	@make -C bot
 
-.PHONY: all clean re fclean
+botclean:
+	@make -C bot clean
+
+botfclean:
+	@make -C bot fclean
+
+.PHONY: all clean re fclean bot

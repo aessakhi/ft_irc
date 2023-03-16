@@ -1,6 +1,8 @@
 ircserv
 objs
 .vscode
+bot/*.o
+ircbot
 
 .nfs0000000003ebbc9c000000c7
 client.sh
