@@ -25,6 +25,8 @@ int main(int ac, char *av[])
 
 	signal(SIGINT, sighandler);
 
+	std::cout << BRED << "Starting up..." << RESET << std::endl;
+
 	Bot bot("ircbot", "ircbot", "Beep BOOP");
 
 	try
@@ -42,4 +44,8 @@ int main(int ac, char *av[])
 	{
 		printError(e.what());
 	}
+
+	std::cout << "\r      " << std::endl << BRED << "Shutting down..." << RESET << std::endl;
+
+	return 0;
 }
