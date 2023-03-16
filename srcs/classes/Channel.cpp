@@ -1,7 +1,10 @@
 #include "Channel.hpp"
 
 Channel::Channel(const std::string & name) : _name(name), _modestring("n"), _limit_mode(false), _invite_mode(false), _key_mode(false), _moderated_mode(false), _secret_mode(false), _protected_topic_mode(false), _no_external_messages_mode(true) 
-{}
+{
+	time(&this->_creatime);
+	time(&this->_topictime);
+}
 
 Channel::~Channel() {}
 
@@ -69,6 +72,12 @@ std::vector<std::string>	Channel::getInviteExcept() const
 
 std::vector<std::string>	Channel::getVoiced() const
 { return _voiced ; }
+
+time_t Channel::getCreatime() const
+{ return _creatime; }
+
+time_t Channel::getTopictime() const
+{ return _topictime; }
 
 /* ----------ADDING USERS TO LISTS---------- */
 
@@ -477,3 +486,9 @@ void	Channel::sendToAllMembers(std::string msg, int &userfd) const
 			(*it)->getUserbuffer().append(msg);
 	}
 }
+
+void	Channel::up_creatime()
+{ time(&this->_creatime); }
+
+void	Channel::up_topictime()
+{ time(&this->_topictime); }

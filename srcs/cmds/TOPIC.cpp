@@ -47,4 +47,5 @@ void	topic(Server *srv, int &userfd, Command &cmd)
 	
 	channel->setTopic(new_topic);
 	channel->sendToAllMembers(":" + user->getMask() + " " + cmd.getStr());
+	channel->up_topictime();
 }
