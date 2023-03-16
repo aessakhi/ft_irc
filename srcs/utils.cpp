@@ -11,6 +11,12 @@ static bool _port_is_digit(char *port)
 	return (port[0] != 0);
 }
 
+bool isAuthcmd(const std::string &cmd)
+{
+	if (cmd.compare("CAP") == 0 || cmd.compare("PASS") == 0 || cmd.compare("NICK") == 0 || cmd.compare("USER") == 0)
+		return (true);
+	return (false);
+}
 
 int program_arguments_check(int argc, char **argv)
 {

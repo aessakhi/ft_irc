@@ -7,6 +7,9 @@
 	Returns 0 if arguments are formatted correctly, -1 otherwise. */
 int program_arguments_check(int argc, char **argv);
 
+/* Check if the cmd is CAP, PASS, USER or NICK */
+bool isAuthcmd(const std::string &cmd);
+
 /* Splits str on delimiter.
 Erases the beginning of str if there is a \\r\\n in str. */
 std::vector<std::string> split(std::string *str, std::string delimiter);

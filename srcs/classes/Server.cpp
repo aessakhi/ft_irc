@@ -138,16 +138,19 @@ void	Server::_execCmds(std::vector<Command> &cmds, int userfd)
 {
 	for (std::vector<Command>::iterator it = cmds.begin(); it != cmds.end(); it++)
 	{
-		std::map<std::string, void(*)(Server *, int &, Command &)>::const_iterator it_map;
-		it_map = this->_cmdMap.find(it->getCmd());
-		if (it_map != this->_cmdMap.end())
+		if (isAuthcmd((*it).getCmd()) || getUser(userfd)->getAuth())
 		{
-			if (it->getCmd() != "PING" && getUser(userfd) != NULL)
-				getUser(userfd)->updateIdletime();
-			this->_cmdMap[toupper(it->getCmd())](this, userfd, *it);
+			std::map<std::string, void(*)(Server *, int &, Command &)>::const_iterator it_map;
+			it_map = this->_cmdMap.find(it->getCmd());
+			if (it_map != this->_cmdMap.end())
+			{
+				if (it->getCmd() != "PING" && getUser(userfd) != NULL)
+					getUser(userfd)->updateIdletime();
+				this->_cmdMap[toupper(it->getCmd())](this, userfd, *it);
+			}
+			else
+				this->sendReply(userfd, ERR_UNKNOWNCOMMAND(this->getUser(userfd)->getNickname(), it->getCmd()));
 		}
-		else
-			this->sendReply(userfd, ERR_UNKNOWNCOMMAND(this->getUser(userfd)->getNickname(), it->getCmd()));
 	}
 }
 
