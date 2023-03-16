@@ -3,6 +3,9 @@
 Bot::Bot() : _fd(-1)
 {}
 
+Bot::Bot(std::string nickname, std::string username, std::string realname) : _fd(-1), _nickname(nickname), _username(username), _realname(realname)
+{}
+
 Bot::~Bot()
 {
 	if (_fd != -1)
@@ -55,19 +58,19 @@ void Bot::socket_setup(char * address, char * port)
 		throw ConnectionException();
 }
 
-void Bot::authentication(std::string password, std::string nickname, std::string username, std::string realname) const
+void Bot::authentication(std::string password) const
 {
 	std::string msg;
 	msg += "PASS ";
 	msg += password;
 	msg += "\r\n";
 	msg += "NICK ";
-	msg += nickname;
+	msg += _nickname;
 	msg += "\r\n";
 	msg += "USER ";
-	msg += username;
+	msg += _username;
 	msg += " 0 * :";
-	msg += realname;
+	msg += _realname;
 
 	send_message(msg);
 }

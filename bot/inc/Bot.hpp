@@ -45,8 +45,11 @@ class RecvException : public std::exception
 
 class Bot
 {
-	public:
+	private:
 		Bot();
+
+	public:
+		Bot(std::string nickname, std::string username, std::string realname);
 		~Bot();
 		Bot(Bot const & src);
 		Bot & operator=(Bot const & src);
@@ -56,7 +59,7 @@ class Bot
 	/* Sets up _fd. */
 		void	socket_setup(char * address, char * port);
 	/* Sends PASS, NICK and USER messages */
-		void	authentication(std::string password, std::string nickname, std::string username, std::string realname) const;
+		void	authentication(std::string password) const;
 	/* Calls recv and appends what is read to buffer.
 	Returns true if something was read, false otherwise. */
 		bool	receive_message();
@@ -71,6 +74,11 @@ class Bot
 		void	loop();
 
 		int		_fd;
+
+		std::string		_nickname;
+		std::string		_username;
+		std::string		_hostname;
+		std::string		_realname;
 
 		std::string		bot_buffer;
 

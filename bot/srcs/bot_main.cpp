@@ -25,14 +25,14 @@ int main(int ac, char *av[])
 
 	signal(SIGINT, sighandler);
 
-	Bot bot;
+	Bot bot("ircbot", "ircbot", "Beep BOOP");
 
 	try
 	{
 		bot.socket_setup(av[1], av[2]);
 		if (bot._fd < 0)
 			return -1;
-		bot.authentication(av[3], "ircbot", "ircbot", "Beep BOOP");
+		bot.authentication(av[3]);
 		while (loop)
 		{
 			bot.loop();
