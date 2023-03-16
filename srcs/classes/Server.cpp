@@ -31,19 +31,24 @@ Server::~Server()
 	}
 
 	// delete _listenfd and epollfd
-	if (epoll_ctl(_epollfd, EPOLL_CTL_DEL, _listenfd, NULL) == -1)
+	if (_epollfd)
 	{
-		throw EpollCtlException();
+		if (epoll_ctl(_epollfd, EPOLL_CTL_DEL, _listenfd, NULL) == -1)
+		{
+			throw EpollCtlException();
+		}
+		if (close(_epollfd) == -1)
+		{
+			throw FdCloseException();
+		}
 	}
-	if (close(_listenfd) == -1)
+	if (_listenfd)
 	{
-		throw FdCloseException();
+		if (close(_listenfd) == -1)
+		{
+			throw FdCloseException();
+		}
 	}
-	if (close(_epollfd) == -1)
-	{
-		throw FdCloseException();
-	}
-
 }
 
 void	Server::_createsocket()
@@ -62,6 +67,7 @@ void	Server::_createsocket()
 
 	if (setsockopt(sockfd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &yes, sizeof yes) == -1)
 	{
+		close(sockfd);
 		throw SocketCreationException();
 	}
 

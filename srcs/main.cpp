@@ -24,16 +24,18 @@ int main(int argc, char **argv)
 
 	Server ircserv("ircserv", argv[1], argv[2], HOSTNAME, "password");
 
-	ircserv.init();
-
-	while (loop)
+	try
 	{
-		try
-		{
+
+		ircserv.init();
+
+		while (loop)
 			ircserv.epoll_loop();
-		}
-		catch(const std::exception& e)
-		{}
+
+	}
+	catch(const std::exception& e)
+	{
+		std::cerr << e.what() << std::endl;
 	}
 
 	std::cout << "\r      " << std::endl << BRED << "Shutting down..." << RESET << std::endl;
