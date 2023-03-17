@@ -31,5 +31,6 @@ void	wallops(Server * srv, int & userfd, Command & cmd);
 void	who(Server *srv, int &userfd, Command &cmd);
 void	whois(Server *srv, int &userfd, Command &cmd);
 void	whowas(Server *srv, int &userfd, Command &cmd);
+void	lusers(Server *srv, int &userfd, Command &cmd);
 
 #endif

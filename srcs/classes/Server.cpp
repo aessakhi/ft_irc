@@ -240,6 +240,7 @@ void	Server::_initCmdMap()
 	this->_cmdMap["WHO"] = &who;
 	this->_cmdMap["WHOIS"] = &whois;
 	this->_cmdMap["WHOWAS"] = &whowas;
+	this->_cmdMap["LUSERS"] = &lusers;
 }
 
 void	Server::epoll_loop()

@@ -43,6 +43,7 @@ CMD_NAMES	+=	AWAY.cpp \
 				WHO.cpp \
 				WHOIS.cpp \
 				WHOWAS.cpp \
+				LUSERS.cpp \
 
 # OTHER FILES
 SRC_NAMES	+=	main.cpp \
