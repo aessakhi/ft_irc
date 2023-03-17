@@ -14,11 +14,14 @@
 #include <signal.h>
 #include <vector>
 #include <fcntl.h>
+#include <sys/epoll.h>
 
 #include "Bot.hpp"
 #include "colors.hpp"
+#include "exceptions.hpp"
 
 #define RECV_BUFFER_SIZE 512
+#define EPOLL_EVENTS_SIZE 10
 
 class Bot;
 

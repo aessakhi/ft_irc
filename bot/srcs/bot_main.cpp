@@ -29,21 +29,34 @@ int main(int ac, char *av[])
 
 	Bot bot("ircbot", "ircbot", "Beep BOOP");
 
+	char hostname[512];
+	gethostname(hostname, 512);
+	std::cout << hostname << std::endl;
+
 	try
 	{
 		bot.socket_setup(av[1], av[2]);
-		if (bot._fd < 0)
-			return -1;
+		bot.create_epoll();
 		bot.authentication(av[3]);
+		while (!bot._has_registered)
+		{
+			
+		}
 		while (loop)
 		{
-			bot.loop();
+			bot.epoll_loop();
+		}
+		bot.add_quit_message();
+		while (!bot._send_buffer.empty())
+		{
+			bot.epoll_loop();
 		}
 	}
 	catch (const std::exception& e)
 	{
 		printError(e.what());
 	}
+	
 
 	std::cout << "\r      " << std::endl << BRED << "Shutting down..." << RESET << std::endl;
 

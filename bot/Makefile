@@ -20,6 +20,7 @@ INC_DIR =	inc
 INC_NAMES +=	Bot.hpp \
 				colors.hpp \
 				main.hpp \
+				exceptions.hpp \
 
 RM =	rm -rf
 

@@ -1,35 +1,61 @@
 #include "Bot.hpp"
 
-Bot::Bot() : _fd(-1)
+Bot::Bot() : _fd(-1), _epollfd(-1), _has_registered(false)
 {}
 
-Bot::Bot(std::string nickname, std::string username, std::string realname) : _fd(-1), _nickname(nickname), _username(username), _realname(realname)
+Bot::Bot(std::string nickname, std::string username, std::string realname) : _fd(-1), _epollfd(-1), _has_registered(false), _has_quit(false), _nickname(nickname), _username(username), _realname(realname)
 {}
 
 Bot::~Bot()
 {
-	if (_fd != -1)
-	{
-		send_message("QUIT :Bot is shutting off");
-		close(_fd);
-	}
+	close_fds();
 }
 
-Bot::Bot(Bot const & src) : _fd(src._fd)
-{}
+Bot::Bot(Bot const & src)
+{
+	*this = src;
+}
 
 Bot & Bot::operator=(Bot const & src)
 {
 	_fd = src._fd;
+	_epollfd = src._epollfd;
+
+	_has_registered = src._has_registered;
+	_has_quit = src._has_quit;
+
+	_nickname = src._nickname;
+	_username = src._username;
+	_hostname = src._hostname;
+	_realname = src._realname;
+
+	_recv_buffer = src._recv_buffer;
+	_send_buffer = src._send_buffer;
+
+	_prefix = src._prefix;
+	_command = src._command;
+	_arguments = src._arguments;
+
 	return *this;
 }
 
-void Bot::send_message(std::string str) const
+void Bot::add_to_send_buffer(std::string str)
 {
+	if (_has_quit)
+		return;
 	str += "\r\n";
-	ssize_t sent = send(_fd, str.c_str(), str.size(), 0);
-	if (sent == -1)
+	_send_buffer += str;
+}
+
+void Bot::send_buffer()
+{
+	ssize_t ret;
+	ret = send(_fd, _send_buffer.c_str(), _send_buffer.size(), 0);
+	if (ret == -1)
+	{
 		throw SendException();
+	}
+	_send_buffer.erase(0, ret);
 }
 
 void Bot::socket_setup(char * address, char * port)
@@ -41,24 +67,63 @@ void Bot::socket_setup(char * address, char * port)
   
     if (inet_pton(AF_INET, address, &serv_addr.sin_addr) <= 0)
 	{
-        printError("Invalid address/ Address not supported");
-		return;
-    }
-
+		throw AddressException();
+	}
+	
 	_fd = socket(PF_INET, SOCK_STREAM, 0);
 
 	if (_fd < 0)
-		throw SocketException();
+	{
+		throw SocketSetupException();
+	}
 
 	int yes = 1;
 	if (setsockopt(_fd, SOL_SOCKET, SO_REUSEADDR | SO_REUSEPORT, &yes, sizeof yes) == -1)
-		throw SocketException();
+	{
+		if (close(_fd) == -1)
+		{
+			throw FdCloseException();
+		}
+		_fd = -1;
+		throw SocketSetupException();
+	}
 
 	if (connect(_fd, (struct sockaddr*)&serv_addr, sizeof serv_addr))
+	{
+		if (close(_fd) == -1)
+		{
+			throw FdCloseException();
+		}
+		_fd = -1;
 		throw ConnectionException();
+	}
 }
 
-void Bot::authentication(std::string password) const
+void	Bot::create_epoll()
+{
+	struct epoll_event	ev;
+
+	if ((_epollfd = epoll_create1(0)) == -1)
+	{
+		throw EpollSetupException();
+	}
+	
+	memset(&ev, 0, sizeof(struct epoll_event));
+	ev.events = EPOLLIN | EPOLLOUT | EPOLLRDHUP;
+	ev.data.fd = _fd;
+	
+	if (epoll_ctl(_epollfd, EPOLL_CTL_ADD, _fd, &ev) == -1)
+	{
+		if (close(_epollfd) == -1)
+		{
+			throw FdCloseException();
+		}
+		_epollfd = -1;
+		throw EpollCtlException();
+	}
+}
+
+void Bot::authentication(std::string password)
 {
 	std::string msg;
 	msg += "PASS ";
@@ -72,38 +137,40 @@ void Bot::authentication(std::string password) const
 	msg += " 0 * :";
 	msg += _realname;
 
-	send_message(msg);
+	add_to_send_buffer(msg);
 }
 
-bool Bot::receive_message()
+void Bot::receive_message()
 {
+	if (_has_quit)
+		return;
+
 	char buf[RECV_BUFFER_SIZE];
 	ssize_t ret;
 
 	ret = recv(_fd, buf, RECV_BUFFER_SIZE, 0);
 	if (ret < 0)
 		throw RecvException();
-	if (ret <= 0)
-		return false;
-	bot_buffer.append(buf, ret);
-	return (true);
+	_recv_buffer.append(buf, ret);
 }
 
 bool Bot::parse_buffer()
 {
-	if (bot_buffer.empty())
+	printRecv(_recv_buffer, _recv_buffer.size());
+
+	if (_recv_buffer.empty())
 		return false;
 
 	// Grab up to the first "\\r\\n"
 
 	std::string buffer;
-	size_t	end = bot_buffer.find("\r\n");
+	size_t	end = _recv_buffer.find("\r\n");
 	if (end == std::string::npos)
-		end = bot_buffer.find_first_of("\r\n");
+		end = _recv_buffer.find_first_of("\r\n");
 	if (end == std::string::npos)
 		return false;
-	buffer = bot_buffer.substr(0, end + 1);
-	bot_buffer.erase(0, end + 1);
+	buffer = _recv_buffer.substr(0, end + 1);
+	_recv_buffer.erase(0, end + 1);
 
 	size_t	start = 0;
 	end = 0;
@@ -114,7 +181,7 @@ bool Bot::parse_buffer()
 	{
 		start = 1;
 		end = buffer.find(' ', start);
-		prefix = buffer.substr(start, end - start);
+		_prefix = buffer.substr(start, end - start);
 	}
 
 	// Command
@@ -122,9 +189,9 @@ bool Bot::parse_buffer()
 	start = buffer.find_first_not_of(' ', end);
 	end = buffer.find(' ', start);
 	if (start == std::string::npos)
-		command = "";
+		_command = "";
 	else
-		command = buffer.substr(start, end - start);
+		_command = buffer.substr(start, end - start);
 
 	// Arguments parsing
 
@@ -143,36 +210,85 @@ bool Bot::parse_buffer()
 		end = buffer.find(' ', start);
 	}
 	args[args.size() - 1] = no_crlf(args[args.size() - 1]);
-	arguments = args;
+	_arguments = args;
 	return true;
-}
-
-void	Bot::print_buffer()
-{
-	std::cout << bot_buffer << std::endl;
 }
 
 void	Bot::print_parsed_buffer()
 {
-	std::cout << "Prefix: \'" << prefix << "\'" << std::endl;
-	std::cout << "Command: \'" << command << "\'" << std::endl;
+	std::cout << "Prefix: \'" << _prefix << "\'" << std::endl;
+	std::cout << "Command: \'" << _command << "\'" << std::endl;
 	std::cout << "Arguments: ";
-	for (size_t i = 0; i < arguments.size();)
+	for (size_t i = 0; i < _arguments.size();)
 	{
-		std::cout << "\'" << arguments[i] << "\'";
+		std::cout << "\'" << _arguments[i] << "\'";
 		i++;
-		if (i == arguments.size())
+		if (i == _arguments.size())
 			std::cout << std::endl;
 		else
 			std::cout << ", ";
 	}
 }
 
-void	Bot::loop()
+void Bot::epoll_loop()
 {
-	if (receive_message())
+	struct	epoll_event ep_events[EPOLL_EVENTS_SIZE];
+	int nfds;
+
+	nfds = epoll_wait(_epollfd, ep_events, EPOLL_EVENTS_SIZE, 0);
+	if (nfds == -1)
 	{
-		parse_buffer();
-		print_parsed_buffer();
+		throw EpollWaitException();
+	}
+	for (int i = 0; i < nfds; i++)
+	{
+		if (ep_events[i].events & EPOLLRDHUP)
+		{
+			throw RDHUPException();
+		}
+		if (ep_events[i].events & EPOLLIN)
+		{
+			receive_message();
+			if (parse_buffer())
+			{
+				print_parsed_buffer();
+			}
+		}
+		if (ep_events[i].events & EPOLLOUT)
+		{
+			if (!_send_buffer.empty())
+			{
+				send_buffer();
+			}
+		}
+	}
+}
+
+void	Bot::add_quit_message()
+{
+	add_to_send_buffer("QUIT :Bot is shutting off");
+	_has_quit = true;
+}
+
+void Bot::close_fds()
+{
+	if (_epollfd != -1)
+	{
+		if (epoll_ctl(_epollfd, EPOLL_CTL_DEL, _fd, NULL) == -1)
+		{
+			throw EpollCtlException();
+		}
+		if (close(_epollfd) == -1)
+		{
+			throw FdCloseException();
+		}
+	}
+
+	if (_fd != -1)
+	{
+		if (close(_fd) == -1)
+		{
+			throw FdCloseException();
+		}
 	}
 }

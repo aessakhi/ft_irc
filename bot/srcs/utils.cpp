@@ -13,18 +13,8 @@ void	printReply(std::string s)
 void	printRecv(char * s, size_t n)
 {
 	std::cout << std::endl << BLU << "<< \"";
-	if (n >= 2)
-	{
-		if (s[n - 2] == '\r' && s[n - 1] == '\n')
-			n -= 2;
-		else if (s[n - 1] == '\n' || s[n - 1] == '\r')
-			n--;
-	}
-	if (n == 1 && (s[0] == '\n' || s[0] == '\r'))
-		n--;
-	
-	for (size_t i = 0; i < n; i++)
-		std::cout << s[i];
+	std::string str(s, n);
+	std::cout << no_crlf(str) << std::endl;
 	std::cout << "\"" << RESET << std::endl;
 }
 
