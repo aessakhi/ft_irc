@@ -33,6 +33,7 @@ class Command;
 class Mode;
 class Server;
 class User;
+class History;
 
 /* OTHER FILES */
 
@@ -45,6 +46,7 @@ class User;
 
 /* CLASS HEADERS */
 
+#include "History.hpp"
 #include "Channel.hpp"
 #include "Command.hpp"
 #include "Mode.hpp"

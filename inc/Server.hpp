@@ -53,6 +53,8 @@ class Server
 		/* Map containing functions and their identifier */
 		std::map<std::string, void(*)(Server *srv, int &userfd, Command &cmd)>	_cmdMap;
 
+		std::vector<History> _history;
+
 	/* ----------INIT FUNCTIONS---------- */
 
 		/* Initializes _cmdMap */
@@ -131,6 +133,8 @@ class Server
 
 		/* Compares str with the operator password */
 		bool check_oper_password(std::string str) const;
+
+		std::vector<History> &getHistory();
 };
 
 #endif

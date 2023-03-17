@@ -13,6 +13,7 @@ CLASS_NAMES	+=	Channel.cpp \
 				Mode.cpp \
 				Server.cpp \
 				User.cpp \
+				History.cpp \
 
 # COMMANDS
 CMD_NAMES	+=	AWAY.cpp \
@@ -71,6 +72,7 @@ INC_NAMES +=	Channel.hpp \
 				Mode.hpp \
 				Server.hpp \
 				User.hpp \
+				History.hpp \
 
 # OTHER FILES
 INC_NAMES =	main.hpp \

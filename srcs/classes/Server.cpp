@@ -200,6 +200,7 @@ void	Server::_removeUserfromServer(int userfd)
 	User * user = this->getUser(userfd);
 	if (user == 0)
 		return printError("Invalid user");
+	_history.push_back(*user);
 	this->_UserList.erase(userfd);
 	if (epoll_ctl(this->_epollfd, EPOLL_CTL_DEL, userfd, NULL) == -1)
 	{
@@ -376,4 +377,9 @@ time_t Server::getCreatime() const
 bool Server::check_oper_password(std::string str) const
 {
 	return !(_op_pwd.compare(str));
+}
+
+std::vector<History> &Server::getHistory()
+{
+	return _history;
 }
