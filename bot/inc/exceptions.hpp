@@ -103,4 +103,24 @@ class RDHUPException : public std::exception
 		}
 };
 
+class IncorrectPasswordException : public std::exception
+{
+	public:
+	
+		virtual const char *what() const throw()
+		{
+			return ("Wrong password supplied");
+		}
+};
+
+class NoAvailableNicknameException : public std::exception
+{
+	public:
+	
+		virtual const char *what() const throw()
+		{
+			return ("No nickname available");
+		}
+};
+
 #endif

@@ -1,9 +1,9 @@
 #include "Bot.hpp"
 
-Bot::Bot() : _fd(-1), _epollfd(-1), _has_registered(false)
+Bot::Bot() : _fd(-1), _epollfd(-1), _suffix(1), _has_quit(false)
 {}
 
-Bot::Bot(std::string nickname, std::string username, std::string realname) : _fd(-1), _epollfd(-1), _has_registered(false), _has_quit(false), _nickname(nickname), _username(username), _realname(realname)
+Bot::Bot(std::string nickname, std::string username, std::string realname) : _fd(-1), _epollfd(-1), _suffix(1), _has_quit(false), _nickname(nickname), _username(username), _realname(realname)
 {}
 
 Bot::~Bot()
@@ -21,7 +21,8 @@ Bot & Bot::operator=(Bot const & src)
 	_fd = src._fd;
 	_epollfd = src._epollfd;
 
-	_has_registered = src._has_registered;
+	_suffix = src._suffix;
+
 	_has_quit = src._has_quit;
 
 	_nickname = src._nickname;
@@ -99,7 +100,7 @@ void Bot::socket_setup(char * address, char * port)
 	}
 }
 
-void	Bot::create_epoll()
+void Bot::create_epoll()
 {
 	struct epoll_event	ev;
 
@@ -125,13 +126,76 @@ void	Bot::create_epoll()
 
 void Bot::authentication(std::string password)
 {
+	std::string new_nick = _nickname;
+	add_pass(password);
+	while (true)
+	{
+		add_nick(new_nick);
+		add_user();
+		while (!_send_buffer.empty())
+		{
+			epoll_loop();
+		}
+		while (_command.empty())
+		{
+			epoll_loop();
+		}
+		// ERR_PASSWDMISMATCH
+		if (!_command.compare("464"))
+		{
+			throw IncorrectPasswordException();
+		}
+		// ERR_NICKNAMEINUSE
+		if (!_command.compare("433"))
+		{
+			new_nick = next_nickname();
+			clear_command();
+		}
+		// RPL_WELCOME
+		if (!_command.compare("001"))
+		{
+			_nickname = new_nick;
+			clear_command();
+			break;
+		}
+	}
+}
+
+std::string Bot::next_nickname()
+{
+	std::string suffix;
+	std::stringstream out;
+	out << _suffix;
+	_suffix++;
+	suffix = "_" + out.str();
+
+	if (_nickname.size() + suffix.size() > 9)
+		throw NoAvailableNicknameException();
+	
+	return (_nickname + suffix);
+}
+
+void Bot::add_pass(std::string password)
+{
 	std::string msg;
 	msg += "PASS ";
 	msg += password;
-	msg += "\r\n";
+
+	add_to_send_buffer(msg);
+}
+
+void Bot::add_nick(std::string nick)
+{
+	std::string msg;
 	msg += "NICK ";
-	msg += _nickname;
-	msg += "\r\n";
+	msg += nick;
+
+	add_to_send_buffer(msg);
+}
+
+void Bot::add_user()
+{
+	std::string msg;
 	msg += "USER ";
 	msg += _username;
 	msg += " 0 * :";
@@ -214,7 +278,7 @@ bool Bot::parse_buffer()
 	return true;
 }
 
-void	Bot::print_parsed_buffer()
+void Bot::print_parsed_buffer()
 {
 	std::cout << "Prefix: \'" << _prefix << "\'" << std::endl;
 	std::cout << "Command: \'" << _command << "\'" << std::endl;
@@ -264,7 +328,14 @@ void Bot::epoll_loop()
 	}
 }
 
-void	Bot::add_quit_message()
+void Bot::clear_command()
+{
+	_prefix = "";
+	_command = "";
+	_arguments.clear();
+}
+
+void Bot::add_quit_message()
 {
 	add_to_send_buffer("QUIT :Bot is shutting off");
 	_has_quit = true;

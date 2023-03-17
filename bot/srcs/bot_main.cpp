@@ -38,14 +38,12 @@ int main(int ac, char *av[])
 		bot.socket_setup(av[1], av[2]);
 		bot.create_epoll();
 		bot.authentication(av[3]);
-		while (!bot._has_registered)
-		{
-			
-		}
+
 		while (loop)
 		{
 			bot.epoll_loop();
 		}
+		
 		bot.add_quit_message();
 		while (!bot._send_buffer.empty())
 		{

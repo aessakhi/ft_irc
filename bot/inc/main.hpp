@@ -15,6 +15,7 @@
 #include <vector>
 #include <fcntl.h>
 #include <sys/epoll.h>
+#include <sstream>
 
 #include "Bot.hpp"
 #include "colors.hpp"
