@@ -24,6 +24,7 @@ CMD_NAMES	+=	AWAY.cpp \
 				KICK.cpp \
 				KILL.cpp \
 				LIST.cpp \
+				LUSERS.cpp \
 				MODE-channel.cpp \
 				MODE-user.cpp \
 				MODE.cpp \
@@ -44,7 +45,6 @@ CMD_NAMES	+=	AWAY.cpp \
 				WHO.cpp \
 				WHOIS.cpp \
 				WHOWAS.cpp \
-				LUSERS.cpp \
 
 # OTHER FILES
 SRC_NAMES	+=	main.cpp \

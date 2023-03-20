@@ -47,8 +47,11 @@ void	list_all(Server *srv, int &userfd, Command &cmd, User *user)
 	it = srv->getChannelMap()->begin();
 	for (; it != srv->getChannelMap()->end(); it++)
 		if (!it->second->secretMode())
+		{
+			std::cout << it->first << " is " << it->second->secretMode() << std::endl;
 			srv->sendReply(userfd, RPL_LIST(user->getNickname(), it->first,\
 				cpt_memb(it->second), it->second->getTopic()));
+		}
 }
 
 void	list_select(Server *srv, int &userfd, Command &cmd, User *user)
@@ -137,8 +140,11 @@ void	list(Server *srv, int &userfd, Command &cmd)
 	}
 	else if (cmd.getParam(0).at(0) == '>' || cmd.getParam(0).at(0) == '<')
 		list_all_users(srv, userfd, cmd, user);
-	else if (cmd.getParam(0).at(0) == 'C' && (cmd.getParam(0).at(1) == '>' || cmd.getParam(0).at(1) == '<' ))
-		list_chan_time(srv,userfd, cmd, user);
-	else if (cmd.getParam(0).at(0) == 'T' && (cmd.getParam(0).at(1) == '>' || cmd.getParam(0).at(1) == '<' ))
-		list_topic_time(srv,userfd, cmd, user);
+	else if (cmd.getParam(0).size() >= 2)
+	{
+		if (cmd.getParam(0).at(0) == 'C' && (cmd.getParam(0).at(1) == '>' || cmd.getParam(0).at(1) == '<' ))
+			list_chan_time(srv,userfd, cmd, user);
+		else if (cmd.getParam(0).at(0) == 'T' && (cmd.getParam(0).at(1) == '>' || cmd.getParam(0).at(1) == '<' ))
+			list_topic_time(srv,userfd, cmd, user);
+	}
 }
