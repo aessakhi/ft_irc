@@ -128,15 +128,11 @@ void Bot::authentication(std::string password)
 {
 	std::string new_nick = _nickname;
 	add_pass(password);
+	add_nick(new_nick);
+	add_user();
 	while (true)
 	{
-		add_nick(new_nick);
-		add_user();
-		while (!_send_buffer.empty())
-		{
-			epoll_loop();
-		}
-		while (_command.empty())
+		while (!_send_buffer.empty() || _command.empty())
 		{
 			epoll_loop();
 		}
@@ -158,6 +154,7 @@ void Bot::authentication(std::string password)
 			clear_command();
 			break;
 		}
+		add_nick(new_nick);
 	}
 }
 
@@ -229,12 +226,18 @@ bool Bot::parse_buffer()
 
 	std::string buffer;
 	size_t	end = _recv_buffer.find("\r\n");
+	size_t	sep_size = 2;
 	if (end == std::string::npos)
+	{
 		end = _recv_buffer.find_first_of("\r\n");
+		sep_size = 1;
+	}
 	if (end == std::string::npos)
+	{
 		return false;
+	}
 	buffer = _recv_buffer.substr(0, end + 1);
-	_recv_buffer.erase(0, end + 1);
+	_recv_buffer.erase(0, end + 1 + sep_size);
 
 	size_t	start = 0;
 	end = 0;
