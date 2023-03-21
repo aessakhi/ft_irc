@@ -44,13 +44,13 @@ class Bot
 		void	add_quit_message();
 	/* Close fds. */
 		void	close_fds();
-	/*  */
+	/* Loop through _cmd_buffer.. */
 		void	handle_commands();
-	/*  */
+	/* Calls bot function corresponding to received command. */
 		void	handle_command(Command cmd);
-	/*  */
+	/* Tries to parse PRIVMSG received as bot commands. */
 		void	privmsg(Command cmd);
-	/*  */
+	/* Executes bot commands. */
 		void	exec_botcommand(BotCommand bot_command);
 
 		int		_fd;
@@ -75,8 +75,7 @@ class Bot
 		std::string		_recv_buffer;
 		std::string		_send_buffer;
 
-	// Command storage
-
+	/* Command storage */
 		std::vector<Command>	_cmd_buffer;
 };
 
