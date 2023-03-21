@@ -5,6 +5,7 @@ BotCommand::BotCommand()
 
 BotCommand::BotCommand(std::string from_mask, std::string original_target, std::string command, std::string raw_args) : from_mask(from_mask), original_target(original_target), command(command), raw_args(raw_args)
 {
+	args = split(raw_args, " ");
 	parse_mask();
 }
 

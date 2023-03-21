@@ -421,5 +421,13 @@ void Bot::exec_botcommand(BotCommand bot_command)
 	if (!bot_command.command.compare("raw_send") || !bot_command.command.compare("rs"))
 	{
 		add_to_send_buffer(bot_command.raw_args);
+		return;
+	}
+	if (!bot_command.command.compare("join") || !bot_command.command.compare("j"))
+	{
+		std::string	join_msg = "JOIN ";
+		join_msg += bot_command.raw_args;
+		add_to_send_buffer(join_msg);
+		return;
 	}
 }
