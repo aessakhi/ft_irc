@@ -63,6 +63,8 @@ void	privmsg(Server *srv, int &userfd, Command &cmd)
 	std::vector<std::string>::const_iterator ite = targets.end();
 	for (; it != ite; it++)
 	{
+		if (it->empty())
+			continue;
 		if (it->at(0) == '#')
 			_privmsg_channel(srv, userfd, cmd, client, *it);
 		else
