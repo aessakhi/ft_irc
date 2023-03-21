@@ -73,6 +73,8 @@ std::vector<std::string> split(std::string str, std::string delimiter)
 		start = end + delimiter.length();
 		end = str.find(delimiter, start);
 	}
-	result.push_back(str.substr(start, end));
+	small_str = str.substr(start, end - start);
+	if (!small_str.empty())
+		result.push_back(small_str);
 	return (result);
 }
