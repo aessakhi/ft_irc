@@ -1,9 +1,9 @@
 #include "Bot.hpp"
 
-Bot::Bot() : _fd(-1), _epollfd(-1), _suffix(1), _has_quit(false)
+Bot::Bot() : _fd(-1), _epollfd(-1), _suffix(1), _registered(false), _botchar('>'), _has_quit(false)
 {}
 
-Bot::Bot(std::string nickname, std::string username, std::string realname) : _fd(-1), _epollfd(-1), _suffix(1), _has_quit(false), _nickname(nickname), _username(username), _realname(realname)
+Bot::Bot(std::string nickname, std::string username, std::string realname, char botchar) : _fd(-1), _epollfd(-1), _suffix(1), _registered(false), _botchar(botchar), _has_quit(false), _nickname(nickname), _username(username), _realname(realname)
 {}
 
 Bot::~Bot()
@@ -23,6 +23,10 @@ Bot & Bot::operator=(Bot const & src)
 
 	_suffix = src._suffix;
 
+	_registered = src._registered;
+
+	_botchar = src._botchar;
+
 	_has_quit = src._has_quit;
 
 	_nickname = src._nickname;
@@ -33,9 +37,7 @@ Bot & Bot::operator=(Bot const & src)
 	_recv_buffer = src._recv_buffer;
 	_send_buffer = src._send_buffer;
 
-	_prefix = src._prefix;
-	_command = src._command;
-	_arguments = src._arguments;
+	_cmd_buffer = src._cmd_buffer;
 
 	return *this;
 }
@@ -51,6 +53,7 @@ void Bot::add_to_send_buffer(std::string str)
 void Bot::send_buffer()
 {
 	ssize_t ret;
+	printReply(no_crlf(_send_buffer));
 	ret = send(_fd, _send_buffer.c_str(), _send_buffer.size(), 0);
 	if (ret == -1)
 	{
@@ -127,34 +130,58 @@ void Bot::create_epoll()
 void Bot::authentication(std::string password)
 {
 	std::string new_nick = _nickname;
+
+	std::vector<Command>::const_iterator it;
+	std::vector<Command>::const_iterator ite;
+
 	add_pass(password);
 	add_nick(new_nick);
 	add_user();
-	while (true)
+
+	while (!_registered)
 	{
-		while (!_send_buffer.empty() || _command.empty())
+		while (!_send_buffer.empty())
 		{
 			epoll_loop();
 		}
-		// ERR_PASSWDMISMATCH
-		if (!_command.compare("464"))
+		while (_recv_buffer.empty() && _cmd_buffer.empty())
 		{
-			throw IncorrectPasswordException();
+			epoll_loop();
 		}
-		// ERR_NICKNAMEINUSE
-		if (!_command.compare("433"))
+		it = _cmd_buffer.begin();
+		ite = _cmd_buffer.end();
+		for (; it != ite; it++)
+		{
+			// ERR_PASSWDMISMATCH
+			if (!it->getCmd().compare("464"))
+			{
+				throw IncorrectPasswordException();
+			}
+			// ERR_NICKNAMEINUSE
+			if (!it->getCmd().compare("433"))
+			{
+				continue;
+			}
+			// RPL_WELCOME
+			if (!it->getCmd().compare("001"))
+			{
+				_nickname = new_nick;
+				_registered = true;
+				break;
+			}
+		}
+		if (!_registered)
 		{
 			new_nick = next_nickname();
-			clear_command();
+			add_nick(new_nick);
 		}
-		// RPL_WELCOME
-		if (!_command.compare("001"))
+		else
 		{
-			_nickname = new_nick;
-			clear_command();
-			break;
+			do
+			{
+				_cmd_buffer.erase(_cmd_buffer.begin());
+			} while (_cmd_buffer.size() && _cmd_buffer[0].getCmd().compare("001")) ;
 		}
-		add_nick(new_nick);
 	}
 }
 
@@ -215,85 +242,78 @@ void Bot::receive_message()
 	_recv_buffer.append(buf, ret);
 }
 
-bool Bot::parse_buffer()
+Command Bot::parse_command(std::string command_str) const
 {
-	printRecv(_recv_buffer, _recv_buffer.size());
-
-	if (_recv_buffer.empty())
-		return false;
-
-	// Grab up to the first "\\r\\n"
-
-	std::string buffer;
-	size_t	end = _recv_buffer.find("\r\n");
-	size_t	sep_size = 2;
-	if (end == std::string::npos)
-	{
-		end = _recv_buffer.find_first_of("\r\n");
-		sep_size = 1;
-	}
-	if (end == std::string::npos)
-	{
-		return false;
-	}
-	buffer = _recv_buffer.substr(0, end + 1);
-	_recv_buffer.erase(0, end + 1 + sep_size);
-
 	size_t	start = 0;
-	end = 0;
+	size_t	end = 0;
+
+	std::string	prefix;
+	std::string	command;
+	std::vector<std::string> args;
 
 	// Prefix
-
-	if (buffer[start] == ':')
+	if (command_str[start] == ':')
 	{
 		start = 1;
-		end = buffer.find(' ', start);
-		_prefix = buffer.substr(start, end - start);
+		end = command_str.find(' ', start);
+		prefix = command_str.substr(start, end - start);
 	}
 
 	// Command
-
-	start = buffer.find_first_not_of(' ', end);
-	end = buffer.find(' ', start);
+	start = command_str.find_first_not_of(' ', end);
+	end = command_str.find(' ', start);
 	if (start == std::string::npos)
-		_command = "";
+		command = "";
 	else
-		_command = buffer.substr(start, end - start);
+		command = command_str.substr(start, end - start);
 
 	// Arguments parsing
-
-	std::vector<std::string> args;
-	start = buffer.find_first_not_of(' ', end);
-	end = buffer.find(' ', start);
+	start = command_str.find_first_not_of(' ', end);
+	end = command_str.find(' ', start);
 	while (start != std::string::npos)
 	{
-		if (buffer[start] == ':')
+		if (command_str[start] == ':')
 		{
 			end = std::string::npos;
 			start++;
 		}
-		args.push_back(buffer.substr(start, end - start));
-		start = buffer.find_first_not_of(' ', end);
-		end = buffer.find(' ', start);
+		args.push_back(command_str.substr(start, end - start));
+		start = command_str.find_first_not_of(' ', end);
+		end = command_str.find(' ', start);
 	}
 	args[args.size() - 1] = no_crlf(args[args.size() - 1]);
-	_arguments = args;
-	return true;
+
+	return Command(command, args, prefix);
 }
 
-void Bot::print_parsed_buffer()
+void Bot::parse_buffer()
 {
-	std::cout << "Prefix: \'" << _prefix << "\'" << std::endl;
-	std::cout << "Command: \'" << _command << "\'" << std::endl;
-	std::cout << "Arguments: ";
-	for (size_t i = 0; i < _arguments.size();)
+	if (_recv_buffer.empty())
+		return ;
+
+	printRecv(_recv_buffer, _recv_buffer.size());
+
+	std::string buffer;
+	size_t	end = _recv_buffer.find("\r\n");
+	size_t	sep_size = 2;
+	while (end != std::string::npos)
 	{
-		std::cout << "\'" << _arguments[i] << "\'";
-		i++;
-		if (i == _arguments.size())
-			std::cout << std::endl;
-		else
-			std::cout << ", ";
+		if (end == std::string::npos)
+		{
+			end = _recv_buffer.find_first_of("\r\n");
+			sep_size = 1;
+		}
+		if (end == std::string::npos)
+		{
+			return ;
+		}
+		buffer = _recv_buffer.substr(0, end + 1);
+		_recv_buffer.erase(0, end + 1 + sep_size);
+
+		_cmd_buffer.push_back(parse_command(buffer));
+
+		end = _recv_buffer.find("\r\n");
+		sep_size = 2;
 	}
 }
 
@@ -316,10 +336,9 @@ void Bot::epoll_loop()
 		if (ep_events[i].events & EPOLLIN)
 		{
 			receive_message();
-			if (parse_buffer())
-			{
-				print_parsed_buffer();
-			}
+			parse_buffer();
+			if (_registered && !_cmd_buffer.empty())
+				handle_commands();
 		}
 		if (ep_events[i].events & EPOLLOUT)
 		{
@@ -329,13 +348,6 @@ void Bot::epoll_loop()
 			}
 		}
 	}
-}
-
-void Bot::clear_command()
-{
-	_prefix = "";
-	_command = "";
-	_arguments.clear();
 }
 
 void Bot::add_quit_message()
@@ -364,5 +376,50 @@ void Bot::close_fds()
 		{
 			throw FdCloseException();
 		}
+	}
+}
+
+void Bot::handle_commands()
+{
+	std::vector<Command>::const_iterator it = _cmd_buffer.begin();
+	std::vector<Command>::const_iterator ite = _cmd_buffer.end();
+	for (; it != ite; it++)
+	{
+		handle_command(*it);
+	}
+	_cmd_buffer.clear();
+}
+
+void Bot::handle_command(Command cmd)
+{
+	if (!cmd.getCmd().compare("PRIVMSG"))
+	{
+		privmsg(cmd);
+	}
+}
+
+void Bot::privmsg(Command cmd)
+{
+	std::string	message = cmd.getArg(1);
+	std::string bot_command;
+	std::string bot_args;
+	BotCommand	command;
+
+	if (!message.empty() && message[0] == _botchar)
+	{
+		size_t found = message.find(' ');
+		bot_command = message.substr(1, found - 1);
+		found = message.find_first_not_of(' ', found);
+		bot_args = message.substr(found);
+		command = BotCommand(cmd.getPrefix(), cmd.getArg(0), bot_command, bot_args);
+		exec_botcommand(command);
+	}
+}
+
+void Bot::exec_botcommand(BotCommand bot_command)
+{
+	if (!bot_command.command.compare("raw_send") || !bot_command.command.compare("rs"))
+	{
+		add_to_send_buffer(bot_command.raw_args);
 	}
 }

@@ -9,7 +9,7 @@ class Bot
 		Bot();
 
 	public:
-		Bot(std::string nickname, std::string username, std::string realname);
+		Bot(std::string nickname, std::string username, std::string realname, char botchar);
 		~Bot();
 		Bot(Bot const & src);
 		Bot & operator=(Bot const & src);
@@ -34,24 +34,34 @@ class Bot
 		std::string	next_nickname();
 	/* Calls recv and appends what is read to buffer. */
 		void	receive_message();
-	/* Splits buffer into prefix, command, and arguments.
-	Returns true if something was split, false otherwise (empty buffer or incomplete message received). */
-		bool	parse_buffer();
-	/* Prints parsed elements of the buffer. */
-		void	print_parsed_buffer();
+	/* Creates Command from string. */
+		Command parse_command(std::string command_str) const;
+	/* Splits buffer into commands in _cmd_buffer. */
+		void	parse_buffer();
 	/* epoll_wait and read/reply if necessary. */
 		void	epoll_loop();
-	/* Clears _prefix, _command and _arguments. */
-		void	clear_command();
 	/* Adds quit message to _send_buffer, sets _has_quit to true. */
 		void	add_quit_message();
 	/* Close fds. */
 		void	close_fds();
+	/*  */
+		void	handle_commands();
+	/*  */
+		void	handle_command(Command cmd);
+	/*  */
+		void	privmsg(Command cmd);
+	/*  */
+		void	exec_botcommand(BotCommand bot_command);
 
 		int		_fd;
 		int		_epollfd;
 
 		int		_suffix;
+
+		bool	_registered;
+
+		/* Character for bot commands. */
+		char	_botchar;
 
 	/* True when QUIT message has been added to the buffer.
 	After that, no more data should be added to _read_buffer or _send_buffer. */
@@ -67,9 +77,7 @@ class Bot
 
 	// Command storage
 
-		std::string					_prefix;
-		std::string 				_command;
-		std::vector<std::string>	_arguments;
+		std::vector<Command>	_cmd_buffer;
 };
 
 #endif

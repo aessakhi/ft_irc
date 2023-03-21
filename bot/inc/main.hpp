@@ -17,7 +17,6 @@
 #include <sys/epoll.h>
 #include <sstream>
 
-#include "Bot.hpp"
 #include "colors.hpp"
 #include "exceptions.hpp"
 
@@ -25,13 +24,23 @@
 #define EPOLL_EVENTS_SIZE 10
 
 class Bot;
+class BotCommand;
+class Command;
+
+#include "Bot.hpp"
+#include "BotCommand.hpp"
+#include "Command.hpp"
 
 /* -------------------- utils.cpp -------------------- */
 
+void			printDebug(std::string s);
+void			printCmdBuf(std::vector<Command> v);
 void			printError(std::string s);
 void			printReply(std::string s);
 void			printRecv(char * s, size_t n);
 std::string		no_crlf(std::string s);
 void			printRecv(std::string s, size_t n);
+std::string		toupper(std::string s);
+std::vector<std::string> split(std::string str, std::string delimiter);
 
 #endif

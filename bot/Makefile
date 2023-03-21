@@ -6,6 +6,8 @@ NAME		=	../ircbot
 SRC_DIR 	= srcs
 
 SRC_NAMES	+=	Bot.cpp \
+				BotCommand.cpp \
+				Command.cpp \
 				bot_main.cpp \
 				utils.cpp \
 
@@ -18,6 +20,8 @@ OBJS		= $(addprefix $(OBJ_DIR)/, $(OBJ_NAMES))
 INC_DIR =	inc
 
 INC_NAMES +=	Bot.hpp \
+				BotCommand.hpp \
+				Command.hpp \
 				colors.hpp \
 				main.hpp \
 				exceptions.hpp \

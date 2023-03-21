@@ -5,6 +5,7 @@ bool loop = true;
 void	sighandler(int)
 {
 	loop = false;
+	std::cout << "\r  " << std::endl;
 }
 
 static bool _error_check(int ac)
@@ -27,11 +28,11 @@ int main(int ac, char *av[])
 
 	std::cout << BRED << "Starting up..." << RESET << std::endl;
 
-	Bot bot("ircbot", "ircbot", "Beep BOOP");
+	Bot bot("ircbot", "ircbot", "Beep BOOP", '>');
 
-	char hostname[512];
-	gethostname(hostname, 512);
-	std::cout << hostname << std::endl;
+	// char hostname[512];
+	// gethostname(hostname, 512);
+	// std::cout << hostname << std::endl;
 
 	try
 	{
@@ -56,7 +57,7 @@ int main(int ac, char *av[])
 	}
 	
 
-	std::cout << "\r      " << std::endl << BRED << "Shutting down..." << RESET << std::endl;
+	std::cout << BRED << "Shutting down..." << RESET << std::endl;
 
 	return 0;
 }
