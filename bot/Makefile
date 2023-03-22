@@ -50,3 +50,7 @@ clean:
 fclean:	clean
 		@echo "\033[31mDeleting $(NAME)\033[0m"
 		@$(RM) $(NAME)
+
+re:	fclean all
+
+.PHONY: all clean re fclean
