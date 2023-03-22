@@ -13,4 +13,6 @@ BotModes & BotModes::operator=(BotModes const & src)
 {
 	parrot = src.parrot;
 	greet = src.greet;
+	
+	return *this;
 }
