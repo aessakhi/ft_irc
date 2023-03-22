@@ -429,17 +429,19 @@ void Bot::exec_botcommand(BotCommand bot_command)
 	}
 	if (!bot_command.command.compare("join") || !bot_command.command.compare("j"))
 	{
-		std::string	join_msg = "JOIN ";
-		join_msg += bot_command.raw_args;
-		add_to_send_buffer(join_msg);
+		join(bot_command);
+		return;
+	}
+	if (!bot_command.command.compare("leave") || !bot_command.command.compare("l"))
+	{
+		std::string	part_msg = "PART ";
+		part_msg += bot_command.raw_args;
+		add_to_send_buffer(part_msg);
 		return;
 	}
 	if (!bot_command.command.compare("help") || !bot_command.command.compare("h"))
 	{
-		if (bot_command.original_target[0] == '#')
-			send_help(bot_command.original_target);
-		else
-			send_help(bot_command.from_nick);
+		send_help(bot_command.reply_target);
 		return;
 	}
 }
@@ -468,10 +470,26 @@ void Bot::send_help(std::string target)
 {
 	send_privmsg(target, build_helpstr("help", "h", "", "displays this help"));
 	send_privmsg(target, build_helpstr("join", "j", "<channel>", "joins <channel>"));
+	send_privmsg(target, build_helpstr("leave", "l", "<channel>", "leaves <channel>"));
 	send_privmsg(target, build_helpstr("raw_send", "rs", "<text>", "sends <text> to the server"));
 }
 
 void Bot::send_privmsg(std::string target, std::string str)
 {
 	add_to_send_buffer("PRIVMSG " + target + " :" + str);
+}
+
+void Bot::join(BotCommand botcommand)
+{
+	std::string infostr("Usage: ");
+	infostr.push_back(_botchar);
+	infostr.append("join <channel>");
+
+	if (botcommand.args.size() != 1 || botcommand.args[0].find(',') != std::string::npos)
+	{
+		send_privmsg(botcommand.reply_target, infostr);
+		return ;
+	}
+	
+	add_to_send_buffer("JOIN " + botcommand.args[0]);
 }

@@ -23,6 +23,8 @@ class BotCommand
 		std::string	from_nick;
 		std::string	from_user;
 		std::string	from_host;
+
+		std::string	reply_target;
 };
 
 std::ostream & operator<<(std::ostream & out, const BotCommand & src);

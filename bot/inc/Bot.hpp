@@ -58,6 +58,9 @@ class Bot
 		void	send_privmsg(std::string target, std::string str);
 	/* Build str to send in help command. */
 		std::string	build_helpstr(std::string command, std::string abbrev, std::string args, std::string description);
+	/* Joins requested channels. */
+		void join(BotCommand botcommand);
+
 
 		int		_fd;
 		int		_epollfd;
@@ -83,6 +86,8 @@ class Bot
 
 	/* Command storage */
 		std::vector<Command>	_cmd_buffer;
+	
+		std::map<std::string, BotModes>	modes;
 };
 
 #endif
