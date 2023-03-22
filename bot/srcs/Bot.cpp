@@ -399,6 +399,20 @@ void Bot::handle_command(Command cmd)
 	{
 		privmsg(cmd);
 	}
+	if (!cmd.getCmd().compare("JOIN"))
+	{
+		size_t	n = cmd.getPrefix().find("!");
+		std::string	from_nick = cmd.getPrefix().substr(0, n);
+		std::string	channel = cmd.getArg(0);
+		if (!from_nick.compare(_nickname))
+		{
+			modes[channel] = BotModes();
+		}
+		else if (modes[channel].greet)
+		{
+			send_privmsg(channel, "Hello " + from_nick + " !");
+		}
+	}
 }
 
 void Bot::privmsg(Command cmd)
@@ -490,6 +504,6 @@ void Bot::join(BotCommand botcommand)
 		send_privmsg(botcommand.reply_target, infostr);
 		return ;
 	}
-	
+
 	add_to_send_buffer("JOIN " + botcommand.args[0]);
 }
