@@ -53,8 +53,10 @@ void Bot::add_to_send_buffer(std::string str)
 void Bot::send_buffer()
 {
 	ssize_t ret;
-	printReply(no_crlf(_send_buffer));
-	ret = send(_fd, _send_buffer.c_str(), _send_buffer.size(), 0);
+	size_t	sep = _send_buffer.find("\r\n");
+	std::string	msg = _send_buffer.substr(0, sep + 2);
+	printReply(no_crlf(msg));
+	ret = send(_fd, msg.c_str(), sep + 2, 0);
 	if (ret == -1)
 	{
 		throw SendException();
