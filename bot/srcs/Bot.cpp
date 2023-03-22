@@ -458,6 +458,11 @@ void Bot::exec_botcommand(BotCommand bot_command)
 		send_help(bot_command.reply_target);
 		return;
 	}
+	if (!toupper(bot_command.command).compare("GREET") || !toupper(bot_command.command).compare("G"))
+	{
+		set_greet(bot_command);
+		return;
+	}
 }
 
 std::string Bot::build_helpstr(std::string command, std::string abbrev = "", std::string args = "", std::string description = "[no info]")
@@ -506,4 +511,21 @@ void Bot::join(BotCommand botcommand)
 	}
 
 	add_to_send_buffer("JOIN " + botcommand.args[0]);
+}
+
+void Bot::set_greet(BotCommand botcommand)
+{
+	std::string infostr("Usage: ");
+	infostr.push_back(_botchar);
+	infostr.append("greet (when in a channel)");
+
+	std::string	channel = botcommand.reply_target;
+
+	if (botcommand.args.size() || !botcommand.original_target.compare(_nickname))
+	{
+		send_privmsg(channel, infostr);
+		return ;
+	}
+
+	modes[channel].greet = !modes[channel].greet;
 }

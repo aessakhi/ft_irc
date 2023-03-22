@@ -60,6 +60,8 @@ class Bot
 		std::string	build_helpstr(std::string command, std::string abbrev, std::string args, std::string description);
 	/* Joins requested channels. */
 		void	join(BotCommand botcommand);
+	/* Toggles greet value. */
+		void	set_greet(BotCommand botcommand);
 
 		int		_fd;
 		int		_epollfd;
