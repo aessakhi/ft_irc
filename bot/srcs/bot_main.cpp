@@ -30,9 +30,7 @@ int main(int ac, char *av[])
 
 	Bot bot("ircbot", "ircbot", "Beep BOOP", '>');
 
-	// char hostname[512];
-	// gethostname(hostname, 512);
-	// std::cout << hostname << std::endl;
+	int	ret = 0;
 
 	try
 	{
@@ -54,10 +52,10 @@ int main(int ac, char *av[])
 	catch (const std::exception& e)
 	{
 		printError(e.what());
+		ret = -1;
 	}
-	
 
 	std::cout << BRED << "Shutting down..." << RESET << std::endl;
 
-	return 0;
+	return ret;
 }
