@@ -16,6 +16,7 @@
 #include <fcntl.h>
 #include <sys/epoll.h>
 #include <sstream>
+#include <map>
 
 #include "colors.hpp"
 #include "exceptions.hpp"
@@ -25,10 +26,12 @@
 
 class Bot;
 class BotCommand;
+class BotModes;
 class Command;
 
 #include "Bot.hpp"
 #include "BotCommand.hpp"
+#include "BotModes.hpp"
 #include "Command.hpp"
 
 /* -------------------- utils.cpp -------------------- */

@@ -7,6 +7,7 @@ SRC_DIR 	= srcs
 
 SRC_NAMES	+=	Bot.cpp \
 				BotCommand.cpp \
+				BotModes.cpp \
 				Command.cpp \
 				bot_main.cpp \
 				utils.cpp \
@@ -21,6 +22,7 @@ INC_DIR =	inc
 
 INC_NAMES +=	Bot.hpp \
 				BotCommand.hpp \
+				BotModes.hpp \
 				Command.hpp \
 				colors.hpp \
 				main.hpp \
