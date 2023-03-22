@@ -413,10 +413,21 @@ void Bot::handle_command(Command cmd)
 			send_privmsg(channel, "Hello " + from_nick + " !");
 		}
 	}
+	if (!cmd.getCmd().compare("PART"))
+	{
+		size_t	n = cmd.getPrefix().find("!");
+		std::string	from_nick = cmd.getPrefix().substr(0, n);
+		std::string	channel = cmd.getArg(0);
+		if (!from_nick.compare(_nickname))
+		{
+			modes.erase(channel);
+		}
+	}
 }
 
 void Bot::privmsg(Command cmd)
 {
+	std::string	target = cmd.getArg(0);
 	std::string	message = cmd.getArg(1);
 	std::string bot_command;
 	std::string bot_args;
@@ -429,8 +440,19 @@ void Bot::privmsg(Command cmd)
 		found = message.find_first_not_of(' ', found);
 		if (found != std::string::npos)
 			bot_args = message.substr(found);
-		command = BotCommand(cmd.getPrefix(), cmd.getArg(0), bot_command, bot_args);
+		command = BotCommand(cmd.getPrefix(), target, bot_command, bot_args);
 		exec_botcommand(command);
+
+		return;
+	}
+
+	if (target[0] == '#')
+	{
+		BotModes	channel_modes = modes.find(target)->second;
+		if (channel_modes.parrot)
+		{
+			send_privmsg(target, message);
+		}
 	}
 }
 
@@ -461,6 +483,11 @@ void Bot::exec_botcommand(BotCommand bot_command)
 	if (!toupper(bot_command.command).compare("GREET") || !toupper(bot_command.command).compare("G"))
 	{
 		set_greet(bot_command);
+		return;
+	}
+	if (!toupper(bot_command.command).compare("PARROT") || !toupper(bot_command.command).compare("P"))
+	{
+		set_parrot(bot_command);
 		return;
 	}
 }
@@ -514,11 +541,12 @@ void Bot::join(BotCommand botcommand)
 	add_to_send_buffer("JOIN " + botcommand.args[0]);
 }
 
-void Bot::set_greet(BotCommand botcommand)
+void Bot::toggle_bool(BotCommand botcommand, bool BotModes::* attr, std::string display)
 {
 	std::string infostr("Usage: ");
 	infostr.push_back(_botchar);
-	infostr.append("greet (when in a channel)");
+	infostr.append(display);
+	infostr.append(" (when in a channel)");
 
 	std::string	channel = botcommand.reply_target;
 
@@ -528,5 +556,15 @@ void Bot::set_greet(BotCommand botcommand)
 		return ;
 	}
 
-	modes[channel].greet = !modes[channel].greet;
+	modes[channel].*attr = !(modes[channel].*attr);
+}
+
+void Bot::set_greet(BotCommand botcommand)
+{
+	toggle_bool(botcommand, &BotModes::greet, "greet");
+}
+
+void Bot::set_parrot(BotCommand botcommand)
+{
+	toggle_bool(botcommand, &BotModes::parrot, "parrot");
 }
