@@ -25,4 +25,6 @@ class BotCommand
 		std::string	from_host;
 };
 
+std::ostream & operator<<(std::ostream & out, const BotCommand & src);
+
 #endif

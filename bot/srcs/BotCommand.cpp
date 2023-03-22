@@ -23,6 +23,10 @@ BotCommand & BotCommand::operator=(BotCommand const & src)
 	raw_args = src.raw_args;
 	args = src.args;
 
+	from_nick = src.from_nick;
+	from_user = src.from_user;
+	from_host = src.from_host;
+
 	return *this;
 }
 
@@ -44,4 +48,20 @@ void BotCommand::parse_mask()
 	start = end + 1;
 
 	from_host = from_mask.substr(start);
+}
+
+std::ostream & operator<<(std::ostream & out, const BotCommand & src)
+{
+	out << "from_mask : " << src.from_mask << ", target = " << src.original_target << std::endl;
+	out << "nick = " << src.from_nick << ", user = " << src.from_user << ", host = " << src.from_host << std::endl;
+	out << "cmd = " << src.command << std::endl;
+	out << "args = ";
+	for (size_t i = 0; i < src.args.size(); i++)
+	{
+		out << src.args[i];
+		if (i + 1 < src.args.size())
+			out << ", ";
+	}
+	out << std::endl;
+	return out;
 }
