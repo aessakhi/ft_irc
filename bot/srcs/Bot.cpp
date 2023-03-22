@@ -178,6 +178,10 @@ void Bot::authentication(std::string password)
 		{
 			new_nick = next_nickname();
 			add_nick(new_nick);
+			do
+			{
+				_cmd_buffer.erase(_cmd_buffer.begin());
+			} while (_cmd_buffer.size() && _cmd_buffer[0].getCmd().compare("433")) ;
 		}
 		else
 		{
