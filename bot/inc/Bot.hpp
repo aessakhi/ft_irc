@@ -52,6 +52,12 @@ class Bot
 		void	privmsg(Command cmd);
 	/* Executes bot commands. */
 		void	exec_botcommand(BotCommand bot_command);
+	/* Sends messages to list possible bot commands. */
+		void	send_help(std::string target);
+	/* Sends str as a PRIVMSG to target. */
+		void	send_privmsg(std::string target, std::string str);
+	/* Build str to send in help command. */
+		std::string	build_helpstr(std::string command, std::string abbrev, std::string args, std::string description);
 
 		int		_fd;
 		int		_epollfd;

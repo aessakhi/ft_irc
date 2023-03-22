@@ -281,7 +281,8 @@ Command Bot::parse_command(std::string command_str) const
 		start = command_str.find_first_not_of(' ', end);
 		end = command_str.find(' ', start);
 	}
-	args[args.size() - 1] = no_crlf(args[args.size() - 1]);
+	if (!args.empty())
+		args[args.size() - 1] = no_crlf(args[args.size() - 1]);
 
 	return Command(command, args, prefix);
 }
@@ -410,7 +411,8 @@ void Bot::privmsg(Command cmd)
 		size_t found = message.find(' ');
 		bot_command = message.substr(1, found - 1);
 		found = message.find_first_not_of(' ', found);
-		bot_args = message.substr(found);
+		if (found != std::string::npos)
+			bot_args = message.substr(found);
 		command = BotCommand(cmd.getPrefix(), cmd.getArg(0), bot_command, bot_args);
 		exec_botcommand(command);
 	}
@@ -430,4 +432,44 @@ void Bot::exec_botcommand(BotCommand bot_command)
 		add_to_send_buffer(join_msg);
 		return;
 	}
+	if (!bot_command.command.compare("help") || !bot_command.command.compare("h"))
+	{
+		if (bot_command.original_target[0] == '#')
+			send_help(bot_command.original_target);
+		else
+			send_help(bot_command.from_nick);
+		return;
+	}
+}
+
+std::string Bot::build_helpstr(std::string command, std::string abbrev = "", std::string args = "", std::string description = "[no info]")
+{
+	std::string	helpstr;
+	helpstr += _botchar + command;
+	if (!abbrev.empty())
+	{
+		helpstr.push_back(' ');
+		helpstr.push_back(_botchar);
+		helpstr.append(abbrev);
+	}
+	if (!args.empty())
+	{
+		helpstr.push_back(' ');
+		helpstr.append(args);
+	}
+	helpstr.append(" : ");
+	helpstr.append(description);
+	return helpstr;
+}
+
+void Bot::send_help(std::string target)
+{
+	send_privmsg(target, build_helpstr("help", "h", "", "displays this help"));
+	send_privmsg(target, build_helpstr("join", "j", "<channel>", "joins <channel>"));
+	send_privmsg(target, build_helpstr("raw_send", "rs", "<text>", "sends <text> to the server"));
+}
+
+void Bot::send_privmsg(std::string target, std::string str)
+{
+	add_to_send_buffer("PRIVMSG " + target + " :" + str);
 }
