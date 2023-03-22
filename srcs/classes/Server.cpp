@@ -200,6 +200,13 @@ void	Server::_removeUserfromServer(int userfd)
 	User * user = this->getUser(userfd);
 	if (user == 0)
 		return printError("Invalid user");
+	err_codes	err;
+	for (std::map<std::string, Channel *>::const_iterator it = _channelMap.begin(); it != _channelMap.end(); it++)
+	{
+		err = (*it).second->part(user);
+		if (err == err_noerror)
+			(*it).second->sendToAllMembers(":" + user->getMask() + " PART " + (*it).first + " Connection error");
+	}
 	_history.push_back(*user);
 	this->_UserList.erase(userfd);
 	if (epoll_ctl(this->_epollfd, EPOLL_CTL_DEL, userfd, NULL) == -1)
