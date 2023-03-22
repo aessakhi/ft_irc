@@ -1,7 +1,9 @@
 #include "Bot.hpp"
 
 Bot::Bot() : _fd(-1), _epollfd(-1), _suffix(1), _registered(false), _botchar('>'), _has_quit(false)
-{}
+{
+	srand(time(NULL));
+}
 
 Bot::Bot(std::string nickname, std::string username, std::string realname, char botchar) : _fd(-1), _epollfd(-1), _suffix(1), _registered(false), _botchar(botchar), _has_quit(false), _nickname(nickname), _username(username), _realname(realname)
 {}
@@ -189,11 +191,8 @@ void Bot::authentication(std::string password)
 
 std::string Bot::next_nickname()
 {
-	std::string suffix;
-	std::stringstream out;
-	out << _suffix;
+	std::string suffix = "_" + itoa(_suffix);
 	_suffix++;
-	suffix = "_" + out.str();
 
 	if (_nickname.size() + suffix.size() > 9)
 		throw NoAvailableNicknameException();
@@ -490,6 +489,11 @@ void Bot::exec_botcommand(BotCommand bot_command)
 		set_parrot(bot_command);
 		return;
 	}
+	if (!toupper(bot_command.command).compare("DICE") || !toupper(bot_command.command).compare("D"))
+	{
+		dice(bot_command);
+		return;
+	}
 }
 
 std::string Bot::build_helpstr(std::string command, std::string abbrev = "", std::string args = "", std::string description = "[no info]")
@@ -567,4 +571,23 @@ void Bot::set_greet(BotCommand botcommand)
 void Bot::set_parrot(BotCommand botcommand)
 {
 	toggle_bool(botcommand, &BotModes::parrot, "parrot");
+}
+
+void Bot::dice(BotCommand botcommand)
+{
+	std::string infostr("Usage: ");
+	infostr.push_back(_botchar);
+	infostr.append("dice [<max>]");
+
+	if (botcommand.args.size() > 1)
+	{
+		send_privmsg(botcommand.reply_target, infostr);
+		return;
+	}
+
+	int	max = 6;
+	if (botcommand.args.size() == 1)
+		max = atoi(botcommand.args[0].c_str());
+	std::string dice_roll = itoa(rand() % max);
+	send_privmsg(botcommand.reply_target, "You rolled a " + dice_roll);
 }

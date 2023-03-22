@@ -66,6 +66,8 @@ class Bot
 		void	set_greet(BotCommand botcommand);
 	/* Toggles parrot value. */
 		void	set_parrot(BotCommand botcommand);
+	/* Rolls a dice. */
+		void	dice(BotCommand botcommand);
 
 		int		_fd;
 		int		_epollfd;
