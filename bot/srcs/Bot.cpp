@@ -422,24 +422,24 @@ void Bot::privmsg(Command cmd)
 
 void Bot::exec_botcommand(BotCommand bot_command)
 {
-	if (!bot_command.command.compare("raw_send") || !bot_command.command.compare("rs"))
+	if (!toupper(bot_command.command).compare("RAW_SEND") || !toupper(bot_command.command).compare("RS"))
 	{
 		add_to_send_buffer(bot_command.raw_args);
 		return;
 	}
-	if (!bot_command.command.compare("join") || !bot_command.command.compare("j"))
+	if (!toupper(bot_command.command).compare("JOIN") || !toupper(bot_command.command).compare("J"))
 	{
 		join(bot_command);
 		return;
 	}
-	if (!bot_command.command.compare("leave") || !bot_command.command.compare("l"))
+	if (!toupper(bot_command.command).compare("LEAVE") || !toupper(bot_command.command).compare("L"))
 	{
 		std::string	part_msg = "PART ";
 		part_msg += bot_command.raw_args;
 		add_to_send_buffer(part_msg);
 		return;
 	}
-	if (!bot_command.command.compare("help") || !bot_command.command.compare("h"))
+	if (!toupper(bot_command.command).compare("HELP") || !toupper(bot_command.command).compare("H"))
 	{
 		send_help(bot_command.reply_target);
 		return;
