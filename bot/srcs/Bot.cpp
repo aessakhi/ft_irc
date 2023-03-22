@@ -487,6 +487,7 @@ std::string Bot::build_helpstr(std::string command, std::string abbrev = "", std
 
 void Bot::send_help(std::string target)
 {
+	send_privmsg(target, build_helpstr("greet", "g", "(when in a channel)", "toggles greetings"));
 	send_privmsg(target, build_helpstr("help", "h", "", "displays this help"));
 	send_privmsg(target, build_helpstr("join", "j", "<channel>", "joins <channel>"));
 	send_privmsg(target, build_helpstr("leave", "l", "<channel>", "leaves <channel>"));
