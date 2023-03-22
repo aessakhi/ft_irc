@@ -78,3 +78,10 @@ std::vector<std::string> split(std::string str, std::string delimiter)
 		result.push_back(small_str);
 	return (result);
 }
+
+std::string	itoa(int n)
+{
+	std::stringstream out;
+	out << n;
+	return out.str();
+}

@@ -45,5 +45,6 @@ std::string		no_crlf(std::string s);
 void			printRecv(std::string s, size_t n);
 std::string		toupper(std::string s);
 std::vector<std::string> split(std::string str, std::string delimiter);
+std::string		itoa(int n);
 
 #endif
