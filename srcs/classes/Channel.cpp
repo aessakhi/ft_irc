@@ -362,12 +362,15 @@ err_codes Channel::join(User *user, std::string s = "")
 			return err_inviteonlychan;
 	}
 
+	if (isMember(user))
+		return err_useronchannel;
+
 	// Adding user
 
 	if (_members.empty())
 		_founder = user;
-	if (!isMember(user))
-		addMember(user);
+
+	addMember(user);
 
 	return err_noerror;
 }

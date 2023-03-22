@@ -40,6 +40,10 @@ void	join(Server *srv, int &userfd, Command &cmd)
 				srv->sendReply(userfd, ERR_INVITEONLYCHAN(user->getNickname(), *it));
 				break;
 			}
+			case err_useronchannel:
+			{
+				break;
+			}
 			default:
 			{
 				std::string msg = ":" + user->getMask() + " JOIN " + *it;
