@@ -134,7 +134,7 @@ void	Server::_acceptnewUser()
 		throw SocketCreationException();
 	}
 
-s	/* User will need to be destroyed if authenticate fails or when the connection is closed */
+	/* User will need to be destroyed if authenticate fails or when the connection is closed */
 	this->_UserList[new_fd] = new User(new_fd, inet_ntoa(client_addr.sin_addr));
 	memset(&ev, 0, sizeof(struct epoll_event));
 	/* Need to recheck the flags to use, EPOLLIN is alright, but other flags might be useful */
