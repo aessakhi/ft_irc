@@ -1,8 +1,0 @@
-Obligatoire:
-
-"bonus":
-	(IN PROGRESS) LIST
-
-Bonus du sujet:
-	Bots
-	(a voir) File Transfer si y a le temps et la motiv
