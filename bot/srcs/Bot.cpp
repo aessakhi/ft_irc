@@ -564,7 +564,17 @@ void Bot::toggle_bool(BotCommand botcommand, bool BotModes::* attr, std::string 
 		return ;
 	}
 
-	modes[channel].*attr = !(modes[channel].*attr);
+	bool val = modes[channel].*attr;
+	if (val)
+	{
+		modes[channel].*attr = false;
+		send_privmsg(channel, display + " mode has been unset.");
+	}
+	else
+	{
+		modes[channel].*attr = true;
+		send_privmsg(channel, display + " mode has been set.");
+	}
 }
 
 void Bot::set_greet(BotCommand botcommand)
